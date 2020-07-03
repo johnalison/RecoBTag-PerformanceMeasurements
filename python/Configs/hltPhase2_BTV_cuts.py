@@ -181,8 +181,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	jetDirectionUsingTracks = cms.bool(False),
     	# jets = cms.InputTag("hltPFJetForBtag"),
     	# jets = cms.InputTag("ak4PFJetsCHS"),
-    	# jets = cms.InputTag("hltAK4PFCHSJets"),
-    	jets = cms.InputTag("hltPFCHSJetForBtag"),
+    	jets = cms.InputTag("hltAK4PFCHSJets"),
+    	# jets = cms.InputTag("hltPFCHSJetForBtag"),
     	maxDeltaR = cms.double(0.4),
     	maximumChiSquared = cms.double(5.0),
     	maximumLongitudinalImpactParameter = cms.double(17.0),
@@ -530,8 +530,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         ghostTrackPriorDeltaR = cms.double(0.03),
         jetDirectionUsingGhostTrack = cms.bool(False),
         jetDirectionUsingTracks = cms.bool(False),
-        # jets = cms.InputTag("hltAK4PuppiJets"),
-        jets = cms.InputTag("hltPFPuppiJetForBtag"),
+        jets = cms.InputTag("hltAK4PuppiJets"),
+        # jets = cms.InputTag("hltPFPuppiJetForBtag"),
         maxDeltaR = cms.double(0.4),
         maximumChiSquared = cms.double(5.0),
         maximumLongitudinalImpactParameter = cms.double(17.0),
@@ -568,9 +568,9 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
 
 
     process.HLTBtagDeepCSVSequencePF = cms.Sequence(
-        process.hltPFCHSJetForBtagSelector # maybe for the future
-        +process.hltPFCHSJetForBtag # maybe for the future
-        +process.hltDeepBLifetimeTagInfosPF
+        # process.hltPFCHSJetForBtagSelector # maybe for the future
+        # +process.hltPFCHSJetForBtag # maybe for the future
+        process.hltDeepBLifetimeTagInfosPF
         +process.hltDeepInclusiveVertexFinderPF
         +process.hltDeepInclusiveSecondaryVerticesPF
         +process.hltDeepTrackVertexArbitratorPF
@@ -580,9 +580,9 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         +process.hltDeepCombinedSecondaryVertexBJetTagsPF)
 
     process.HLTBtagDeepCSVSequencePFPuppi = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelector
-        +process.hltPFPuppiJetForBtag
-        +process.hltDeepBLifetimeTagInfosPFPuppi
+        # process.hltPFPuppiJetForBtagSelector
+        # +process.hltPFPuppiJetForBtag
+        process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltDeepInclusiveVertexFinderPF
         +process.hltDeepInclusiveSecondaryVerticesPF
         +process.hltDeepTrackVertexArbitratorPF
@@ -592,18 +592,26 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         +process.hltDeepCombinedSecondaryVertexBJetTagsPFPuppi)
 
     process.HLTBtagProbabiltySequencePF = cms.Sequence(
+        # process.hltPFCHSJetForBtagSelector # maybe for the future
+        # +process.hltPFCHSJetForBtag # maybe for the future
         process.hltDeepBLifetimeTagInfosPF
         +process.hltPfJetProbabilityBJetTags)
 
     process.HLTBtagBProbabiltySequencePF = cms.Sequence(
+        # process.hltPFCHSJetForBtagSelector # maybe for the future
+        # +process.hltPFCHSJetForBtag # maybe for the future
         process.hltDeepBLifetimeTagInfosPF
         +process.hltPfJetBProbabilityBJetTags)
 
     process.HLTBtagProbabiltySequencePFPuppi = cms.Sequence(
+        # process.hltPFPuppiJetForBtagSelector
+        # +process.hltPFPuppiJetForBtag
         process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltPfJetProbabilityBJetTagsPuppi)
 
     process.HLTBtagBProbabiltySequencePFPuppi = cms.Sequence(
+        # process.hltPFPuppiJetForBtagSelector
+        # +process.hltPFPuppiJetForBtag
         process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltPfJetBProbabilityBJetTagsPuppi)
 
