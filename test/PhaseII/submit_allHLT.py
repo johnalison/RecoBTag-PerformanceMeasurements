@@ -68,8 +68,8 @@ def main():
     config.Data.splitting = 'EventAwareLumiBased' # Testwithout
     config.Data.unitsPerJob = 1 # These get overwritten below
     # config.Data.ignoreLocality = False
-    config.Data.ignoreLocality = True
-    config.Site.whitelist = ['T2_DE_*','T1_DE_*']
+    # config.Data.ignoreLocality = True
+    # config.Site.whitelist = ['T2_DE_*','T1_DE_*']
     config.Data.publication = False
     config.Data.publishDBS = 'phys03'
     config.Site.storageSite = args.storageSite
