@@ -155,7 +155,7 @@ process.hltPFCHSCentralJetQuad30 = cms.EDFilter( "HLT1PFJet",
     MinMass = cms.double( -1.0 ),
     inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
     MinE = cms.double( -1.0 ),
-    triggerType = cms.int32( 86 ), #??????????????????????
+    triggerType = cms.int32( 86 ),
     MaxMass = cms.double( -1.0 )
 )
 
@@ -168,7 +168,7 @@ process.hlt1PFCHSCentralJet75 = cms.EDFilter( "HLT1PFJet",
     MinMass = cms.double( -1.0 ),
     inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
     MinE = cms.double( -1.0 ),
-    triggerType = cms.int32( 0 ), #??????????????????????
+    triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
 )
 
@@ -181,7 +181,7 @@ process.hlt2PFCHSCentralJet60 = cms.EDFilter( "HLT1PFJet",
     MinMass = cms.double( -1.0 ),
     inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
     MinE = cms.double( -1.0 ),
-    triggerType = cms.int32( 0 ), #??????????????????????
+    triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
 )
 
@@ -194,7 +194,7 @@ process.hlt3PFCHSCentralJet45 = cms.EDFilter( "HLT1PFJet",
     MinMass = cms.double( -1.0 ),
     inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
     MinE = cms.double( -1.0 ),
-    triggerType = cms.int32( 0 ), #??????????????????????
+    triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
 )
 
@@ -207,12 +207,12 @@ process.hlt4PFCHSCentralJet40 = cms.EDFilter( "HLT1PFJet",
     MinMass = cms.double( -1.0 ),
     inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
     MinE = cms.double( -1.0 ),
-    triggerType = cms.int32( 0 ), #??????????????????????
+    triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
 )
 
 process.hltPFCHSCentralJetQuad30forHt = cms.EDProducer( "HLTPFJetCollectionProducer",
-    TriggerTypes = cms.vint32( 86 ), #??????????????????????
+    TriggerTypes = cms.vint32( 86 ),
     HLTObject = cms.InputTag( "hltPFCHSCentralJetQuad30" )
 )
 
@@ -242,16 +242,17 @@ process.hltPFCHSCentralJetsQuad30HT330 = cms.EDFilter( "HLTHtMhtFilter",
 
 
 # modify simple BtagSequence
-process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltPFCHSJetForBtag")
+# process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltPFCHSJetForBtag")
+process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltAK4PFCHSJetsCorrected")
 process.hltDeepSecondaryVertexTagInfosPFMod = process.hltDeepSecondaryVertexTagInfosPF.clone(trackIPTagInfos = "hltDeepBLifetimeTagInfosPFMod")
 process.hltDeepCombinedSecondaryVertexBJetTagsInfosMod = process.hltDeepCombinedSecondaryVertexBJetTagsInfos.clone(svTagInfos = "hltDeepSecondaryVertexTagInfosPFMod")
 process.hltDeepCombinedSecondaryVertexBJetTagsPFMod = process.hltDeepCombinedSecondaryVertexBJetTagsPF.clone(src = "hltDeepCombinedSecondaryVertexBJetTagsInfosMod")
 
 
 process.HLTBtagDeepCSVSequencePFMod = cms.Sequence(
-    process.hltPFCHSJetForBtagSelector
-    +process.hltPFCHSJetForBtag
-    +process.hltDeepBLifetimeTagInfosPFMod
+    # process.hltPFCHSJetForBtagSelector
+    # +process.hltPFCHSJetForBtag
+    process.hltDeepBLifetimeTagInfosPFMod
     +process.hltDeepInclusiveVertexFinderPF
     +process.hltDeepInclusiveSecondaryVerticesPF
     +process.hltDeepTrackVertexArbitratorPF
@@ -261,12 +262,13 @@ process.HLTBtagDeepCSVSequencePFMod = cms.Sequence(
     +process.hltDeepCombinedSecondaryVertexBJetTagsPFMod)
 
 
-process.hltBTagPFCHSDeepCSV4p5Triple = cms.EDFilter( "HLTPFJetTag",
+process.hltBTagPFCHSDeepCSV4p5Triple = cms.EDFilter("HLTPFJetTag",
     saveTags = cms.bool( True ),
     MinJets = cms.int32( 3 ),
     JetTags = cms.InputTag( 'hltDeepCombinedSecondaryVertexBJetTagsPFMod','probb' ),
-    TriggerType = cms.int32( 86 ), #??????????????????????
-    Jets = cms.InputTag( "hltPFCHSJetForBtag" ),
+    TriggerType = cms.int32( 86 ),
+    # Jets = cms.InputTag( "hltPFCHSJetForBtag" ),
+    Jets = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
     MinTag = cms.double( 0.24 ),
     MaxTag = cms.double( 999999.0 )
 )
@@ -317,7 +319,7 @@ process.hltBTagPFPuppiDeepCSV4p5Triple = cms.EDFilter( "HLTPFJetTag",
     saveTags = cms.bool( True ),
     MinJets = cms.int32( 3 ),
     JetTags = cms.InputTag( 'hltDeepCombinedSecondaryVertexBJetTagsPFPuppiMod','probb' ),
-    TriggerType = cms.int32( 86 ), #??????????????????????
+    TriggerType = cms.int32( 86 ),
     Jets = cms.InputTag( "hltPFPuppiJetForBtag" ),
     MinTag = cms.double( 0.24 ),
     MaxTag = cms.double( 999999.0 )
@@ -453,10 +455,10 @@ process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1 =
     +process.hlt3PFCHSCentralJet45
     +process.hlt4PFCHSCentralJet40
     +process.hltPFCHSCentralJetQuad30forHt
-    +process.hltHtMhtPFCHSCentralJetsQuadC30
-    +process.hltPFCHSCentralJetsQuad30HT330
+    # +process.hltHtMhtPFCHSCentralJetsQuadC30
+    # +process.hltPFCHSCentralJetsQuad30HT330
     +process.HLTBtagDeepCSVSequencePFMod
-    +process.hltBTagPFCHSDeepCSV4p5Triple
+    # +process.hltBTagPFCHSDeepCSV4p5Triple
 )
 
 # process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
@@ -532,11 +534,16 @@ if opts.inputFiles:
    process.source.fileNames = opts.inputFiles
 else:
    process.source.fileNames = [
-     # '/store/mc/Phase2HLTTDRWinter20DIGI/QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8/GEN-SIM-DIGI-RAW/PU200_castor_110X_mcRun4_realistic_v3-v2/10000/02C1FCCC-315F-404C-ABF7-A65154C46C28.root',
-     # '/store/mc/Phase2HLTTDRWinter20DIGI/QCD_Pt_30to50_TuneCP5_14TeV_pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/40000/0013F717-1DFF-ED45-B881-E11B000895C6.root',
-     '/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/F9F5095B-DC0A-6F48-8148-E221616F0C9E.root',
+        # '/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/F9F5095B-DC0A-6F48-8148-E221616F0C9E.root',
+     'file:/afs/cern.ch/work/s/sewuchte/private/BTag_Upgrade/april_CMSSW_11_1_0_pre6/TestL1/CMSSW_11_1_0_pre6/src/RecoBTag/PerformanceMeasurements/python/Configs/testGENSIM.root',
    ]
-
+process.MessageLogger = cms.Service("MessageLogger",
+       destinations   = cms.untracked.vstring('detailedInfo','debugInfo', 'critical','cerr'),
+       critical       = cms.untracked.PSet(threshold = cms.untracked.string('ERROR')),
+       detailedInfo   = cms.untracked.PSet(threshold = cms.untracked.string('INFO')),
+       debugInfo   = cms.untracked.PSet(threshold = cms.untracked.string('DEBUG')),
+       cerr           = cms.untracked.PSet(threshold  = cms.untracked.string('WARNING'))
+)
 
 process.schedule = cms.Schedule(*[
   process.raw2digi_step,
