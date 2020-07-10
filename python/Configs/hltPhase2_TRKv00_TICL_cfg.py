@@ -1,8 +1,8 @@
 # Auto generated configuration file
-# using:
-# Revision: 1.19
-# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v
-# with command line options: step3 --geometry Extended2026D49 --era Phase2C9 --conditions auto:phase2_realistic_T15 --processName RECO2 --step RAW2DIGI,RECO --eventcontent RECO --datatier RECO --filein /store/mc/Phase2HLTTDRWinter20DIGI/QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8/GEN-SIM-DIGI-RAW/PU200_castor_110X_mcRun4_realistic_v3-v2/10000/05BFAD3E-3F91-1843-ABA2-2040324C7567.root --mc --nThreads 4 --nStreams 4 --no_exec -n 10 --customise SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,Configuration/DataProcessing/Utils.addMonitoring --customise JMETriggerAnalysis/Common/hltPhase2_TRKv00.customize_hltPhase2_TRKv00 --customise JMETriggerAnalysis/Common/hltPhase2_JME.customize_hltPhase2_JME --customise JMETriggerAnalysis/Common/hltPhase2_JME.customize_hltPhase2_TICL --customise RecoBTag/PerformanceMeasurements/hltPhase2_BTV.customize_hltPhase2_BTV --customise_commands process.schedule.remove(process.RECOoutput_step)\ndel process.RECOoutput\ndel process.RECOoutput_step\n --python_filename hltPhase2_TRKv00_TICL_cfg.py
+# using: 
+# Revision: 1.19 
+# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
+# with command line options: step3 --geometry Extended2026D49 --era Phase2C9 --conditions auto:phase2_realistic_T15 --processName RECO2 --step RAW2DIGI,RECO --eventcontent RECO --datatier RECO --filein /store/mc/Phase2HLTTDRWinter20DIGI/QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8/GEN-SIM-DIGI-RAW/PU200_castor_110X_mcRun4_realistic_v3-v2/10000/05BFAD3E-3F91-1843-ABA2-2040324C7567.root --mc --nThreads 4 --nStreams 4 --no_exec -n 10 --customise SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,Configuration/DataProcessing/Utils.addMonitoring --customise JMETriggerAnalysis/Common/hltPhase2_L1T.customize_hltPhase2_L1T --customise JMETriggerAnalysis/Common/hltPhase2_TRKv00.customize_hltPhase2_TRKv00 --customise JMETriggerAnalysis/Common/hltPhase2_JME.customize_hltPhase2_JME --customise JMETriggerAnalysis/Common/hltPhase2_JME.customize_hltPhase2_TICL --customise_commands process.schedule.remove(process.RECOoutput_step)\ndel process.RECOoutput\ndel process.RECOoutput_step\n --python_filename hltPhase2_TRKv00_TICL_cfg.py
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Phase2C9_cff import Phase2C9
@@ -104,37 +104,37 @@ process.options.numberOfConcurrentLuminosityBlocks=cms.untracked.uint32(1)
 # customisation of the process.
 
 # Automatic addition of the customisation function from SLHCUpgradeSimulations.Configuration.aging
-from SLHCUpgradeSimulations.Configuration.aging import customise_aging_1000
+from SLHCUpgradeSimulations.Configuration.aging import customise_aging_1000 
 
 #call to customisation function customise_aging_1000 imported from SLHCUpgradeSimulations.Configuration.aging
 process = customise_aging_1000(process)
 
 # Automatic addition of the customisation function from Configuration.DataProcessing.Utils
-from Configuration.DataProcessing.Utils import addMonitoring
+from Configuration.DataProcessing.Utils import addMonitoring 
 
 #call to customisation function addMonitoring imported from Configuration.DataProcessing.Utils
 process = addMonitoring(process)
 
+# Automatic addition of the customisation function from JMETriggerAnalysis.Common.hltPhase2_L1T
+from JMETriggerAnalysis.Common.hltPhase2_L1T import customize_hltPhase2_L1T 
+
+#call to customisation function customize_hltPhase2_L1T imported from JMETriggerAnalysis.Common.hltPhase2_L1T
+process = customize_hltPhase2_L1T(process)
+
 # Automatic addition of the customisation function from JMETriggerAnalysis.Common.hltPhase2_TRKv00
-from JMETriggerAnalysis.Common.hltPhase2_TRKv00 import customize_hltPhase2_TRKv00
+from JMETriggerAnalysis.Common.hltPhase2_TRKv00 import customize_hltPhase2_TRKv00 
 
 #call to customisation function customize_hltPhase2_TRKv00 imported from JMETriggerAnalysis.Common.hltPhase2_TRKv00
 process = customize_hltPhase2_TRKv00(process)
 
 # Automatic addition of the customisation function from JMETriggerAnalysis.Common.hltPhase2_JME
-from JMETriggerAnalysis.Common.hltPhase2_JME import customize_hltPhase2_JME,customize_hltPhase2_TICL
+from JMETriggerAnalysis.Common.hltPhase2_JME import customize_hltPhase2_JME,customize_hltPhase2_TICL 
 
 #call to customisation function customize_hltPhase2_JME imported from JMETriggerAnalysis.Common.hltPhase2_JME
 process = customize_hltPhase2_JME(process)
 
 #call to customisation function customize_hltPhase2_TICL imported from JMETriggerAnalysis.Common.hltPhase2_JME
 process = customize_hltPhase2_TICL(process)
-
-# Automatic addition of the customisation function from RecoBTag.PerformanceMeasurements.hltPhase2_BTV
-# from RecoBTag.PerformanceMeasurements.hltPhase2_BTV import customize_hltPhase2_BTV
-
-#call to customisation function customize_hltPhase2_BTV imported from RecoBTag.PerformanceMeasurements.hltPhase2_BTV
-# process = customize_hltPhase2_BTV(process)
 
 # End of customisation functions
 
