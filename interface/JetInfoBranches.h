@@ -90,6 +90,14 @@ class JetInfoBranches {
     float Jet_DeepCSVbbP[nMaxJets_];
     float Jet_DeepCSVccP[nMaxJets_];
 
+    // float Jet_DeepFlavourb[nMaxJets_];
+    // float Jet_DeepFlavourbb[nMaxJets_];
+    // float Jet_DeepFlavourlepb[nMaxJets_];
+    // float Jet_DeepFlavourc[nMaxJets_];
+    // float Jet_DeepFlavouruds[nMaxJets_];
+    // float Jet_DeepFlavourg[nMaxJets_];
+
+
     float Jet_ProbaN[nMaxJets_];
     float Jet_ProbaP[nMaxJets_];
     float Jet_Proba[nMaxJets_];

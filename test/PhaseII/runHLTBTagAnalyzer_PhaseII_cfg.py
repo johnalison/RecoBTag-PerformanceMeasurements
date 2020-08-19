@@ -50,7 +50,7 @@ opts.register('dumpPython', None,
               vpo.VarParsing.varType.string,
               'Path to python file with content of cms.Process')
 
-opts.register('trkdqm', True,
+opts.register('trkdqm', False,
               vpo.VarParsing.multiplicity.singleton,
               vpo.VarParsing.varType.bool,
               'added monitoring histograms for selected Tracks and Vertices')
@@ -60,7 +60,7 @@ opts.register('BTVreco', 'default',
               vpo.VarParsing.varType.string,
               'which reco to load for BTV sequence, default = default')
 
-opts.register('pfdqm', 3,
+opts.register('pfdqm', 0,
               vpo.VarParsing.multiplicity.singleton,
               vpo.VarParsing.varType.int,
               'added monitoring histograms for selected PF-Candidates')
@@ -126,11 +126,12 @@ process.noFilter_PFDeepCSV = cms.Path(process.HLTBtagDeepCSVSequencePF)
 process.noFilter_PFProba = cms.Path(process.HLTBtagProbabiltySequencePF)
 process.noFilter_PFBProba = cms.Path(process.HLTBtagBProbabiltySequencePF)
 process.noFilter_PFDeepCSVPuppi = cms.Path(process.HLTBtagDeepCSVSequencePFPuppi)
+process.noFilter_PFDeepFlavourPuppi = cms.Path(process.HLTBtagDeepFlavourSequencePFPuppi)
 process.noFilter_PFProbaPuppi = cms.Path(process.HLTBtagProbabiltySequencePFPuppi)
 process.noFilter_PFBProbaPuppi = cms.Path(process.HLTBtagBProbabiltySequencePFPuppi)
 
 process.schedule.extend([process.noFilter_PFDeepCSV, process.noFilter_PFProba, process.noFilter_PFBProba])
-process.schedule.extend([process.noFilter_PFDeepCSVPuppi, process.noFilter_PFProbaPuppi, process.noFilter_PFBProbaPuppi])
+process.schedule.extend([process.noFilter_PFDeepCSVPuppi, process.noFilter_PFProbaPuppi, process.noFilter_PFBProbaPuppi, process.noFilter_PFDeepFlavourPuppi])
 
 
 # max number of events to be processed
@@ -200,23 +201,24 @@ else:
    process.source.fileNames = [
      # "/store/mc/Phase2HLTTDRWinter20DIGI/TTToSemiLepton_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/20000/2FA69DD4-0651-084E-87B6-E5F38B007D5D.root",
      # ttbar NoPu
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FF494CD0-A72D-494F-8C89-8C6422D24504.root",
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FF1F2446-2FDB-5E4A-8CBE-A5E62A4518C2.root",
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FD048324-6F32-D944-B680-3633DBD45186.root",
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FC872EC1-9102-8545-A726-DDA51C276E6C.root",
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FBBEC820-DA08-AA44-8BC6-0469ED6C0D74.root",
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FA97BECF-51BE-7146-9946-B0560434E42B.root",
-     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/F9F5095B-DC0A-6F48-8148-E221616F0C9E.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FF494CD0-A72D-494F-8C89-8C6422D24504.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FF1F2446-2FDB-5E4A-8CBE-A5E62A4518C2.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FD048324-6F32-D944-B680-3633DBD45186.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FC872EC1-9102-8545-A726-DDA51C276E6C.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FBBEC820-DA08-AA44-8BC6-0469ED6C0D74.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FA97BECF-51BE-7146-9946-B0560434E42B.root",
+     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/F9F5095B-DC0A-6F48-8148-E221616F0C9E.root",
 
      # ttbarPU200
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240001/BCAB284F-B065-F343-9E48-478FDFBA70A0.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FFE0A906-20D1-764B-BA0E-CB0E4CC062D3.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FFCD7B10-9213-D746-B800-FD3F4A963297.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FF55BD2C-752F-424E-BD6A-238F8CF2B0A1.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FFB39BB4-5A91-2E46-B53A-415EE63A6DB8.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FF3DA176-02DA-224A-84AD-9FE986A028E4.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FF27A61A-E4BF-414A-8A82-AEDABD724723.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240001/BCAB284F-B065-F343-9E48-478FDFBA70A0.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FFE0A906-20D1-764B-BA0E-CB0E4CC062D3.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FFCD7B10-9213-D746-B800-FD3F4A963297.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FF55BD2C-752F-424E-BD6A-238F8CF2B0A1.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FFB39BB4-5A91-2E46-B53A-415EE63A6DB8.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FF3DA176-02DA-224A-84AD-9FE986A028E4.root",
+     "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240000/FF27A61A-E4BF-414A-8A82-AEDABD724723.root",
 
+     # "/store/relval/CMSSW_11_1_0_patch1/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW-RECO/110X_mcRun4_realistic_v3_2026D49PU200_raw1100_ProdType1-v1/10000/00C4D01F-4F23-1042-AB44-0B4CB733B59C.root",
    ]
 
 
@@ -333,6 +335,9 @@ process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVer
 process.btagana.PuppiJetBPBJetTags   = cms.InputTag('hltPfJetBProbabilityBJetTagsPuppi')
 process.btagana.PuppiJetPBJetTags    = cms.InputTag('hltPfJetProbabilityBJetTagsPuppi')
 process.btagana.PuppiJetCSVTags      = cms.InputTag('hltCombinedSecondaryVertexBJetTagsPFPuppi')
+process.btagana.PuppiJetDeepFlavourTags      = cms.InputTag('hltPfDeepFlavourJetTags:probb')
+process.btagana.PuppiJetDeepFlavourTags_bb      = cms.InputTag('hltPfDeepFlavourJetTags:probbb')
+process.btagana.PuppiJetDeepFlavourTags_lb      = cms.InputTag('hltPfDeepFlavourJetTags:problepb')
 
 process.btagana.analyzeL1Objects     =  cms.bool(True)
 process.btagana.L1VertexColl         =  cms.InputTag('L1TkPrimaryVertex')
@@ -394,12 +399,12 @@ if opts.trkdqm:
    from JMETriggerAnalysis.Common.vertexHistogrammer_cfi import vertexHistogrammer
    process.VertexHistograms_hltPixelVertices = vertexHistogrammer.clone(src = 'pixelVertices')
    process.VertexHistograms_hltPrimaryVertices = vertexHistogrammer.clone(src = 'offlinePrimaryVertices')
-   process.VertexHistograms_offlinePrimaryVertices = vertexHistogrammer.clone(src = 'offlineSlimmedPrimaryVertices')
+   # process.VertexHistograms_offlinePrimaryVertices = vertexHistogrammer.clone(src = 'offlineSlimmedPrimaryVertices')
 
    process.trkMonitoringSeq += cms.Sequence(
        process.VertexHistograms_hltPixelVertices
      + process.VertexHistograms_hltPrimaryVertices
-     + process.VertexHistograms_offlinePrimaryVertices
+     # + process.VertexHistograms_offlinePrimaryVertices
    )
 
 #   from Validation.RecoVertex.PrimaryVertexAnalyzer4PUSlimmed_cfi import vertexAnalysis, pixelVertexAnalysisPixelTrackingOnly
@@ -422,18 +427,30 @@ if opts.l1tdqm:
     from JMETriggerAnalysis.Common.pfJetHistogrammer_cfi import pfJetHistogrammer
     process.TrackHistograms_L1BarrelTracks = l1tPFTrackHistogrammer.clone(src = 'pfTracksFromL1TracksBarrel')
     process.TrackHistograms_L1HGCalTracks = l1tPFTrackHistogrammer.clone(src = 'pfTracksFromL1TracksHGCal')
-    process.trkMonitoringSeq += process.TrackHistograms_L1BarrelTracks
-    process.trkMonitoringSeq += process.TrackHistograms_L1HGCalTracks
+    # process.trkMonitoringSeq += process.TrackHistograms_L1BarrelTracks
+    # process.trkMonitoringSeq += process.TrackHistograms_L1HGCalTracks
     process.VertexHistograms_L1PrimaryVertices = l1tVertexHistogrammer.clone(src = 'L1TkPrimaryVertex')
-    process.trkMonitoringSeq += process.VertexHistograms_L1PrimaryVertices
+    # process.trkMonitoringSeq += process.VertexHistograms_L1PrimaryVertices
     process.JetHistograms_L1PFCHSCorrected = l1tPFJetHistogrammer.clone(src = 'ak4PFL1PFCorrected')
     process.JetHistograms_L1PFPUPPICorrected = l1tPFJetHistogrammer.clone(src = 'ak4PFL1PuppiCorrected')
     process.JetHistograms_L1PFCHS = pfJetHistogrammer.clone(src = 'ak4PFL1PF')
     process.JetHistograms_L1PFPUPPI = pfJetHistogrammer.clone(src = 'ak4PFL1Puppi')
-    process.trkMonitoringSeq += process.JetHistograms_L1PFCHSCorrected
-    process.trkMonitoringSeq += process.JetHistograms_L1PFPUPPICorrected
-    process.trkMonitoringSeq += process.JetHistograms_L1PFCHS
-    process.trkMonitoringSeq += process.JetHistograms_L1PFPUPPI
+    # process.trkMonitoringSeq += process.JetHistograms_L1PFCHSCorrected
+    # process.trkMonitoringSeq += process.JetHistograms_L1PFPUPPICorrected
+    # process.trkMonitoringSeq += process.JetHistograms_L1PFCHS
+    # process.trkMonitoringSeq += process.JetHistograms_L1PFPUPPI
+
+    process.l1MonitoringSeq = cms.Sequence(
+       process.TrackHistograms_L1BarrelTracks
+     + process.TrackHistograms_L1HGCalTracks
+     + process.VertexHistograms_L1PrimaryVertices
+     + process.JetHistograms_L1PFCHSCorrected
+     + process.JetHistograms_L1PFPUPPICorrected
+     + process.JetHistograms_L1PFCHS
+     + process.JetHistograms_L1PFPUPPI
+    )
+    process.l1MonitoringEndPath = cms.EndPath(process.l1MonitoringSeq)
+    process.schedule.extend([process.l1MonitoringEndPath])
 
 # ParticleFlow Monitoring
 if opts.pfdqm > 0:
@@ -494,6 +511,9 @@ if opts.pfdqm > 0:
    process.pfMonitoringEndPath = cms.EndPath(process.pfMonitoringSeq)
    process.schedule.extend([process.pfMonitoringEndPath])
 
+# Test for skimmed event content
+# from HLTrigger.Configuration.Tools.hltTDREventContent import dropInputProducts
+# dropInputProducts(process.source)
 
 process.p = cms.Path(
     process.allEvents
@@ -506,6 +526,7 @@ process.schedule.extend([process.analysisNTupleEndPath])
 # dump content of cms.Process to python file
 if opts.dumpPython is not None:
    open(opts.dumpPython, 'w').write(process.dumpPython())
+
 
 # print-outs
 print '--- runHLTBTagAnalyzer_PhaseII_cfg.py ---\n'

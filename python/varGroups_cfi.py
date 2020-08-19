@@ -2162,6 +2162,7 @@ groupSet = cms.PSet(
         "PuppiJet.Jet_SV_multi",
         "PuppiJet.Jet_CombIVF",
         "PuppiJet.Jet_DeepCSVb",
+        "PuppiJet.Jet_DeepFlavourB",
         "PuppiJet.Jet_Proba",
         "PuppiJet.Jet_Bprob",
       ),
