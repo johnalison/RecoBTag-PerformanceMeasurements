@@ -134,16 +134,16 @@ process.HLTAK4PFCHSJetsReconstruction = cms.Sequence(
   + process.hltAK4PFCHSJetsCorrected
 )
 # ## sequence: AK4 Jets, Puppi
-# process.HLTAK4PuppiJetsReconstruction = cms.Sequence(
-#     process.hltPuppi
-#   + process.hltAK4PuppiJets
-#   + process.hltAK4PuppiJetCorrectorL1
-#   + process.hltAK4PuppiJetCorrectorL2
-#   + process.hltAK4PuppiJetCorrectorL3
-#   + process.hltAK4PuppiJetCorrectorL2L3
-#   + process.hltAK4PuppiJetCorrector
-#   + process.hltAK4PuppiJetsCorrected
-# )
+process.HLTAK4PuppiJetsReconstruction = cms.Sequence(
+    process.hltPuppi
+  + process.hltAK4PuppiJets
+  + process.hltAK4PuppiJetCorrectorL1
+  + process.hltAK4PuppiJetCorrectorL2
+  + process.hltAK4PuppiJetCorrectorL3
+  + process.hltAK4PuppiJetCorrectorL2L3
+  + process.hltAK4PuppiJetCorrector
+  + process.hltAK4PuppiJetsCorrected
+)
 
 
 process.hltPFCHSCentralJetQuad30 = cms.EDFilter( "HLT1PFJet",
@@ -242,17 +242,17 @@ process.hltPFCHSCentralJetsQuad30HT330 = cms.EDFilter( "HLTHtMhtFilter",
 
 
 # modify simple BtagSequence
-# process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltPFCHSJetForBtag")
-process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltAK4PFCHSJetsCorrected")
+process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltPFCHSJetForBtag")
+# process.hltDeepBLifetimeTagInfosPFMod = process.hltDeepBLifetimeTagInfosPF.clone(jets = "hltAK4PFCHSJetsCorrected")
 process.hltDeepSecondaryVertexTagInfosPFMod = process.hltDeepSecondaryVertexTagInfosPF.clone(trackIPTagInfos = "hltDeepBLifetimeTagInfosPFMod")
 process.hltDeepCombinedSecondaryVertexBJetTagsInfosMod = process.hltDeepCombinedSecondaryVertexBJetTagsInfos.clone(svTagInfos = "hltDeepSecondaryVertexTagInfosPFMod")
 process.hltDeepCombinedSecondaryVertexBJetTagsPFMod = process.hltDeepCombinedSecondaryVertexBJetTagsPF.clone(src = "hltDeepCombinedSecondaryVertexBJetTagsInfosMod")
 
 
 process.HLTBtagDeepCSVSequencePFMod = cms.Sequence(
-    # process.hltPFCHSJetForBtagSelector
-    # +process.hltPFCHSJetForBtag
-    process.hltDeepBLifetimeTagInfosPFMod
+    process.hltPFCHSJetForBtagSelector
+    +process.hltPFCHSJetForBtag
+    +process.hltDeepBLifetimeTagInfosPFMod
     +process.hltDeepInclusiveVertexFinderPF
     +process.hltDeepInclusiveSecondaryVerticesPF
     +process.hltDeepTrackVertexArbitratorPF
@@ -269,6 +269,7 @@ process.hltBTagPFCHSDeepCSV4p5Triple = cms.EDFilter("HLTPFJetTag",
     TriggerType = cms.int32( 86 ),
     # Jets = cms.InputTag( "hltPFCHSJetForBtag" ),
     Jets = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
+    # Jets = cms.InputTag( "hltAK4PFCHSJets" ),
     MinTag = cms.double( 0.24 ),
     MaxTag = cms.double( 999999.0 )
 )
@@ -455,48 +456,48 @@ process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1 =
     +process.hlt3PFCHSCentralJet45
     +process.hlt4PFCHSCentralJet40
     +process.hltPFCHSCentralJetQuad30forHt
-    # +process.hltHtMhtPFCHSCentralJetsQuadC30
-    # +process.hltPFCHSCentralJetsQuad30HT330
+    +process.hltHtMhtPFCHSCentralJetsQuadC30
+    +process.hltPFCHSCentralJetsQuad30HT330
     +process.HLTBtagDeepCSVSequencePFMod
-    # +process.hltBTagPFCHSDeepCSV4p5Triple
+    +process.hltBTagPFCHSDeepCSV4p5Triple
 )
 
-# process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
-#     process.HLTParticleFlowSequence
-#     +process.HLTAK4PuppiJetsReconstruction
-#     +process.hltPFPuppiCentralJetQuad30
-#     +process.hlt1PFPuppiCentralJet75
-#     +process.hlt2PFPuppiCentralJet60
-#     +process.hlt3PFPuppiCentralJet45
-#     +process.hlt4PFPuppiCentralJet40
-#     +process.hltPFPuppiCentralJetQuad30forHt
-#     +process.hltHtMhtPFPuppiCentralJetsQuadC30
-#     +process.hltPFPuppiCentralJetsQuad30HT330  #problematic???
-#     +process.HLTBtagDeepCSVSequencePFPuppiMod
-#     +process.hltBTagPFPuppiDeepCSV4p5Triple
-# )
+process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
+    process.HLTParticleFlowSequence
+    +process.HLTAK4PuppiJetsReconstruction
+    +process.hltPFPuppiCentralJetQuad30
+    +process.hlt1PFPuppiCentralJet75
+    +process.hlt2PFPuppiCentralJet60
+    +process.hlt3PFPuppiCentralJet45
+    +process.hlt4PFPuppiCentralJet40
+    +process.hltPFPuppiCentralJetQuad30forHt
+    +process.hltHtMhtPFPuppiCentralJetsQuadC30
+    +process.hltPFPuppiCentralJetsQuad30HT330  #problematic???
+    +process.HLTBtagDeepCSVSequencePFPuppiMod
+    +process.hltBTagPFPuppiDeepCSV4p5Triple
+)
 
-# process.HLT_DoublePFCHSJets128MaxDeta1p6_DoublePFCHSBTagDeepCSV_p71_v1 = cms.Path(
-#     process.HLTParticleFlowSequence
-#     +process.HLTAK4PFCHSJetsReconstruction
-#     +process.hltSelectorPFCHSJets80L1FastJet
-#     +process.hltSelector6PFCHSCentralJetsL1FastJet
-#     +process.hltDoublePFCHSJets128Eta2p3
-#     +process.hltDoublePFCHSJets128Eta2p3MaxDeta1p6
-#     +process.HLTBtagDeepCSVSequencePFMod
-#     + process.hltBTagPFCHSDeepCSV0p71Double6Jets80
-# )
-#
-# process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1 = cms.Path(
-#     process.HLTParticleFlowSequence
-#     +process.HLTAK4PuppiJetsReconstruction
-#     +process.hltSelectorPFPuppiJets80L1FastJet
-#     +process.hltSelector6PFPuppiCentralJetsL1FastJet
-#     +process.hltDoublePFPuppiJets128Eta2p3
-#     +process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6
-#     +process.HLTBtagDeepCSVSequencePFPuppiMod
-#     + process.hltBTagPFPuppiDeepCSV0p71Double6Jets80
-# )
+process.HLT_DoublePFCHSJets128MaxDeta1p6_DoublePFCHSBTagDeepCSV_p71_v1 = cms.Path(
+    process.HLTParticleFlowSequence
+    +process.HLTAK4PFCHSJetsReconstruction
+    +process.hltSelectorPFCHSJets80L1FastJet
+    +process.hltSelector6PFCHSCentralJetsL1FastJet
+    +process.hltDoublePFCHSJets128Eta2p3
+    +process.hltDoublePFCHSJets128Eta2p3MaxDeta1p6
+    +process.HLTBtagDeepCSVSequencePFMod
+    + process.hltBTagPFCHSDeepCSV0p71Double6Jets80
+)
+
+process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1 = cms.Path(
+    process.HLTParticleFlowSequence
+    +process.HLTAK4PuppiJetsReconstruction
+    +process.hltSelectorPFPuppiJets80L1FastJet
+    +process.hltSelector6PFPuppiCentralJetsL1FastJet
+    +process.hltDoublePFPuppiJets128Eta2p3
+    +process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6
+    +process.HLTBtagDeepCSVSequencePFPuppiMod
+    + process.hltBTagPFPuppiDeepCSV0p71Double6Jets80
+)
 
 
 
@@ -549,6 +550,9 @@ process.schedule = cms.Schedule(*[
   process.raw2digi_step,
   process.HLT_AK4PFCHSJet100_v1,
   process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1,
+  process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1,
+  process.HLT_DoublePFCHSJets128MaxDeta1p6_DoublePFCHSBTagDeepCSV_p71_v1,
+  process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1,
 
 ])
 # EDM output
