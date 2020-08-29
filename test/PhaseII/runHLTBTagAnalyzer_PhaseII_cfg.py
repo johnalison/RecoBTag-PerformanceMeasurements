@@ -231,7 +231,7 @@ else:
 ####### Parameters ############
 ###############################
 
-groups = ["HLTEventInfo","HLTJetInfo","HLTTagVar","HLTJetTrack","HLTJetSV","HLTCSVTagVar"]
+groups = ["HLTEventInfo","HLTJetInfo","HLTTagVar","HLTJetTrack","HLTJetSV","HLTCSVTagVar","HLTDeepFlavourVar"]
 groups.append("L1ObjectInfo")
 
 
@@ -303,6 +303,7 @@ process.btagana.triggerTable          = cms.InputTag('TriggerResults') # Data an
 process.btagana.primaryVertexColl     = cms.InputTag('offlinePrimaryVertices') #change with new Offline like sequence
 
 process.btagana.runHLTJetVariables     = cms.bool(True)
+process.btagana.runDeepFlavourTagVariables     = cms.bool(True)
 process.btagana.runOnData = False
 
 # if opts.FastPV:
@@ -330,6 +331,7 @@ process.btagana.PFJetPBJetTags       = cms.InputTag('hltPfJetProbabilityBJetTags
 
 process.btagana.PuppiJets            = cms.InputTag('hltAK4PuppiJetsCorrected')
 process.btagana.PuppiJetTags         = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi')
+process.btagana.PuppiDeepFlavourTags = cms.InputTag('hltPfDeepFlavourTagInfos')
 process.btagana.PuppiSVs             = cms.InputTag('hltDeepSecondaryVertexTagInfosPFPuppi')
 process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppi:probb')
 process.btagana.PuppiJetBPBJetTags   = cms.InputTag('hltPfJetBProbabilityBJetTagsPuppi')
