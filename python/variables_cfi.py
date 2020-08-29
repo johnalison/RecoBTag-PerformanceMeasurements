@@ -4537,6 +4537,7 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_charged_chi2"),
       store       = cms.bool(False),
@@ -4545,6 +4546,116 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_PPar"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_PPar"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_DeltaR"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_DeltaR"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_PParRatio"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_PParRatio"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_Sip2dVal"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_Sip2dVal"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_Sip2dSig"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_Sip2dSig"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_JetDistVal"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_JetDistVal"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_ptrel"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_ptrel"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_drminsv"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_drminsv"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_vtx_ass"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_vtx_ass"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_puppiw"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_puppiw"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_EtaRel"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_EtaRel"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_charged_PtRel"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_charged_PtRel"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_neutral_drminsv"),
       store       = cms.bool(False),
@@ -4553,6 +4664,7 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_neutral_hadFrac"),
       store       = cms.bool(False),
@@ -4561,6 +4673,7 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_neutral_ptrel"),
       store       = cms.bool(False),
@@ -4569,6 +4682,37 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_neutral_deltaR"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_neutral_deltaR"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_neutral_isGamma"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_neutral_isGamma"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_neutral_puppiw"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_neutral_puppiw"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_sv_d3d"),
       store       = cms.bool(False),
@@ -4577,6 +4721,7 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_sv_d3dsig"),
       store       = cms.bool(False),
@@ -4585,6 +4730,7 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
     cms.PSet(
       variable    = cms.string("DeepFlavourInput_sv_normchi2"),
       store       = cms.bool(False),
@@ -4593,6 +4739,240 @@ variableList = [
       requires    = cms.vstring("nJet"),
       runOptions  = cms.vstring("runDeepFlavourTagVariables"),
     ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_pt"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_pt"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_deltaR"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_deltaR"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_mass"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_mass"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_ntracks"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_ntracks"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_chi2"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_chi2"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_dxy"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_dxy"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_dxysig"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_dxysig"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_costhetasvpv"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_costhetasvpv"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_enratio"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_enratio"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_trackSumJetEtRatio"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_trackSumJetEtRatio"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_trackSumJetDeltaR"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_trackSumJetDeltaR"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_vertexCategory"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_vertexCategory"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_trackSip2dValAboveCharm"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_trackSip2dValAboveCharm"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_trackSip2dSigAboveCharm"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_trackSip2dSigAboveCharm"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_trackSip3dValAboveCharm"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_trackSip3dValAboveCharm"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_trackSip3dSigAboveCharm"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_trackSip3dSigAboveCharm"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_jetNSelectedTracks"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_jetNSelectedTracks"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_jetNTracksEtaRel"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_jetNTracksEtaRel"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_jet_pt"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_jet_pt"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_jet_eta"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_jet_eta"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_c_pf_features"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_c_pf_features"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_n_pf_features"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_n_pf_features"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_sv_features"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_sv_features"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+    cms.PSet(
+      variable    = cms.string("DeepFlavourInput_npv"),
+      store       = cms.bool(False),
+      mconly      = cms.bool(False),
+      description = cms.string("DeepFlavourInput_npv"),
+      requires    = cms.vstring("nJet"),
+      runOptions  = cms.vstring("runDeepFlavourTagVariables"),
+    ),
+
+
+
     cms.PSet(
       variable    = cms.string("TagVarCSV_trackJetPt"),
       store       = cms.bool(False),

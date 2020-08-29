@@ -2630,6 +2630,72 @@ groupSet = cms.PSet(
       ),
 
 
+
+
+    cms.PSet(
+      group       = cms.string("HLTDeepFlavourVar"),
+      store       = cms.bool(False),
+      description = cms.string("DeepFlavour Tag Variables"),
+      variables   = cms.vstring(
+          "PuppiJet.DeepFlavourInput_charged_Sip3dVal",
+          "PuppiJet.DeepFlavourInput_charged_Sip3dSig",
+          "PuppiJet.DeepFlavourInput_charged_quality",
+          "PuppiJet.DeepFlavourInput_charged_chi2",
+          "PuppiJet.DeepFlavourInput_charged_PPar",
+          "PuppiJet.DeepFlavourInput_charged_DeltaR",
+          "PuppiJet.DeepFlavourInput_charged_PParRatio",
+          "PuppiJet.DeepFlavourInput_charged_Sip2dVal",
+          "PuppiJet.DeepFlavourInput_charged_Sip2dSig",
+          "PuppiJet.DeepFlavourInput_charged_JetDistVal",
+          "PuppiJet.DeepFlavourInput_charged_ptrel",
+          "PuppiJet.DeepFlavourInput_charged_drminsv",
+          "PuppiJet.DeepFlavourInput_charged_vtx_ass",
+          "PuppiJet.DeepFlavourInput_charged_puppiw",
+          "PuppiJet.DeepFlavourInput_charged_EtaRel",
+          "PuppiJet.DeepFlavourInput_charged_PtRel",
+
+          "PuppiJet.DeepFlavourInput_neutral_drminsv",
+          "PuppiJet.DeepFlavourInput_neutral_hadFrac",
+          "PuppiJet.DeepFlavourInput_neutral_ptrel",
+          "PuppiJet.DeepFlavourInput_neutral_deltaR",
+          "PuppiJet.DeepFlavourInput_neutral_isGamma",
+          "PuppiJet.DeepFlavourInput_neutral_puppiw",
+
+
+          "PuppiJet.DeepFlavourInput_sv_d3d",
+          "PuppiJet.DeepFlavourInput_sv_d3dsig",
+          "PuppiJet.DeepFlavourInput_sv_normchi2",
+          "PuppiJet.DeepFlavourInput_sv_pt",
+          "PuppiJet.DeepFlavourInput_sv_deltaR",
+          "PuppiJet.DeepFlavourInput_sv_mass",
+          "PuppiJet.DeepFlavourInput_sv_ntracks",
+          "PuppiJet.DeepFlavourInput_sv_chi2",
+          "PuppiJet.DeepFlavourInput_sv_dxy",
+          "PuppiJet.DeepFlavourInput_sv_dxysig",
+          "PuppiJet.DeepFlavourInput_sv_costhetasvpv",
+          "PuppiJet.DeepFlavourInput_sv_enratio",
+
+          "PuppiJet.DeepFlavourInput_trackSumJetEtRatio",
+          "PuppiJet.DeepFlavourInput_trackSumJetDeltaR",
+          "PuppiJet.DeepFlavourInput_vertexCategory",
+          "PuppiJet.DeepFlavourInput_trackSip2dValAboveCharm",
+          "PuppiJet.DeepFlavourInput_trackSip2dSigAboveCharm",
+          "PuppiJet.DeepFlavourInput_trackSip3dValAboveCharm",
+          "PuppiJet.DeepFlavourInput_trackSip3dSigAboveCharm",
+          "PuppiJet.DeepFlavourInput_jetNSelectedTracks",
+          "PuppiJet.DeepFlavourInput_jetNTracksEtaRel",
+
+          "PuppiJet.DeepFlavourInput_jet_pt",
+          "PuppiJet.DeepFlavourInput_jet_eta",
+          "PuppiJet.DeepFlavourInput_c_pf_features",
+          "PuppiJet.DeepFlavourInput_n_pf_features",
+          "PuppiJet.DeepFlavourInput_sv_features",
+          "PuppiJet.DeepFlavourInput_npv",
+
+      ),
+      ),
+
+
 cms.PSet(
   group       = cms.string("L1ObjectInfo"),
   store       = cms.bool(False),
