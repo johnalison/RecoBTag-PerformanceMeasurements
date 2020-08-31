@@ -611,7 +611,9 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
   bool havePassingPFJet = havePassingJets<PFJetCollection>(pfJetsColl);
 
   if(havePassingPFJet){
-    processHLTPFJets(pfJetsColl, PFJetTagCollectionTag_, PFJetCSVTag_, PFJetDeepCSVTag_, PFJetProbTag_, PFJetBProbTag_, PuppiJetDeepFlavourTag_,PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
+    processHLTPFJets(pfJetsColl, PFJetTagCollectionTag_, PFJetCSVTag_, PFJetDeepCSVTag_,
+                    PFJetProbTag_, PFJetBProbTag_, PuppiJetDeepFlavourTag_,
+                    PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
   }
 
   ++iJetColl;
@@ -621,7 +623,9 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
   bool havePassingPuppiJet = havePassingJets<PFJetCollection>(puppiJetsColl);
 
   if(havePassingPuppiJet){
-    processHLTPFJets(puppiJetsColl, PuppiJetTagCollectionTag_, PuppiJetCSVTag_, PuppiJetDeepCSVTag_, PuppiJetProbTag_, PuppiJetBProbTag_, PuppiJetDeepFlavourTag_,PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
+    processHLTPFJets(puppiJetsColl, PuppiJetTagCollectionTag_, PuppiJetCSVTag_, PuppiJetDeepCSVTag_,
+                    PuppiJetProbTag_, PuppiJetBProbTag_, PuppiJetDeepFlavourTag_,
+                    PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
   }
 
 
@@ -750,6 +754,8 @@ void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jets
 	}
       }
       JetInfo[iJetColl].Jet_DeepFlavourB[JetInfo[iJetColl].nJet]     = -1;
+      JetInfo[iJetColl].Jet_DeepFlavourBB[JetInfo[iJetColl].nJet]     = -1;
+      JetInfo[iJetColl].Jet_DeepFlavourLEPB[JetInfo[iJetColl].nJet]     = -1;
       if(deepflavourColl.isValid()){
 	unsigned int nDeepFlavour = deepflavourColl->size();
 	for(unsigned int iDeepFlavour = 0; iDeepFlavour < nDeepFlavour; ++iDeepFlavour){
