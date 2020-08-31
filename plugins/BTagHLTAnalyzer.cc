@@ -35,6 +35,8 @@
 #include "DataFormats/BTauReco/interface/BoostedDoubleSVTagInfo.h"
 #include "DataFormats/BTauReco/interface/TrackIPTagInfo.h"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/BTauReco/interface/DeepFlavourTagInfo.h"
+
 
 #include "DataFormats/GeometrySurface/interface/Line.h"
 #include "DataFormats/GeometryCommonDetAlgo/interface/Measurement1D.h"
@@ -151,7 +153,7 @@ typedef math::XYZPoint Point;
 typedef std::vector<reco::PFJet> PFJetCollection ;
 typedef std::vector<reco::ShallowTagInfo> ShallowTagCollection ;
 typedef edm::AssociationVector<edm::RefToBaseProd<reco::Jet>,std::vector<float> > HLTBTagValue;
-
+typedef std::vector<reco::DeepFlavourTagInfo> DeepFlavourTagInfoCollection;
 
 
 
@@ -235,7 +237,7 @@ private:
   void processHLTJets(const edm::Handle<JetColl>&,  const edm::EDGetTokenT<ShallowTagCollection>&,  const edm::EDGetTokenT<std::vector<SVColl> >&,
 		      const edm::EDGetTokenT<HLTBTagValue>&, const edm::EDGetTokenT<HLTBTagValue>&,
 		      const edm::EDGetTokenT<HLTBTagValue>&, const edm::EDGetTokenT<HLTBTagValue>&,
-              const edm::EDGetTokenT<HLTBTagValue>&,const edm::EDGetTokenT<HLTBTagValue>&,const edm::EDGetTokenT<HLTBTagValue>&,
+		      const edm::EDGetTokenT<HLTBTagValue>&,const edm::EDGetTokenT<HLTBTagValue>&,const edm::EDGetTokenT<HLTBTagValue>&,
 		      const edm::Event&, const edm::EventSetup&, const int) ;
 
   void processHLTPFJets(const edm::Handle<PFJetCollection>&, const edm::EDGetTokenT<ShallowTagCollection>&,
@@ -269,6 +271,7 @@ private:
   edm::EDGetTokenT<PFJetCollection> PuppiJetCollectionTag_;
   edm::EDGetTokenT<ShallowTagCollection> PuppiJetTagCollectionTag_;
   edm::EDGetTokenT<std::vector<SVTagInfo> > PuppiSVCollectionTag_;
+  edm::EDGetTokenT<DeepFlavourTagInfoCollection> PuppiDeepFlavourCollectionTag_;
   edm::EDGetTokenT<HLTBTagValue> PuppiJetCSVTag_;
   edm::EDGetTokenT<HLTBTagValue> PuppiJetDeepCSVTag_;
   edm::EDGetTokenT<HLTBTagValue> PuppiJetProbTag_;
@@ -292,6 +295,7 @@ private:
 
   bool isData_;
   bool runHLTJetVariables_;
+  bool runDeepFlavourTagVariables_;
 
   // trigger list
   std::vector<std::string> triggerPathNames_;
@@ -360,6 +364,7 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   maxJetEta_ = iConfig.getParameter<double>("MaxEta");
 
   runHLTJetVariables_ = iConfig.getParameter<bool>("runHLTJetVariables");
+  runDeepFlavourTagVariables_ = iConfig.getParameter<bool>("runDeepFlavourTagVariables");
 
   // Modules
   primaryVertexColl_   = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("HLTprimaryVertexColl"));
@@ -390,6 +395,7 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   PuppiJetCollectionTag_   = consumes<PFJetCollection>(iConfig.getParameter<edm::InputTag>("PuppiJets"));
   PuppiJetTagCollectionTag_ = consumes<ShallowTagCollection>(iConfig.getParameter<edm::InputTag>("PuppiJetTags"));
   PuppiSVCollectionTag_   = consumes<std::vector<SVTagInfo> >(iConfig.getParameter<edm::InputTag>("PuppiSVs"));
+  PuppiDeepFlavourCollectionTag_ = consumes<DeepFlavourTagInfoCollection>(iConfig.getParameter<edm::InputTag>("PuppiDeepFlavourTags"));
   PuppiJetCSVTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetCSVTags"));
   PuppiJetDeepCSVTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetDeepCSVTags"));
   PuppiJetProbTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetPBJetTags"));
@@ -626,6 +632,98 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
     processHLTPFJets(puppiJetsColl, PuppiJetTagCollectionTag_, PuppiJetCSVTag_, PuppiJetDeepCSVTag_,
                     PuppiJetProbTag_, PuppiJetBProbTag_, PuppiJetDeepFlavourTag_,
                     PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
+
+    // DeepFlavour InputFeatures
+    if(runDeepFlavourTagVariables_) {
+
+      edm::Handle <DeepFlavourTagInfoCollection> deepFlavourTagsColl;
+      iEvent.getByToken (PuppiDeepFlavourCollectionTag_, deepFlavourTagsColl);
+      if(deepFlavourTagsColl.isValid()){
+
+	//// Loop over the jets
+	for ( PFJetCollection::const_iterator jet = puppiJetsColl->begin(); jet != puppiJetsColl->end(); ++jet ) {
+
+	  double ptjet  = jet->pt()  ;
+	  double etajet = jet->eta() ;
+	  double phijet = jet->phi() ;
+
+	  if( ptjet < minJetPt_ || std::fabs( etajet ) > maxJetEta_ ) continue;
+
+	  for(DeepFlavourTagInfoCollection::const_iterator deepFlavTagInfo = deepFlavourTagsColl->begin(); deepFlavTagInfo != deepFlavourTagsColl->end(); ++deepFlavTagInfo){
+
+	    auto tagJet = deepFlavTagInfo->jet();
+	    float tagJetPhi  = tagJet->phi();
+	    float tagJetEta  = tagJet->eta();
+	    if(  std::fabs(tagJetPhi - phijet) < 0.1 && std::fabs(tagJetEta - etajet) < 0.1){
+
+	      const auto & features = deepFlavTagInfo->features();
+
+	      size_t csize = features.c_pf_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip3dVal[JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip3dVal;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip3dSig[JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip3dSig;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_quality[ JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].quality;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_chi2[    JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].chi2;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_EtaRel     [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackEtaRel      ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_PtRel      [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPtRel	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_PPar       [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPPar	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_DeltaR     [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackDeltaR	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_PParRatio  [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPParRatio	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip2dVal   [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip2dVal	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip2dSig   [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip2dSig	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_JetDistVal [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackJetDistVal	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_ptrel      [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].ptrel			 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_drminsv    [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].drminsv		 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_vtx_ass    [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].vtx_ass		 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_puppiw     [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].puppiw                  ;
+
+
+	      size_t nsize = features.n_pf_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_drminsv[JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].drminsv;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_hadFrac[JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].hadFrac;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_ptrel  [JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].ptrel;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_deltaR [JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].deltaR;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_isGamma[JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].isGamma;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_puppiw [JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].puppiw;
+
+
+	      size_t svsize = features.sv_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_sv_d3d[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].d3d;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_d3dsig[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].d3dsig;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_normchi2[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].normchi2;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_pt[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].pt;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_deltaR[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].deltaR;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_mass[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].mass;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_ntracks[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].ntracks;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_chi2[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].chi2;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_dxy[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].dxy;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_dxysig[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].dxysig;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_costhetasvpv[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].costhetasvpv;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_enratio[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].enratio;
+
+	      JetInfo[iJetColl].DeepFlavourInput_trackSumJetEtRatio[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSumJetEtRatio;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSumJetDeltaR[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSumJetDeltaR;
+	      JetInfo[iJetColl].DeepFlavourInput_vertexCategory[JetInfo[iJetColl].nJet] = features.tag_info_features.vertexCategory;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip2dValAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip2dValAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip2dSigAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip2dSigAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip3dValAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip3dValAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip3dSigAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip3dSigAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_jetNSelectedTracks[JetInfo[iJetColl].nJet] = features.tag_info_features.jetNSelectedTracks;
+	      JetInfo[iJetColl].DeepFlavourInput_jetNTracksEtaRel[JetInfo[iJetColl].nJet] = features.tag_info_features.jetNTracksEtaRel;
+
+	      JetInfo[iJetColl].DeepFlavourInput_jet_pt[JetInfo[iJetColl].nJet] = features.jet_features.pt;
+	      JetInfo[iJetColl].DeepFlavourInput_jet_eta[JetInfo[iJetColl].nJet] = features.jet_features.eta;
+	      JetInfo[iJetColl].DeepFlavourInput_c_pf_features[JetInfo[iJetColl].nJet] = features.c_pf_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_n_pf_features[JetInfo[iJetColl].nJet] = features.n_pf_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_sv_features[JetInfo[iJetColl].nJet] = features.sv_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_npv[JetInfo[iJetColl].nJet] = features.npv;
+
+
+	    }// jet matched tagifo
+	  } //loop on deepFlavTagInfo
+	}// loop on jets
+      }// isValid
+    }// runDeepFlavourTagVariables_
+    
   }
 
 
@@ -669,7 +767,7 @@ template<typename JetColl, typename SVColl>
 void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jetsColl, const edm::EDGetTokenT<ShallowTagCollection>& jetTagsCollToken, const edm::EDGetTokenT<std::vector<SVColl> >& svCollToken,
 						const edm::EDGetTokenT<HLTBTagValue>& CSVToken, const edm::EDGetTokenT<HLTBTagValue>& deepCSVToken,
 						const edm::EDGetTokenT<HLTBTagValue>& probToken, const edm::EDGetTokenT<HLTBTagValue>& probbToken,
-                        const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_bb,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_lepb,
+						const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_bb,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_lepb,
 						const edm::Event& iEvent, const edm::EventSetup& iSetup, const int iJetColl)
 {
 
@@ -770,6 +868,7 @@ void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jets
 	  }
 	}
       }
+
       //
       //  Fill prob Value
       //
@@ -1276,8 +1375,8 @@ void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jets
 template<typename IPTI,typename VTX>
 void BTagHLTAnalyzerT<IPTI,VTX>::processHLTPFJets(const edm::Handle<PFJetCollection>& jetsColl, const edm::EDGetTokenT<ShallowTagCollection>& jetTagsCollToken,
 						  const edm::EDGetTokenT<HLTBTagValue>& CSVToken, const edm::EDGetTokenT<HLTBTagValue>& deepCSVToken,
-                          const edm::EDGetTokenT<HLTBTagValue>& probToken, const edm::EDGetTokenT<HLTBTagValue>& bprobToken,
-                          const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_bb,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_lepb,
+						  const edm::EDGetTokenT<HLTBTagValue>& probToken, const edm::EDGetTokenT<HLTBTagValue>& bprobToken,
+						  const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_bb,const edm::EDGetTokenT<HLTBTagValue>& DeepFlavourToken_lepb,
 						  const edm::Event& iEvent, const edm::EventSetup& iSetup, const int iJetColl)
 {
 

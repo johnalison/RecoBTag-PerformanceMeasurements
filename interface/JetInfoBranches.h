@@ -438,14 +438,57 @@ class JetInfoBranches {
     float DeepFlavourInput_charged_Sip3dSig[nMaxJets_];
     float DeepFlavourInput_charged_quality[ nMaxJets_];
     float DeepFlavourInput_charged_chi2[    nMaxJets_];
+    float DeepFlavourInput_charged_PPar       [nMaxJets_];
+    float DeepFlavourInput_charged_DeltaR     [nMaxJets_];
+    float DeepFlavourInput_charged_PParRatio  [nMaxJets_];
+    float DeepFlavourInput_charged_Sip2dVal   [nMaxJets_];
+    float DeepFlavourInput_charged_Sip2dSig   [nMaxJets_];
+    float DeepFlavourInput_charged_JetDistVal [nMaxJets_];
+    float DeepFlavourInput_charged_ptrel      [nMaxJets_];
+    float DeepFlavourInput_charged_drminsv    [nMaxJets_];
+    float DeepFlavourInput_charged_vtx_ass    [nMaxJets_];
+    float DeepFlavourInput_charged_puppiw     [nMaxJets_];
+    float DeepFlavourInput_charged_EtaRel     [nMaxJets_];
+    float DeepFlavourInput_charged_PtRel      [nMaxJets_];
+
 
     float DeepFlavourInput_neutral_drminsv[nMaxJets_];
     float DeepFlavourInput_neutral_hadFrac[nMaxJets_];
-    float DeepFlavourInput_neutral_ptrel[  nMaxJets_];
+    float DeepFlavourInput_neutral_ptrel  [nMaxJets_];
+    float DeepFlavourInput_neutral_deltaR [nMaxJets_];
+    float DeepFlavourInput_neutral_isGamma[nMaxJets_];
+    float DeepFlavourInput_neutral_puppiw [nMaxJets_];
+
 
     float DeepFlavourInput_sv_d3d[     nMaxJets_];
     float DeepFlavourInput_sv_d3dsig[  nMaxJets_];
     float DeepFlavourInput_sv_normchi2[nMaxJets_];
+    float DeepFlavourInput_sv_pt[     nMaxJets_];
+    float DeepFlavourInput_sv_deltaR[  nMaxJets_];
+    float DeepFlavourInput_sv_mass[nMaxJets_];
+    float DeepFlavourInput_sv_ntracks[     nMaxJets_];
+    float DeepFlavourInput_sv_chi2[  nMaxJets_];
+    float DeepFlavourInput_sv_dxy[nMaxJets_];
+    float DeepFlavourInput_sv_dxysig[     nMaxJets_];
+    float DeepFlavourInput_sv_costhetasvpv[  nMaxJets_];
+    float DeepFlavourInput_sv_enratio[nMaxJets_];
+
+    float DeepFlavourInput_trackSumJetEtRatio[nMaxJets_];
+    float DeepFlavourInput_trackSumJetDeltaR[nMaxJets_];
+    float DeepFlavourInput_vertexCategory[nMaxJets_];
+    float DeepFlavourInput_trackSip2dValAboveCharm[nMaxJets_];
+    float DeepFlavourInput_trackSip2dSigAboveCharm[nMaxJets_];
+    float DeepFlavourInput_trackSip3dValAboveCharm[nMaxJets_];
+    float DeepFlavourInput_trackSip3dSigAboveCharm[nMaxJets_];
+    float DeepFlavourInput_jetNSelectedTracks[nMaxJets_];
+    float DeepFlavourInput_jetNTracksEtaRel[nMaxJets_];
+    float DeepFlavourInput_jet_pt[nMaxJets_];
+    float DeepFlavourInput_jet_eta[nMaxJets_];
+    float DeepFlavourInput_c_pf_features[nMaxJets_];
+    float DeepFlavourInput_n_pf_features[nMaxJets_];
+    float DeepFlavourInput_sv_features[nMaxJets_];
+    float DeepFlavourInput_npv[nMaxJets_];
+
 
     //DeepDoubleX input features selection
     float DeepDoubleXInput_jetNTracks[nMaxJets_];
@@ -1013,13 +1056,62 @@ class JetInfoBranches {
       if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_quality")) tree->Branch((name+"DeepFlavourInput_charged_quality" ).c_str(), DeepFlavourInput_charged_quality , (name+"DeepFlavourInput_charged_quality[" +name+"nJet]/F").c_str());
       if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_chi2")) tree->Branch((name+"DeepFlavourInput_charged_chi2"    ).c_str(), DeepFlavourInput_charged_chi2    , (name+"DeepFlavourInput_charged_chi2["    +name+"nJet]/F").c_str());
 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_PPar"      ))  tree->Branch((name+"DeepFlavourInput_charged_PPar"      ).c_str(),   DeepFlavourInput_charged_PPar      , (name+"DeepFlavourInput_charged_PPar["      +name+"nJet]/F").c_str());         
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_DeltaR"    ))  tree->Branch((name+"DeepFlavourInput_charged_DeltaR"    ).c_str(),   DeepFlavourInput_charged_DeltaR    , (name+"DeepFlavourInput_charged_DeltaR["    +name+"nJet]/F").c_str());         
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_PParRatio" ))  tree->Branch((name+"DeepFlavourInput_charged_PParRatio" ).c_str(),   DeepFlavourInput_charged_PParRatio , (name+"DeepFlavourInput_charged_PParRatio[" +name+"nJet]/F").c_str());       
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_Sip2dVal"  ))  tree->Branch((name+"DeepFlavourInput_charged_Sip2dVal"  ).c_str(),   DeepFlavourInput_charged_Sip2dVal  , (name+"DeepFlavourInput_charged_Sip2dVal["  +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_Sip2dSig"  ))  tree->Branch((name+"DeepFlavourInput_charged_Sip2dSig"  ).c_str(),   DeepFlavourInput_charged_Sip2dSig  , (name+"DeepFlavourInput_charged_Sip2dSig["  +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_JetDistVal"))  tree->Branch((name+"DeepFlavourInput_charged_JetDistVal").c_str(),   DeepFlavourInput_charged_JetDistVal, (name+"DeepFlavourInput_charged_JetDistVal["+name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_ptrel"     ))  tree->Branch((name+"DeepFlavourInput_charged_ptrel"     ).c_str(),   DeepFlavourInput_charged_ptrel     , (name+"DeepFlavourInput_charged_ptrel["     +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_drminsv"   ))  tree->Branch((name+"DeepFlavourInput_charged_drminsv"   ).c_str(),   DeepFlavourInput_charged_drminsv   , (name+"DeepFlavourInput_charged_drminsv["   +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_vtx_ass"   ))  tree->Branch((name+"DeepFlavourInput_charged_vtx_ass"   ).c_str(),   DeepFlavourInput_charged_vtx_ass   , (name+"DeepFlavourInput_charged_vtx_ass["   +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_puppiw"    ))  tree->Branch((name+"DeepFlavourInput_charged_puppiw"    ).c_str(),   DeepFlavourInput_charged_puppiw    , (name+"DeepFlavourInput_charged_puppiw["    +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_EtaRel"    ))  tree->Branch((name+"DeepFlavourInput_charged_EtaRel"    ).c_str(),   DeepFlavourInput_charged_EtaRel    , (name+"DeepFlavourInput_charged_EtaRel["    +name+"nJet]/F").c_str()); 
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_charged_PtRel"     ))  tree->Branch((name+"DeepFlavourInput_charged_PtRel"     ).c_str(),   DeepFlavourInput_charged_PtRel     , (name+"DeepFlavourInput_charged_PtRel["     +name+"nJet]/F").c_str()); 
+
+
+
       if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_drminsv")) tree->Branch((name+"DeepFlavourInput_neutral_drminsv").c_str(), DeepFlavourInput_neutral_drminsv, (name+"DeepFlavourInput_neutral_drminsv["+name+"nJet]/F").c_str());
       if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_hadFrac")) tree->Branch((name+"DeepFlavourInput_neutral_hadFrac").c_str(), DeepFlavourInput_neutral_hadFrac, (name+"DeepFlavourInput_neutral_hadFrac["+name+"nJet]/F").c_str());
-      if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_ptrel")) tree->Branch((name+"DeepFlavourInput_neutral_ptrel  ").c_str(), DeepFlavourInput_neutral_ptrel  , (name+"DeepFlavourInput_neutral_ptrel["  +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_ptrel")) tree->Branch((name+"DeepFlavourInput_neutral_ptrel").c_str(), DeepFlavourInput_neutral_ptrel  , (name+"DeepFlavourInput_neutral_ptrel["  +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_deltaR")) tree->Branch((name+"DeepFlavourInput_neutral_deltaR").c_str(), DeepFlavourInput_neutral_deltaR, (name+"DeepFlavourInput_neutral_deltaR["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_isGamma")) tree->Branch((name+"DeepFlavourInput_neutral_isGamma").c_str(), DeepFlavourInput_neutral_isGamma, (name+"DeepFlavourInput_neutral_isGamma["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_neutral_puppiw")) tree->Branch((name+"DeepFlavourInput_neutral_puppiw").c_str(), DeepFlavourInput_neutral_puppiw  , (name+"DeepFlavourInput_neutral_puppiw["  +name+"nJet]/F").c_str());
+
 
       if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_d3d")) tree->Branch((name+"DeepFlavourInput_sv_d3d"     ).c_str(), DeepFlavourInput_sv_d3d     , (name+"DeepFlavourInput_sv_d3d["     +name+"nJet]/F").c_str());
       if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_d3dsig")) tree->Branch((name+"DeepFlavourInput_sv_d3dsig"  ).c_str(), DeepFlavourInput_sv_d3dsig  , (name+"DeepFlavourInput_sv_d3dsig["  +name+"nJet]/F").c_str());
       if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_normchi2")) tree->Branch((name+"DeepFlavourInput_sv_normchi2").c_str(), DeepFlavourInput_sv_normchi2, (name+"DeepFlavourInput_sv_normchi2["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_pt")) tree->Branch((name+"DeepFlavourInput_sv_pt"     ).c_str(), DeepFlavourInput_sv_pt     , (name+"DeepFlavourInput_sv_pt["     +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_deltaR")) tree->Branch((name+"DeepFlavourInput_sv_deltaR"  ).c_str(), DeepFlavourInput_sv_deltaR  , (name+"DeepFlavourInput_sv_deltaR["  +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_mass")) tree->Branch((name+"DeepFlavourInput_sv_mass").c_str(), DeepFlavourInput_sv_mass, (name+"DeepFlavourInput_sv_mass["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_ntracks")) tree->Branch((name+"DeepFlavourInput_sv_ntracks"     ).c_str(), DeepFlavourInput_sv_ntracks     , (name+"DeepFlavourInput_sv_ntracks["     +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_chi2")) tree->Branch((name+"DeepFlavourInput_sv_chi2"  ).c_str(), DeepFlavourInput_sv_chi2  , (name+"DeepFlavourInput_sv_chi2["  +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_dxy")) tree->Branch((name+"DeepFlavourInput_sv_dxy").c_str(), DeepFlavourInput_sv_dxy, (name+"DeepFlavourInput_sv_dxy["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_dxysig")) tree->Branch((name+"DeepFlavourInput_sv_dxysig"     ).c_str(), DeepFlavourInput_sv_dxysig     , (name+"DeepFlavourInput_sv_dxysig["     +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_costhetasvpv")) tree->Branch((name+"DeepFlavourInput_sv_costhetasvpv"  ).c_str(), DeepFlavourInput_sv_costhetasvpv  , (name+"DeepFlavourInput_sv_costhetasvpv["  +name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_enratio")) tree->Branch((name+"DeepFlavourInput_sv_enratio").c_str(), DeepFlavourInput_sv_enratio, (name+"DeepFlavourInput_sv_enratio["+name+"nJet]/F").c_str());
+
+
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_trackSumJetEtRatio")) tree->Branch((name+"DeepFlavourInput_trackSumJetEtRatio").c_str(), DeepFlavourInput_trackSumJetEtRatio, (name+"DeepFlavourInput_trackSumJetEtRatio["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_trackSumJetDeltaR")) tree->Branch((name+"DeepFlavourInput_trackSumJetDeltaR").c_str(), DeepFlavourInput_trackSumJetDeltaR, (name+"DeepFlavourInput_trackSumJetDeltaR["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_vertexCategory")) tree->Branch((name+"DeepFlavourInput_vertexCategory").c_str(), DeepFlavourInput_vertexCategory, (name+"DeepFlavourInput_vertexCategory["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_trackSip2dValAboveCharm")) tree->Branch((name+"DeepFlavourInput_trackSip2dValAboveCharm").c_str(), DeepFlavourInput_trackSip2dValAboveCharm, (name+"DeepFlavourInput_trackSip2dValAboveCharm["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_trackSip2dSigAboveCharm")) tree->Branch((name+"DeepFlavourInput_trackSip2dSigAboveCharm").c_str(), DeepFlavourInput_trackSip2dSigAboveCharm, (name+"DeepFlavourInput_trackSip2dSigAboveCharm["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_trackSip3dValAboveCharm")) tree->Branch((name+"DeepFlavourInput_trackSip3dValAboveCharm").c_str(), DeepFlavourInput_trackSip3dValAboveCharm, (name+"DeepFlavourInput_trackSip3dValAboveCharm["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_trackSip3dSigAboveCharm")) tree->Branch((name+"DeepFlavourInput_trackSip3dSigAboveCharm").c_str(), DeepFlavourInput_trackSip3dSigAboveCharm, (name+"DeepFlavourInput_trackSip3dSigAboveCharm["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_jetNSelectedTracks")) tree->Branch((name+"DeepFlavourInput_jetNSelectedTracks").c_str(), DeepFlavourInput_jetNSelectedTracks, (name+"DeepFlavourInput_jetNSelectedTracks["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_jetNTracksEtaRel")) tree->Branch((name+"DeepFlavourInput_jetNTracksEtaRel").c_str(), DeepFlavourInput_jetNTracksEtaRel, (name+"DeepFlavourInput_jetNTracksEtaRel["+name+"nJet]/F").c_str());
+
+
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_jet_pt")) tree->Branch((name+"DeepFlavourInput_jet_pt").c_str(), DeepFlavourInput_jet_pt, (name+"DeepFlavourInput_jet_pt["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_jet_eta")) tree->Branch((name+"DeepFlavourInput_jet_eta").c_str(), DeepFlavourInput_jet_eta, (name+"DeepFlavourInput_jet_eta["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_c_pf_features")) tree->Branch((name+"DeepFlavourInput_c_pf_features").c_str(), DeepFlavourInput_c_pf_features, (name+"DeepFlavourInput_c_pf_features["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_n_pf_features")) tree->Branch((name+"DeepFlavourInput_n_pf_features").c_str(), DeepFlavourInput_n_pf_features, (name+"DeepFlavourInput_n_pf_features["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_sv_features")) tree->Branch((name+"DeepFlavourInput_sv_features").c_str(), DeepFlavourInput_sv_features, (name+"DeepFlavourInput_sv_features["+name+"nJet]/F").c_str());
+      if(variableParser.isToBeStored(name+"DeepFlavourInput_npv")) tree->Branch((name+"DeepFlavourInput_npv").c_str(), DeepFlavourInput_npv, (name+"DeepFlavourInput_npv["+name+"nJet]/F").c_str());
+
+
 
       ////// DeepDoubleX input variables
       if(variableParser.isToBeStored(name+"DeepDoubleXInput_jetNTracks")) tree->Branch((name+"DeepDoubleXInput_jetNTracks").c_str()           ,&DeepDoubleXInput_jetNTracks          ,(name+"DeepDoubleXInput_jetNTracks["+name+"nJet]/F").c_str());
