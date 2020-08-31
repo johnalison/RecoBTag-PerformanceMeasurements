@@ -55,7 +55,7 @@ opts.register('trkdqm', False,
               vpo.VarParsing.varType.bool,
               'added monitoring histograms for selected Tracks and Vertices')
 
-opts.register('BTVreco', 'default',
+opts.register('BTVreco', 'cutsV1',
               vpo.VarParsing.multiplicity.singleton,
               vpo.VarParsing.varType.string,
               'which reco to load for BTV sequence, default = default')
@@ -97,6 +97,9 @@ if opt_BTVreco == 'default':
       process = customize_hltPhase2_BTV(process)
 elif opt_BTVreco == 'cutsV1':
       from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_BTV_cuts import customize_hltPhase2_BTV
+      process = customize_hltPhase2_BTV(process)
+elif opt_BTVreco == 'cutsV2':
+      from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_BTV_cutsV2 import customize_hltPhase2_BTV
       process = customize_hltPhase2_BTV(process)
 else:
    raise RuntimeError('invalid argument for option "BTVreco": "'+opt_BTVreco+'"')

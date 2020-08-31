@@ -206,7 +206,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     )
 
 
-
+    # cutsV2
     process.hltDeepTrackVertexArbitratorPF = cms.EDProducer("CandidateVertexArbitrator",
     	beamSpot = cms.InputTag("offlineBeamSpot"),
     	dLenFraction = cms.double(0.333),
@@ -221,10 +221,14 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	primaryVertices = cms.InputTag("offlinePrimaryVertices"),
     	secondaryVertices = cms.InputTag("hltDeepInclusiveSecondaryVerticesPF"),
     	sigCut = cms.double(5),
+    	# trackMinLayers = cms.int32(4),
     	trackMinLayers = cms.int32(4),
     	trackMinPixels = cms.int32(1),
-    	trackMinPt = cms.double(0.4),
+    	# trackMinPixels = cms.int32(3),
+    	# trackMinPt = cms.double(0.4),
+    	trackMinPt = cms.double(1.4),
     	tracks = cms.InputTag("particleFlowTmp")
+    	# tracks = cms.InputTag("particleFlowTmpBTV")
     )
 
     process.hltDeepInclusiveSecondaryVerticesPF = cms.EDProducer("CandidateVertexMerger",
@@ -233,8 +237,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	secondaryVertices = cms.InputTag("hltDeepInclusiveVertexFinderPF")
     )
 
-
-
+    # cutsV2
     process.hltDeepInclusiveVertexFinderPF = cms.EDProducer("InclusiveCandidateVertexFinder",
     	beamSpot = cms.InputTag("offlineBeamSpot"),
     	clusterizer = cms.PSet(
@@ -251,17 +254,19 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	fitterRatio = cms.double(0.25),
     	fitterSigmacut = cms.double(3),
     	fitterTini = cms.double(256),
-    	maxNTracks = cms.uint32(30),
-    	maximumLongitudinalImpactParameter = cms.double(0.3),
+    	# maxNTracks = cms.uint32(30),
+    	maxNTracks = cms.uint32(15),
+    	# maximumLongitudinalImpactParameter = cms.double(0.3),
+    	maximumLongitudinalImpactParameter = cms.double(0.2),
     	maximumTimeSignificance = cms.double(3),
     	mightGet = cms.optional.untracked.vstring, #####new
     	minHits = cms.uint32(8),
     	# minHits = cms.uint32(0),
-    	minPt = cms.double(0.8),
-    	# primaryVertices = cms.InputTag("hltVerticesPFFilter"),
+    	# minPt = cms.double(0.8),
+    	minPt = cms.double(1.4),
     	primaryVertices = cms.InputTag("offlinePrimaryVertices"),
     	tracks = cms.InputTag("particleFlowTmp"),
-    	# tracks = cms.InputTag("generalTracks"),
+    	# tracks = cms.InputTag("particleFlowTmpBTV"),
     	useDirectVertexFitter = cms.bool(True),
     	useVertexReco = cms.bool(True),
     	vertexMinAngleCosine = cms.double(0.95),
@@ -275,58 +280,6 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	)
     )
 
-
-    process.hltCandidateJetBProbabilityComputer = cms.ESProducer("CandidateJetBProbabilityESProducer",
-        a_dR = cms.double(-0.001053),
-        a_pT = cms.double(0.005263),
-        b_dR = cms.double(0.6263),
-        b_pT = cms.double(0.3684),
-        deltaR = cms.double(-1.0),
-        impactParameterType = cms.int32(0),
-        max_pT = cms.double(500),
-        max_pT_dRcut = cms.double(0.1),
-        max_pT_trackPTcut = cms.double(3),
-        maximumDecayLength = cms.double(5.0),
-        maximumDistanceToJetAxis = cms.double(0.07),
-        min_pT = cms.double(120),
-        min_pT_dRcut = cms.double(0.5),
-        minimumProbability = cms.double(0.005),
-        numberOfBTracks = cms.uint32(4),
-        trackIpSign = cms.int32(1),
-        trackQualityClass = cms.string('any'),
-        useVariableJTA = cms.bool(False)
-    )
-
-    process.hltCandidateJetProbabilityComputer = cms.ESProducer("CandidateJetProbabilityESProducer",
-        a_dR = cms.double(-0.001053),
-        a_pT = cms.double(0.005263),
-        b_dR = cms.double(0.6263),
-        b_pT = cms.double(0.3684),
-        deltaR = cms.double(0.3),
-        impactParameterType = cms.int32(0),
-        max_pT = cms.double(500),
-        max_pT_dRcut = cms.double(0.1),
-        max_pT_trackPTcut = cms.double(3),
-        maximumDecayLength = cms.double(5.0),
-        maximumDistanceToJetAxis = cms.double(0.07),
-        min_pT = cms.double(120),
-        min_pT_dRcut = cms.double(0.5),
-        minimumProbability = cms.double(0.005),
-        trackIpSign = cms.int32(1),
-        trackQualityClass = cms.string('any'),
-        useVariableJTA = cms.bool(False)
-    )
-
-    process.hltPfJetBProbabilityBJetTags = cms.EDProducer("JetTagProducer",
-        jetTagComputer = cms.string('hltCandidateJetBProbabilityComputer'),
-        tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPF"))
-    )
-
-
-    process.hltPfJetProbabilityBJetTags = cms.EDProducer("JetTagProducer",
-        jetTagComputer = cms.string('hltCandidateJetProbabilityComputer'),
-        tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPF"))
-    )
 
 
     process.hltPFCHSJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
@@ -514,11 +467,53 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
             sortCriterium = cms.string('dist3dError')
         ),
         weights = cms.InputTag("hltPuppi")
+        # weights = cms.InputTag("hltPuppiBTV")
     )
 
     process.hltPfJetBProbabilityBJetTagsPuppi = cms.EDProducer("JetTagProducer",
         jetTagComputer = cms.string('hltCandidateJetBProbabilityComputer'),
         tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPFPuppi"))
+    )
+
+    process.hltCandidateJetBProbabilityComputer = cms.ESProducer("CandidateJetBProbabilityESProducer",
+        a_dR = cms.double(-0.001053),
+        a_pT = cms.double(0.005263),
+        b_dR = cms.double(0.6263),
+        b_pT = cms.double(0.3684),
+        deltaR = cms.double(-1.0),
+        impactParameterType = cms.int32(0),
+        max_pT = cms.double(500),
+        max_pT_dRcut = cms.double(0.1),
+        max_pT_trackPTcut = cms.double(3),
+        maximumDecayLength = cms.double(5.0),
+        maximumDistanceToJetAxis = cms.double(0.07),
+        min_pT = cms.double(120),
+        min_pT_dRcut = cms.double(0.5),
+        minimumProbability = cms.double(0.005),
+        numberOfBTracks = cms.uint32(4),
+        trackIpSign = cms.int32(1),
+        trackQualityClass = cms.string('any'),
+        useVariableJTA = cms.bool(False)
+    )
+
+    process.hltCandidateJetProbabilityComputer = cms.ESProducer("CandidateJetProbabilityESProducer",
+        a_dR = cms.double(-0.001053),
+        a_pT = cms.double(0.005263),
+        b_dR = cms.double(0.6263),
+        b_pT = cms.double(0.3684),
+        deltaR = cms.double(0.3),
+        impactParameterType = cms.int32(0),
+        max_pT = cms.double(500),
+        max_pT_dRcut = cms.double(0.1),
+        max_pT_trackPTcut = cms.double(3),
+        maximumDecayLength = cms.double(5.0),
+        maximumDistanceToJetAxis = cms.double(0.07),
+        min_pT = cms.double(120),
+        min_pT_dRcut = cms.double(0.5),
+        minimumProbability = cms.double(0.005),
+        trackIpSign = cms.int32(1),
+        trackQualityClass = cms.string('any'),
+        useVariableJTA = cms.bool(False)
     )
 
     process.hltPfJetProbabilityBJetTagsPuppi = cms.EDProducer("JetTagProducer",
@@ -528,6 +523,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
 
     process.hltDeepBLifetimeTagInfosPFPuppi = cms.EDProducer("CandIPProducer",
         candidates = cms.InputTag("particleFlowTmp"),
+        # candidates = cms.InputTag("particleFlowTmpBTV"),
         computeGhostTrack = cms.bool(True),
         computeProbabilities = cms.bool(True),
         ghostTrackPriorDeltaR = cms.double(0.03),
@@ -597,6 +593,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     process.hltPfDeepFlavourTagInfos = cms.EDProducer("DeepFlavourTagInfoProducer",
         # candidates = cms.InputTag("packedPFCandidates"),
         candidates = cms.InputTag("particleFlowTmp"),
+        # candidates = cms.InputTag("particleFlowTmpBTV"),
         compute_probabilities = cms.bool(False),
         fallback_puppi_weight = cms.bool(False),
         fallback_vertex_association = cms.bool(False),
@@ -611,6 +608,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         min_jet_pt = cms.double(15),
         # puppi_value_map = cms.InputTag("puppi"),
         puppi_value_map = cms.InputTag("hltPuppi"),
+        # puppi_value_map = cms.InputTag("hltPuppiBTV"),
         run_deepVertex = cms.bool(False),
         # secondary_vertices = cms.InputTag("inclusiveCandidateSecondaryVertices"),
         secondary_vertices = cms.InputTag("hltDeepInclusiveSecondaryVerticesPF"),
@@ -641,6 +639,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         jets = cms.InputTag("hltAK4PuppiJets"),
         # particles = cms.InputTag("particleFlow"),
         particles = cms.InputTag("particleFlowTmp"),
+        # particles = cms.InputTag("particleFlowTmpBTV"),
         produceAssociationToOriginalVertices = cms.bool(True),
         produceNoPileUpCollection = cms.bool(False),
         producePileUpCollection = cms.bool(False),
@@ -652,19 +651,6 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         usePVMET = cms.bool(True),
         vertices = cms.InputTag("offlinePrimaryVertices")
     )
-
-
-
-    # process.generalTracks = cms.EDProducer('TracksClosestToFirstVerticesSelector',
-    #     tracks = cms.InputTag('generalTracksOriginal'),
-    #     # vertices = cms.InputTag('hltTrimmedPixelVertices'),
-    #     vertices = cms.InputTag('offlinePrimaryVertices'),
-    #     # retain only tracks associated to one of the first N vertices
-    #     maxNVertices = cms.int32( 10 ),
-    #     # track-vertex association: max delta-Z between track and z-closest vertex
-    #     maxDeltaZ = cms.double( 0.2 ),
-    # )
-
 
     process.HLTBtagDeepFlavourSequencePFPuppi = cms.Sequence(
         process.hltPFPuppiJetForBtagSelector # maybe for the future
@@ -705,6 +691,17 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         +process.hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi
         +process.hltDeepCombinedSecondaryVertexBJetTagsPFPuppi)
 
+    process.hltPfJetBProbabilityBJetTags = cms.EDProducer("JetTagProducer",
+        jetTagComputer = cms.string('hltCandidateJetBProbabilityComputer'),
+        tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPF"))
+    )
+
+
+    process.hltPfJetProbabilityBJetTags = cms.EDProducer("JetTagProducer",
+        jetTagComputer = cms.string('hltCandidateJetProbabilityComputer'),
+        tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPF"))
+    )
+
     process.HLTBtagProbabiltySequencePF = cms.Sequence(
         process.hltPFCHSJetForBtagSelector # maybe for the future
         +process.hltPFCHSJetForBtag # maybe for the future
@@ -716,6 +713,18 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         +process.hltPFCHSJetForBtag # maybe for the future
         +process.hltDeepBLifetimeTagInfosPF
         +process.hltPfJetBProbabilityBJetTags)
+
+
+
+    process.hltPfJetBProbabilityBJetTagsPuppi = cms.EDProducer("JetTagProducer",
+        jetTagComputer = cms.string('hltCandidateJetBProbabilityComputer'),
+        tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPFPuppi"))
+    )
+
+    process.hltPfJetProbabilityBJetTagsPuppi = cms.EDProducer("JetTagProducer",
+        jetTagComputer = cms.string('hltCandidateJetProbabilityComputer'),
+        tagInfos = cms.VInputTag(cms.InputTag("hltDeepBLifetimeTagInfosPFPuppi"))
+    )
 
     process.HLTBtagProbabiltySequencePFPuppi = cms.Sequence(
         process.hltPFPuppiJetForBtagSelector
