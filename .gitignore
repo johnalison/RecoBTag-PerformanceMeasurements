@@ -5,4 +5,4 @@
 #*.*#
 __init__.py
 *.log
-
+test/PhaseII/crab_projects_*
