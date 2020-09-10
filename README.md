@@ -3,8 +3,8 @@
 ## Software setup for CMSSW_11_1_2
 * **Step #1** : create local CMSSW area and add the relevant packages.
 ```
-cmsrel CMSSW_11_1_2
-cd CMSSW_11_1_2/src
+cmsrel CMSSW_11_1_2_patch3
+cd CMSSW_11_1_2_patch3/src
 cmsenv
 
 git cms-init
@@ -17,6 +17,16 @@ git cms-init
 # git fetch hatakeyamak
 # git cherry-pick 0cf67551731c80dc85130e4b8ec73c8f44d53cb0
 
+# For running custom L1 Filters
+git cms-addpkg DataFormats/HLTReco
+git cms-addpkg HLTrigger/HLTcore
+git cms-addpkg HLTrigger/HLTfilters
+git remote add missirol https://github.com/missirol/cmssw.git
+git fetch missirol
+
+git cherry-pick 892eac81715c88d13c465ffc08e5d86c6ca87a7e
+git cherry-pick 66d114ff75480e72e59dec1101ff4bb51e623523
+
 git cms-addpkg RecoBTag
 git cms-addpkg RecoBTag/TensorFlow
 git cms-addpkg RecoBTag/Combined
@@ -25,14 +35,19 @@ git clone -b PrunedTraining_NoPuppi https://github.com/emilbols/RecoBTag-Combine
 wget https://raw.githubusercontent.com/cms-data/RecoBTag-Combined/master/DeepCSV_PhaseII.json -P RecoBTag/Combined/data/
 git clone -b PhaseIIOnline --depth 1 https://github.com/johnalison/RecoBTag-PerformanceMeasurements.git RecoBTag/PerformanceMeasurements
 
-git clone https://github.com/missirol/JMETriggerAnalysis.git -o missirol -b phase2
+git clone https://github.com/missirol/JMETriggerAnalysis.git -o missirol -b phase2_devel_l1tSeed
 
 scram b -j8
 
 ```
 
 
-* **Step #2a** : generate customized configuration file to run TRK(v00/v02/v06)+PF+JME(incl TICL?)+BTV HLT-like reconstruction on RAW.
+
+* **Step #2** : Run `cmsRun` with bTagHLTAnalyzer in `/test/python/PhaseII/runHLTBTagAnalyzer_PhaseII_cfg.py`
+
+
+#obsolete
+* **Creating configuration files** : generate customized configuration file to run TRK(v00/v02/v06)+PF+JME(incl TICL?)+BTV HLT-like reconstruction on RAW.
 Already done in `RecoBTag/PerformanceMeasurements/python/hltPhase2_TRKv*_cfg`
 For example with TrackingV6 and TICL:
 ```
@@ -57,5 +72,3 @@ cmsDriver.py step3 \
   --customise RecoBTag/PerformanceMeasurements/hltPhase2_BTV.customize_hltPhase2_BTV \
   --customise_commands 'process.schedule.remove(process.RECOoutput_step)\ndel process.RECOoutput\ndel process.RECOoutput_step\n'
 ```
-
-* **Step #3** : Run `cmsRun` with bTagHLTAnalyzer in `/test/python/PhaseII/runHLTBTagAnalyzer_PhaseII_cfg.py`
