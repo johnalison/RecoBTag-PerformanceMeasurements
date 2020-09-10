@@ -83,7 +83,7 @@ process.RECOoutput = cms.OutputModule("PoolOutputModule",
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T15', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '111X_mcRun4_realistic_T15_v2', '')
 
 # Path and EndPath definitions
 process.raw2digi_step = cms.Path(process.RawToDigi)
@@ -116,10 +116,10 @@ from Configuration.DataProcessing.Utils import addMonitoring
 process = addMonitoring(process)
 
 # Automatic addition of the customisation function from JMETriggerAnalysis.Common.hltPhase2_L1T
-from JMETriggerAnalysis.Common.hltPhase2_L1T import customize_hltPhase2_L1T
+# from JMETriggerAnalysis.Common.hltPhase2_L1T import customize_hltPhase2_L1T
 
 #call to customisation function customize_hltPhase2_L1T imported from JMETriggerAnalysis.Common.hltPhase2_L1T
-process = customize_hltPhase2_L1T(process)
+# process = customize_hltPhase2_L1T(process)
 
 # Automatic addition of the customisation function from JMETriggerAnalysis.Common.hltPhase2_TRKv06
 from JMETriggerAnalysis.Common.hltPhase2_TRKv06 import customize_hltPhase2_TRKv06

@@ -64,12 +64,12 @@ if opt_reco.endswith('_skimmedTracks'):
    opt_reco = opt_reco[:-len('_skimmedTracks')]
    opt_skimTracks = True
 
-if   opt_reco == 'HLT_TRKv00':      from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_TRKv00_cfg      import cms, process
-elif opt_reco == 'HLT_TRKv00_TICL': from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_TRKv00_TICL_cfg import cms, process
-elif opt_reco == 'HLT_TRKv02':      from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_TRKv02_cfg      import cms, process
-elif opt_reco == 'HLT_TRKv02_TICL': from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_TRKv02_TICL_cfg import cms, process
-elif opt_reco == 'HLT_TRKv06':      from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_TRKv06_cfg      import cms, process
-elif opt_reco == 'HLT_TRKv06_TICL': from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_TRKv06_TICL_cfg import cms, process
+if   opt_reco == 'HLT_TRKv00':      from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv00_cfg      import cms, process
+elif opt_reco == 'HLT_TRKv00_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv00_TICL_cfg import cms, process
+elif opt_reco == 'HLT_TRKv02':      from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv02_cfg      import cms, process
+elif opt_reco == 'HLT_TRKv02_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv02_TICL_cfg import cms, process
+elif opt_reco == 'HLT_TRKv06':      from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv06_cfg      import cms, process
+elif opt_reco == 'HLT_TRKv06_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv06_TICL_cfg import cms, process
 else:
    logmsg = '\n\n'+' '*2+'Valid arguments for option "reco" are'
    for recoArg in [
@@ -105,6 +105,9 @@ if opt_BTVreco == 'default':
 elif opt_BTVreco == 'cutsV1':
       from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_BTV_cuts import customize_hltPhase2_BTV
       process = customize_hltPhase2_BTV(process)
+elif opt_BTVreco == 'cutsV2':
+      from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_BTV_cutsV2 import customize_hltPhase2_BTV
+      process = customize_hltPhase2_BTV(process)
 else:
    raise RuntimeError('invalid argument for option "BTVreco": "'+opt_BTVreco+'"')
 
@@ -112,38 +115,6 @@ else:
 ###
 ### trigger paths
 ###
-
-## sequence: ParticleFlow
-process.HLTParticleFlowSequence = cms.Sequence(
-    process.localreco
-  + process.globalreco
-  + process.particleFlowReco
-)
-# ## sequence: AK4 Jets, PFCHS
-process.HLTAK4PFCHSJetsReconstruction = cms.Sequence(
-    process.particleFlowPtrs
-  + process.goodOfflinePrimaryVertices
-  + process.pfPileUpJME
-  + process.pfNoPileUpJME
-  + process.hltAK4PFCHSJets
-  + process.hltAK4PFCHSJetCorrectorL1
-  + process.hltAK4PFCHSJetCorrectorL2
-  + process.hltAK4PFCHSJetCorrectorL3
-  + process.hltAK4PFCHSJetCorrectorL2L3
-  + process.hltAK4PFCHSJetCorrector
-  + process.hltAK4PFCHSJetsCorrected
-)
-# ## sequence: AK4 Jets, Puppi
-process.HLTAK4PuppiJetsReconstruction = cms.Sequence(
-    process.hltPuppi
-  + process.hltAK4PuppiJets
-  + process.hltAK4PuppiJetCorrectorL1
-  + process.hltAK4PuppiJetCorrectorL2
-  + process.hltAK4PuppiJetCorrectorL3
-  + process.hltAK4PuppiJetCorrectorL2L3
-  + process.hltAK4PuppiJetCorrector
-  + process.hltAK4PuppiJetsCorrected
-)
 
 
 process.hltPFCHSCentralJetQuad30 = cms.EDFilter( "HLT1PFJet",
@@ -444,7 +415,23 @@ _singlePFJet100 = cms.EDFilter('HLT1PFJet',
   triggerType = cms.int32(85),
 )
 process.hltSingleAK4PFCHSJet100 = _singlePFJet100.clone(inputTag = 'hltAK4PFCHSJetsCorrected', MinPt = 100.)
-process.HLT_AK4PFCHSJet100_v1 = cms.Path(process.HLTParticleFlowSequence + process.HLTAK4PFCHSJetsReconstruction + process.hltSingleAK4PFCHSJet100)
+process.L1TPFCHSFilter90 = cms.EDFilter('L1TPFJetFilter',
+    inputTag = cms.InputTag("ak4PFL1PuppiCorrected"),
+    MinN = cms.int32(1),
+    MinPt = cms.double(90.),
+    saveTags = cms.bool(True)
+)
+process.L1TPuppiJetFilterN2Pt40 = cms.EDFilter('L1TPFJetFilter',
+    inputTag = cms.InputTag("ak4PFL1PuppiCorrected"),
+    MinN = cms.int32(2),
+    MinPt = cms.double(40.),
+    saveTags = cms.bool(True)
+)
+process.HLT_AK4PFCHSJet100_v1 = cms.Path(
+    # process.L1TPFCHSFilter90
+    process.HLTParticleFlowSequence
+    + process.HLTAK4PFCHSJetsReconstruction
+    + process.hltSingleAK4PFCHSJet100)
 
 ## paths
 process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1 = cms.Path(
@@ -462,6 +449,7 @@ process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1 =
     +process.hltBTagPFCHSDeepCSV4p5Triple
 )
 
+# process.hltL1DoubleJet112er2p3dEtaMax1p6
 process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
     process.HLTParticleFlowSequence
     +process.HLTAK4PuppiJetsReconstruction
@@ -536,7 +524,8 @@ if opts.inputFiles:
 else:
    process.source.fileNames = [
         # '/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/F9F5095B-DC0A-6F48-8148-E221616F0C9E.root',
-     'file:/afs/cern.ch/work/s/sewuchte/private/BTag_Upgrade/april_CMSSW_11_1_0_pre6/TestL1/CMSSW_11_1_0_pre6/src/RecoBTag/PerformanceMeasurements/python/Configs/testGENSIM.root',
+     # 'file:/afs/cern.ch/work/s/sewuchte/private/BTag_Upgrade/april_CMSSW_11_1_0_pre6/TestL1/CMSSW_11_1_0_pre6/src/RecoBTag/PerformanceMeasurements/python/Configs/testGENSIM.root',
+     '/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/280000/227B9AFA-2612-694B-A2E7-B566F92C4B55.root',
    ]
 process.MessageLogger = cms.Service("MessageLogger",
        destinations   = cms.untracked.vstring('detailedInfo','debugInfo', 'critical','cerr'),
@@ -545,14 +534,12 @@ process.MessageLogger = cms.Service("MessageLogger",
        debugInfo   = cms.untracked.PSet(threshold = cms.untracked.string('DEBUG')),
        cerr           = cms.untracked.PSet(threshold  = cms.untracked.string('WARNING'))
 )
-
 process.schedule = cms.Schedule(*[
-  process.raw2digi_step,
   process.HLT_AK4PFCHSJet100_v1,
-  process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1,
-  process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1,
-  process.HLT_DoublePFCHSJets128MaxDeta1p6_DoublePFCHSBTagDeepCSV_p71_v1,
-  process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1,
+  # process.HLT_PFHT330PT30_QuadPFCHSJet_75_60_45_40_TriplePFCHSBTagDeepCSV_4p5_v1,
+  # process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1,
+  # process.HLT_DoublePFCHSJets128MaxDeta1p6_DoublePFCHSBTagDeepCSV_p71_v1,
+  # process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1,
 
 ])
 # EDM output
