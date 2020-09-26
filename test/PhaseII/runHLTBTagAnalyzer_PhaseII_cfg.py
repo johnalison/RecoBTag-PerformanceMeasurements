@@ -117,14 +117,6 @@ if opt_skimTracks:
    from JMETriggerAnalysis.Common.hltPhase2_skimmedTracks import customize_hltPhase2_skimmedTracks
    process = customize_hltPhase2_skimmedTracks(process)
 
-# if opts.FastPV:
-#     process.noFilter_PFDeepCSV = cms.Path(process.HLTBtagDeepCSVSequencePFFastPV)
-#     process.noFilter_PFProba = cms.Path(process.HLTBtagProbabiltySequencePFFastPV)
-#     process.noFilter_PFBProba = cms.Path(process.HLTBtagBProbabiltySequencePFFastPV)
-#     process.noFilter_PFDeepCSVPuppi = cms.Path(process.HLTBtagDeepCSVSequencePFPuppiFastPV)
-#     process.noFilter_PFProbaPuppi = cms.Path(process.HLTBtagProbabiltySequencePFPuppiFastPV)
-#     process.noFilter_PFBProbaPuppi = cms.Path(process.HLTBtagBProbabiltySequencePFPuppiFastPV)
-# else:
 process.noFilter_PFDeepCSV = cms.Path(process.HLTBtagDeepCSVSequencePF)
 process.noFilter_PFProba = cms.Path(process.HLTBtagProbabiltySequencePF)
 process.noFilter_PFBProba = cms.Path(process.HLTBtagBProbabiltySequencePF)
@@ -334,7 +326,7 @@ process.btagana.PFJetDeepCSVTags     = cms.InputTag('hltDeepCombinedSecondaryVer
 process.btagana.PFJetBPBJetTags      = cms.InputTag('hltPfJetBProbabilityBJetTags')
 process.btagana.PFJetPBJetTags       = cms.InputTag('hltPfJetProbabilityBJetTags')
 
-process.btagana.PuppiJets            = cms.InputTag('hltAK4PuppiJetsCorrected')
+process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJetsCorrected')
 process.btagana.PuppiJetTags         = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi')
 process.btagana.PuppiDeepFlavourTags = cms.InputTag('hltPfDeepFlavourTagInfos')
 process.btagana.PuppiSVs             = cms.InputTag('hltDeepSecondaryVertexTagInfosPFPuppi')
@@ -468,7 +460,7 @@ if opts.pfdqm > 0:
    _candTags = [
      ('_offlineParticleFlow', 'packedPFCandidates', '', pfCandidateHistogrammerPatPackedCandidate),
      ('_particleFlowTmp', 'particleFlowTmp', '', pfCandidateHistogrammerRecoPFCandidate),
-     ('_hltPuppi', 'hltPuppi', '(pt > 0)', pfCandidateHistogrammerRecoPFCandidate),
+     ('_hltPFPuppi', 'hltPFPuppi', '(pt > 0)', pfCandidateHistogrammerRecoPFCandidate),
    ]
 
    if 'TICL' in opt_reco:
@@ -518,9 +510,7 @@ if opts.pfdqm > 0:
    process.pfMonitoringEndPath = cms.EndPath(process.pfMonitoringSeq)
    process.schedule.extend([process.pfMonitoringEndPath])
 
-# Test for skimmed event content
-# from HLTrigger.Configuration.Tools.hltTDREventContent import dropInputProducts
-# dropInputProducts(process.source)
+
 
 process.p = cms.Path(
     process.allEvents

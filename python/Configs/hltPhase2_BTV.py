@@ -504,7 +504,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         vertexSelection = cms.PSet(
             sortCriterium = cms.string('dist3dError')
         ),
-        weights = cms.InputTag("hltPuppi")
+        weights = cms.InputTag("hltPFPuppi")
     )
 
     process.hltPfJetBProbabilityBJetTagsPuppi = cms.EDProducer("JetTagProducer",
@@ -524,7 +524,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         ghostTrackPriorDeltaR = cms.double(0.03),
         jetDirectionUsingGhostTrack = cms.bool(False),
         jetDirectionUsingTracks = cms.bool(False),
-        jets = cms.InputTag("hltAK4PuppiJets"),
+        jets = cms.InputTag("hltAK4PFPuppiJets"),
         maxDeltaR = cms.double(0.4),
         maximumChiSquared = cms.double(5.0),
         maximumLongitudinalImpactParameter = cms.double(17.0),
@@ -592,13 +592,13 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         flip = cms.bool(False),
         jet_radius = cms.double(0.4),
         # jets = cms.InputTag("ak4PFJetsCHS"),
-        jets = cms.InputTag("hltAK4PuppiJets"),
+        jets = cms.InputTag("hltAK4PFPuppiJets"),
         max_jet_eta = cms.double(2.5),
         mightGet = cms.optional.untracked.vstring,
         min_candidate_pt = cms.double(0.95),
         min_jet_pt = cms.double(15),
         # puppi_value_map = cms.InputTag("puppi"),
-        puppi_value_map = cms.InputTag("hltPuppi"),
+        puppi_value_map = cms.InputTag("hltPFPuppi"),
         run_deepVertex = cms.bool(False),
         # secondary_vertices = cms.InputTag("inclusiveCandidateSecondaryVertices"),
         secondary_vertices = cms.InputTag("hltDeepInclusiveSecondaryVerticesPF"),
@@ -626,7 +626,7 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
             useTiming = cms.bool(False)
         ),
         # jets = cms.InputTag("ak4PFJets"),
-        jets = cms.InputTag("hltAK4PuppiJets"),
+        jets = cms.InputTag("hltAK4PFPuppiJets"),
         # particles = cms.InputTag("particleFlow"),
         particles = cms.InputTag("particleFlowTmp"),
         produceAssociationToOriginalVertices = cms.bool(True),
