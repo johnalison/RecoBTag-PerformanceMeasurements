@@ -123,7 +123,7 @@ process.hltPFPuppiCentralJetQuad30 = cms.EDFilter( "HLT1PFJet",
     MaxEta = cms.double( 3.5 ),
     MinEta = cms.double( -1.0 ),
     MinMass = cms.double( -1.0 ),
-    inputTag = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     MinE = cms.double( -1.0 ),
     triggerType = cms.int32( 86 ),
     MaxMass = cms.double( -1.0 )
@@ -136,7 +136,7 @@ process.hlt1PFPuppiCentralJet75 = cms.EDFilter( "HLT1PFJet",
     MaxEta = cms.double( 3.5 ),
     MinEta = cms.double( -1.0 ),
     MinMass = cms.double( -1.0 ),
-    inputTag = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     MinE = cms.double( -1.0 ),
     triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
@@ -149,7 +149,7 @@ process.hlt2PFPuppiCentralJet60 = cms.EDFilter( "HLT1PFJet",
     MaxEta = cms.double( 3.5 ),
     MinEta = cms.double( -1.0 ),
     MinMass = cms.double( -1.0 ),
-    inputTag = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     MinE = cms.double( -1.0 ),
     triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
@@ -162,7 +162,7 @@ process.hlt3PFPuppiCentralJet45 = cms.EDFilter( "HLT1PFJet",
     MaxEta = cms.double( 3.5 ),
     MinEta = cms.double( -1.0 ),
     MinMass = cms.double( -1.0 ),
-    inputTag = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     MinE = cms.double( -1.0 ),
     triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
@@ -175,7 +175,7 @@ process.hlt4PFPuppiCentralJet40 = cms.EDFilter( "HLT1PFJet",
     MaxEta = cms.double( 3.5 ),
     MinEta = cms.double( -1.0 ),
     MinMass = cms.double( -1.0 ),
-    inputTag = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     MinE = cms.double( -1.0 ),
     triggerType = cms.int32( 0 ),
     MaxMass = cms.double( -1.0 )
@@ -247,7 +247,7 @@ process.hltDoublePFPuppiJets128Eta2p3 = cms.EDFilter( "HLT1PFJet",
     MaxEta = cms.double( 2.3 ),
     MinEta = cms.double( -1.0 ),
     MinMass = cms.double( -1.0 ),
-    inputTag = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     MinE = cms.double( -1.0 ),
     triggerType = cms.int32( 85 ),
     MaxMass = cms.double( -1.0 )
@@ -256,11 +256,11 @@ process.hltDoublePFPuppiJets128Eta2p3 = cms.EDFilter( "HLT1PFJet",
 process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6 =  cms.EDFilter( "HLT2PFJetPFJet",
     saveTags = cms.bool( True ),
     MinMinv = cms.double( 0.0 ),
-    originTag2 = cms.VInputTag( 'hltAK4PuppiJetsCorrected' ),
+    originTag2 = cms.VInputTag( 'hltAK4PFPuppiJetsCorrected' ),
     MinDelR = cms.double( 0.0 ),
     MinPt = cms.double( 0.0 ),
     MinN = cms.int32( 1 ),
-    originTag1 = cms.VInputTag( 'hltAK4PuppiJetsCorrected' ),
+    originTag1 = cms.VInputTag( 'hltAK4PFPuppiJetsCorrected' ),
     triggerType1 = cms.int32( 85 ),
     triggerType2 = cms.int32( 85 ),
     MaxMinv = cms.double( 1.0E7 ),
@@ -276,7 +276,7 @@ process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6 =  cms.EDFilter( "HLT2PFJetPFJet
 
 process.hltSelectorPFPuppiJets80L1FastJet = cms.EDFilter( "EtMinPFJetSelector",
     filter = cms.bool( False ),
-    src = cms.InputTag( "hltAK4PuppiJetsCorrected" ),
+    src = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
     etMin = cms.double( 80.0 )
 )
 process.hltSelector6PFPuppiCentralJetsL1FastJet = cms.EDFilter( "LargestEtPFJetSelector",
@@ -413,7 +413,7 @@ process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_
     process.l1tPFPuppiHT
     +process.l1tPFPuppiHT330
     +process.HLTParticleFlowSequence
-    +process.HLTAK4PuppiJetsReconstruction
+    +process.HLTAK4PFPuppiJetsReconstruction
     +process.hltPFPuppiCentralJetQuad30
     +process.hlt1PFPuppiCentralJet75
     +process.hlt2PFPuppiCentralJet60
@@ -446,7 +446,7 @@ process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v
 process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1 = cms.Path(
     process.l1tDoubleAK4PFPuppiJet100MaxEta
     +process.HLTParticleFlowSequence
-    +process.HLTAK4PuppiJetsReconstruction
+    +process.HLTAK4PFPuppiJetsReconstruction
     +process.hltSelectorPFPuppiJets80L1FastJet
     +process.hltSelector6PFPuppiCentralJetsL1FastJet
     +process.hltDoublePFPuppiJets128Eta2p3

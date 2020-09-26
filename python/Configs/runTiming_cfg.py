@@ -181,30 +181,7 @@ if opts.inputFiles:
 else:
    process.source.fileNames = [
      # ttbar NoPu
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FF494CD0-A72D-494F-8C89-8C6422D24504.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FF1F2446-2FDB-5E4A-8CBE-A5E62A4518C2.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FD048324-6F32-D944-B680-3633DBD45186.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FC872EC1-9102-8545-A726-DDA51C276E6C.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FBBEC820-DA08-AA44-8BC6-0469ED6C0D74.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/FA97BECF-51BE-7146-9946-B0560434E42B.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/NoPU_110X_mcRun4_realistic_v3-v2/40000/F9F5095B-DC0A-6F48-8148-E221616F0C9E.root",
-
      # ttbarPU200
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/240001/BCAB284F-B065-F343-9E48-478FDFBA70A0.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/110000/005E74D6-B50E-674E-89E6-EAA9A617B476.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/110000/007F7BCB-2251-FE48-A5D4-68DE9E4F1271.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/110000/00B081CE-A285-1242-8CB5-F28F10285592.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/110000/00BF98ED-FE5E-6341-A1F3-7AA1EF8C3BEB.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/110000/00C33DFD-2283-2A42-9A6E-AC76311FFCC5.root",
-     # "/store/mc/Phase2HLTTDRWinter20DIGI/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW/PU200_110X_mcRun4_realistic_v3-v2/110000/0159AC9E-5057-2147-A47A-E43D88B04AC0.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/BCAB284F-B065-F343-9E48-478FDFBA70A0.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/005E74D6-B50E-674E-89E6-EAA9A617B476.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/007F7BCB-2251-FE48-A5D4-68DE9E4F1271.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/00B081CE-A285-1242-8CB5-F28F10285592.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/00BF98ED-FE5E-6341-A1F3-7AA1EF8C3BEB.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/00C33DFD-2283-2A42-9A6E-AC76311FFCC5.root",
-     # "file:/eos/home-s/sewuchte/TimingFilesPhase2/PU200/0159AC9E-5057-2147-A47A-E43D88B04AC0.root",
-
      "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/280000/227B9AFA-2612-694B-A2E7-B566F92C4B55.root",
    ]
 
@@ -223,61 +200,6 @@ process.GlobalTag.toGet.append(cms.PSet(
 
 
 
-# del process.pfDeepBoostedJetTask
-# del process.inclusiveCandidateVertexingCvsLTask
-# del process.inclusiveCandidateVertexingTask
-# del process.inclusiveCandidateVertexing
-# del process.inclusiveCandidateVertexingCvsL
-#
-#
-# del process.inclusiveVertexFinder
-# del process.inclusiveVertexFinderDefault
-# del process.vertexMerger
-#
-#
-# del process.inclusiveVertexingTask
-#
-# del process.globalrecoTask
-# process.globalrecoTask = cms.Task(process.MeasurementTrackerEventPreSplitting, process.caloJetsForTrkTask, process.caloTowersRecTask, process.ecalClustersTask, process.egammaGlobalRecoTask, process.fastTimingGlobalRecoTask, process.generalV0Candidates, process.hcalGlobalRecoTask, process.iterTICLTask, process.jetGlobalRecoTask, process.muonGlobalRecoTask, process.muoncosmicrecoTask, process.offlineBeamSpot, process.offlinePrimaryVertices, process.offlinePrimaryVertices4D, process.offlinePrimaryVertices4DWithBS, process.offlinePrimaryVertices4DnoPID, process.offlinePrimaryVertices4DnoPIDWithBS, process.offlinePrimaryVerticesWithBS, process.particleFlowClusterTask, process.pfTrackingGlobalRecoTask, process.quickTrackAssociatorByHits, process.siPixelClusterShapeCachePreSplitting, process.standalonemuontrackingTask, process.tofPID, process.tofPID4DnoPID, process.tpClusterProducer, process.trackRefsForJetsBeforeSorting, process.trackRefsForJetsBeforeSorting4D, process.trackRefsForJetsBeforeSorting4DnoPID, process.trackTimeValueMapProducer, process.trackWithVertexRefSelectorBeforeSorting, process.trackWithVertexRefSelectorBeforeSorting4D, process.trackWithVertexRefSelectorBeforeSorting4DnoPID, process.trackingGlobalRecoTask, process.unsortedOfflinePrimaryVertices, process.unsortedOfflinePrimaryVertices4D, process.unsortedOfflinePrimaryVertices4DnoPID)
-#
-# del process.reconstruction_withPixellessTkTask
-#
-# process.reconstruction_withPixellessTkTask = cms.Task(process.ConvStepTask, process.DetachedQuadStepTask, process.InitialStepPreSplittingTask, process.LowPtQuadStepTask, process.LowPtTripletStepTask, process.MeasurementTrackerEventPreSplitting, process.PFTauTask, process.PixelPairStepTask, process.ak4CaloJetsForTrk, process.btaggingTask, process.caloTowerForTrk, process.caloTowersRecTask, process.conversionOpenTrackTask, process.conversionStepTracks, process.cosmicDCTracksSeqTask, process.ctfTracksPixelLessTask, process.doAlldEdXEstimatorsTask, process.duplicateTrackCandidates, process.duplicateTrackClassifier, process.earlyGeneralTracks, process.ecalClustersTask, process.egammaGlobalRecoTask, process.egammaHighLevelRecoPostPFTask, process.egammaHighLevelRecoPrePFTask, process.electronSeedsSeqTask, process.fastTimingGlobalRecoTask, process.firstStepPrimaryVertices, process.firstStepPrimaryVerticesUnsorted, process.fixedGridRhoFastjetAllTmp, process.generalTracks, process.generalV0Candidates, process.gsfTracksOpenConversions, process.hcalGlobalRecoTask, process.hgcalTrackCollection, process.highPtTripletStepClusters, process.highPtTripletStepHitDoublets, process.highPtTripletStepHitTriplets, process.highPtTripletStepSeedLayers, process.highPtTripletStepSeeds, process.highPtTripletStepSelector, process.highPtTripletStepTrackCandidates, process.highPtTripletStepTrackingRegions, process.highPtTripletStepTracks,  process.initialStepHitDoublets, process.initialStepHitQuadruplets, process.initialStepSeedLayers, process.initialStepSeeds, process.initialStepSelector, process.initialStepTrackCandidates, process.initialStepTrackRefsForJets, process.initialStepTrackingRegions, process.initialStepTracks, process.iterTICLTask, process.jetGlobalRecoTask, process.jetHighLevelRecoTask, process.localrecoTask, process.logErrorHarvester, process.lowPtGsfElectronTask, process.mergedDuplicateTracks, process.metrecoPlusHCALNoiseTask, process.muonGlobalRecoTask, process.muonSeededStepTask, process.muoncosmichighlevelrecoTask, process.muoncosmicrecoTask, process.muonshighlevelrecoTask, process.offlineBeamSpot, process.offlinePrimaryVertices, process.offlinePrimaryVertices4D, process.offlinePrimaryVertices4DWithBS, process.offlinePrimaryVertices4DnoPID, process.offlinePrimaryVertices4DnoPIDWithBS, process.offlinePrimaryVerticesWithBS, process.particleFlowBlock, process.particleFlowClusterTask, process.particleFlowEGammaFinalTask, process.particleFlowEGammaFullTask, process.particleFlowLinksTask, process.particleFlowTmp, process.particleFlowTmpBarrel, process.particleFlowTmpPtrs, process.particleFlowTrackWithDisplacedVertexTask, process.pfGsfElectronMVASelectionTask, process.pfParticleSelectionTask, process.pfTrack, process.pfTrackingGlobalRecoTask, process.preDuplicateMergingGeneralTracks, process.quickTrackAssociatorByHits, process.recoPFMETTask, process.reducedRecHitsTask, process.siPixelClusterShapeCachePreSplitting, process.simPFProducer, process.standalonemuontrackingTask, process.tofPID, process.tofPID4DnoPID, process.tpClusterProducer, process.trackExtrapolator, process.trackRefsForJetsBeforeSorting, process.trackRefsForJetsBeforeSorting4D, process.trackRefsForJetsBeforeSorting4DnoPID, process.trackTimeValueMapProducer, process.trackWithVertexRefSelectorBeforeSorting, process.trackWithVertexRefSelectorBeforeSorting4D, process.trackWithVertexRefSelectorBeforeSorting4DnoPID, process.trackerClusterCheck, process.unsortedOfflinePrimaryVertices, process.unsortedOfflinePrimaryVertices4D, process.unsortedOfflinePrimaryVertices4DnoPID)
-#
-# process.reconstructionTask = cms.Task(process.ConvStepTask, process.DetachedQuadStepTask, process.InitialStepPreSplittingTask, process.LowPtQuadStepTask, process.LowPtTripletStepTask, process.MeasurementTrackerEventPreSplitting, process.PFTauTask, process.PixelPairStepTask, process.ak4CaloJetsForTrk, process.btaggingTask, process.caloTowerForTrk, process.caloTowersRecTask, process.conversionOpenTrackTask, process.conversionStepTracks, process.cosmicDCTracksSeqTask, process.doAlldEdXEstimatorsTask, process.duplicateTrackCandidates, process.duplicateTrackClassifier, process.earlyGeneralTracks, process.ecalClustersTask, process.egammaGlobalRecoTask, process.egammaHighLevelRecoPostPFTask, process.egammaHighLevelRecoPrePFTask, process.electronSeedsSeqTask, process.fastTimingGlobalRecoTask, process.firstStepPrimaryVertices, process.firstStepPrimaryVerticesUnsorted, process.fixedGridRhoFastjetAllTmp, process.generalTracks, process.generalV0Candidates, process.gsfTracksOpenConversions, process.hcalGlobalRecoTask, process.hgcalTrackCollection, process.highPtTripletStepClusters, process.highPtTripletStepHitDoublets, process.highPtTripletStepHitTriplets, process.highPtTripletStepSeedLayers, process.highPtTripletStepSeeds, process.highPtTripletStepSelector, process.highPtTripletStepTrackCandidates, process.highPtTripletStepTrackingRegions, process.highPtTripletStepTracks, process.initialStepHitDoublets, process.initialStepHitQuadruplets, process.initialStepSeedLayers, process.initialStepSeeds, process.initialStepSelector, process.initialStepTrackCandidates, process.initialStepTrackRefsForJets, process.initialStepTrackingRegions, process.initialStepTracks, process.iterTICLTask, process.jetGlobalRecoTask, process.jetHighLevelRecoTask, process.localrecoTask, process.logErrorHarvester, process.lowPtGsfElectronTask, process.mergedDuplicateTracks, process.metrecoPlusHCALNoiseTask, process.muonGlobalRecoTask, process.muonSeededStepTask, process.muoncosmichighlevelrecoTask, process.muoncosmicrecoTask, process.muonshighlevelrecoTask, process.offlineBeamSpot, process.offlinePrimaryVertices, process.offlinePrimaryVertices4D, process.offlinePrimaryVertices4DWithBS, process.offlinePrimaryVertices4DnoPID, process.offlinePrimaryVertices4DnoPIDWithBS, process.offlinePrimaryVerticesWithBS, process.particleFlowBlock, process.particleFlowClusterTask, process.particleFlowEGammaFinalTask, process.particleFlowEGammaFullTask, process.particleFlowLinksTask, process.particleFlowTmp, process.particleFlowTmpBarrel, process.particleFlowTmpPtrs, process.particleFlowTrackWithDisplacedVertexTask, process.pfGsfElectronMVASelectionTask, process.pfParticleSelectionTask, process.pfTrack, process.pfTrackingGlobalRecoTask, process.preDuplicateMergingGeneralTracks, process.quickTrackAssociatorByHits, process.recoPFMETTask, process.reducedRecHitsTask, process.siPixelClusterShapeCachePreSplitting, process.simPFProducer, process.standalonemuontrackingTask, process.tofPID, process.tofPID4DnoPID, process.tpClusterProducer, process.trackExtrapolator, process.trackRefsForJetsBeforeSorting, process.trackRefsForJetsBeforeSorting4D, process.trackRefsForJetsBeforeSorting4DnoPID, process.trackTimeValueMapProducer,  process.trackWithVertexRefSelectorBeforeSorting, process.trackWithVertexRefSelectorBeforeSorting4D, process.trackWithVertexRefSelectorBeforeSorting4DnoPID, process.trackerClusterCheck, process.unsortedOfflinePrimaryVertices, process.unsortedOfflinePrimaryVertices4D, process.unsortedOfflinePrimaryVertices4DnoPID)
-#
-# process.reconstruction_trackingOnlyTask = cms.Task(process.ConvStepTask, process.InitialStepPreSplittingTask, process.MeasurementTrackerEventPreSplitting, process.caloJetsForTrkTask, process.conversionStepTracks, process.doAlldEdXEstimatorsTask, process.duplicateTrackCandidates, process.duplicateTrackClassifier, process.earlyGeneralTracks, process.electronSeedsSeqTask, process.fastTimingGlobalRecoTask, process.generalTracks, process.generalV0Candidates, process.hcalGlobalRecoTask, process.iterTrackingEarlyTask, process.localrecoTask, process.mergedDuplicateTracks, process.muonSeededStepTask, process.offlineBeamSpot, process.offlinePrimaryVertices, process.offlinePrimaryVertices4D, process.offlinePrimaryVertices4DWithBS, process.offlinePrimaryVertices4DnoPID, process.offlinePrimaryVertices4DnoPIDWithBS, process.offlinePrimaryVerticesWithBS, process.preDuplicateMergingGeneralTracks, process.quickTrackAssociatorByHits, process.siPixelClusterShapeCachePreSplitting, process.standalonemuontrackingTask, process.tofPID, process.tofPID4DnoPID, process.tpClusterProducer, process.trackExtrapolator, process.trackRefsForJetsBeforeSorting, process.trackRefsForJetsBeforeSorting4D, process.trackRefsForJetsBeforeSorting4DnoPID, process.trackTimeValueMapProducer,  process.trackWithVertexRefSelectorBeforeSorting, process.trackWithVertexRefSelectorBeforeSorting4D, process.trackWithVertexRefSelectorBeforeSorting4DnoPID, process.trackerClusterCheck, process.unsortedOfflinePrimaryVertices, process.unsortedOfflinePrimaryVertices4D, process.unsortedOfflinePrimaryVertices4DnoPID)
-#
-#
-# process.reconstruction_HcalNZSTask = cms.Task(process.MeasurementTrackerEventPreSplitting, process.caloJetsForTrkTask, process.caloTowersRecTask, process.ecalClustersTask, process.egammaGlobalRecoTask, process.fastTimingGlobalRecoTask, process.generalV0Candidates, process.hcalGlobalRecoTask, process.highlevelrecoTask,  process.iterTICLTask, process.jetGlobalRecoTask, process.localreco_HcalNZSTask, process.logErrorHarvester, process.muonGlobalRecoTask, process.muoncosmicrecoTask, process.offlineBeamSpot, process.offlinePrimaryVertices, process.offlinePrimaryVertices4D, process.offlinePrimaryVertices4DWithBS, process.offlinePrimaryVertices4DnoPID, process.offlinePrimaryVertices4DnoPIDWithBS, process.offlinePrimaryVerticesWithBS, process.particleFlowClusterTask, process.pfTrackingGlobalRecoTask, process.quickTrackAssociatorByHits, process.siPixelClusterShapeCachePreSplitting, process.standalonemuontrackingTask, process.tofPID, process.tofPID4DnoPID, process.tpClusterProducer, process.trackRefsForJetsBeforeSorting, process.trackRefsForJetsBeforeSorting4D, process.trackRefsForJetsBeforeSorting4DnoPID, process.trackTimeValueMapProducer, process.trackWithVertexRefSelectorBeforeSorting, process.trackWithVertexRefSelectorBeforeSorting4D, process.trackWithVertexRefSelectorBeforeSorting4DnoPID, process.trackingGlobalRecoTask, process.unsortedOfflinePrimaryVertices, process.unsortedOfflinePrimaryVertices4D, process.unsortedOfflinePrimaryVertices4DnoPID)
-
-# del process.vertexReco
-# process.vertexReco = cms.Sequence(process.initialStepPVSequence+process.unsortedOfflinePrimaryVertices+process.trackWithVertexRefSelectorBeforeSorting+process.trackRefsForJetsBeforeSorting+process.offlinePrimaryVertices+process.offlinePrimaryVerticesWithBS)
-
-
-# process.pfCTaggingTask = cms.Task(process.candidateVertexArbitratorCvsL, process.candidateVertexMergerCvsL, process.inclusiveCandidateSecondaryVerticesCvsL, process.inclusiveCandidateVertexFinderCvsL, process.pfCombinedCvsBJetTags, process.pfCombinedCvsLJetTags, process.pfInclusiveSecondaryVertexFinderCvsLTagInfos)
-# del process.pfCTaggingTask
-
-# process.pfBTaggingTask = cms.Task(process.candidateVertexArbitrator, process.candidateVertexMerger, process.inclusiveCandidateSecondaryVertices, process.inclusiveCandidateVertexFinder, process.pfChargeBJetTags, process.pfCombinedInclusiveSecondaryVertexV2BJetTags, process.pfCombinedMVAV2BJetTags, process.pfCombinedSecondaryVertexV2BJetTags, process.pfDeepCSVTask, process.pfGhostTrackBJetTags, process.pfGhostTrackVertexTagInfos, process.pfImpactParameterTagInfos, process.pfInclusiveSecondaryVertexFinderTagInfos, process.pfJetBProbabilityBJetTags, process.pfJetProbabilityBJetTags, process.pfSecondaryVertexTagInfos, process.pfSimpleInclusiveSecondaryVertexHighEffBJetTags, process.pfSimpleSecondaryVertexHighEffBJetTags, process.pfTrackCountingHighEffBJetTags, process.pixelClusterTagInfos, process.softPFElectronBJetTags, process.softPFElectronsTagInfos, process.softPFMuonBJetTags, process.softPFMuonsTagInfos)
-# del process.pfBTaggingTask
-# del process.pfBTagging
-# del process.btaggingTask
-# del process.pfCTagging
-# del process.candidateVertexArbitrator
-# del process.candidateVertexArbitratorCvsL
-# del process.candidateVertexArbitratorDefault
-# del process.candidateVertexMerger
-# del process.candidateVertexMergerCvsL
-# del process.inclusiveCandidateSecondaryVertices
-# del process.inclusiveCandidateSecondaryVerticesCvsL
-# del process.inclusiveSecondaryVertices
-# del process.trackVertexArbitrator
-# del process.trackVertexArbitratorDefault
-
-
-
-
-
 
 # dump content of cms.Process to python file
 if opts.dumpPython is not None:
@@ -285,9 +207,9 @@ if opts.dumpPython is not None:
 
 
 #timing test
-from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
+# from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
 # process = customise_timer_service_print(process)
-process = customise_timer_service(process)
+# process = customise_timer_service(process)
 # process = customise_timer_service_singlejob(process)
 process.FastTimerService.dqmPathTimeRange    =  300.   # ms
 process.FastTimerService.dqmModuleTimeRange  =   300.   # ms
