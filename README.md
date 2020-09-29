@@ -1,6 +1,6 @@
 # RecoBTag-PerformanceMeasurements
 
-## Software setup for CMSSW_11_1_2
+## Software setup for CMSSW_11_1_2_patch3/CMSSW_11_1_2
 * **Step #1** : create local CMSSW area and add the relevant packages.
 ```
 cmsrel CMSSW_11_1_2_patch3
@@ -19,13 +19,20 @@ git cms-init
 
 # For running custom L1 Filters
 git cms-addpkg DataFormats/HLTReco
+git cms-addpkg DataFormats/L1TParticleFlow
 git cms-addpkg HLTrigger/HLTcore
 git cms-addpkg HLTrigger/HLTfilters
+git cms-addpkg HLTrigger/JetMET
 git remote add missirol https://github.com/missirol/cmssw.git
 git fetch missirol
 
 git cherry-pick 892eac81715c88d13c465ffc08e5d86c6ca87a7e
 git cherry-pick 66d114ff75480e72e59dec1101ff4bb51e623523
+
+#or in CMSSW_11_1_2_patch3
+git git cms-merge-topic -u missirol:devel_hltPhase2_l1tPFJet_1112pa3
+
+#For BTV:
 
 git cms-addpkg RecoBTag
 git cms-addpkg RecoBTag/TensorFlow
@@ -35,7 +42,8 @@ git clone -b PrunedTraining_NoPuppi https://github.com/emilbols/RecoBTag-Combine
 wget https://raw.githubusercontent.com/cms-data/RecoBTag-Combined/master/DeepCSV_PhaseII.json -P RecoBTag/Combined/data/
 git clone -b PhaseIIOnline --depth 1 https://github.com/johnalison/RecoBTag-PerformanceMeasurements.git RecoBTag/PerformanceMeasurements
 
-git clone https://github.com/missirol/JMETriggerAnalysis.git -o missirol -b phase2_devel_l1tSeed
+#For basic JME objects/PF..
+git clone https://github.com/missirol/JMETriggerAnalysis.git -o missirol -b phase2
 
 scram b -j8
 
