@@ -102,16 +102,10 @@ if opt_skimTracks:
    from JMETriggerAnalysis.Common.hltPhase2_skimmedTracks import customize_hltPhase2_skimmedTracks
    process = customize_hltPhase2_skimmedTracks(process)
 
-# process.noFilter_PFDeepCSV = cms.Path(process.HLTBtagDeepCSVSequencePF)
-# process.noFilter_PFProba = cms.Path(process.HLTBtagProbabiltySequencePF)
-# process.noFilter_PFBProba = cms.Path(process.HLTBtagBProbabiltySequencePF)
+
 process.noFilter_PFDeepCSVPuppi = cms.Path(process.HLTBtagDeepCSVSequencePFPuppi)
 # process.noFilter_PFDeepFlavourPuppi = cms.Path(process.HLTBtagDeepFlavourSequencePFPuppi)
-# process.noFilter_PFProbaPuppi = cms.Path(process.HLTBtagProbabiltySequencePFPuppi)
-# process.noFilter_PFBProbaPuppi = cms.Path(process.HLTBtagBProbabiltySequencePFPuppi)
 
-# process.schedule.extend([process.noFilter_PFDeepCSV, process.noFilter_PFProba, process.noFilter_PFBProba])
-# process.schedule.extend([process.noFilter_PFDeepCSVPuppi, process.noFilter_PFProbaPuppi, process.noFilter_PFBProbaPuppi, process.noFilter_PFDeepFlavourPuppi])
 process.schedule.extend([process.noFilter_PFDeepCSVPuppi])
 
 
@@ -208,11 +202,15 @@ if opts.dumpPython is not None:
 
 #timing test
 # from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
-# process = customise_timer_service_print(process)
-# process = customise_timer_service(process)
+process = customise_timer_service_print(process)
+process = customise_timer_service(process)
 # process = customise_timer_service_singlejob(process)
-process.FastTimerService.dqmPathTimeRange    =  300.   # ms
-process.FastTimerService.dqmModuleTimeRange  =   300.   # ms
+process.FastTimerService.dqmTimeRange            = 20000.
+process.FastTimerService.dqmTimeResolution       =    10.
+process.FastTimerService.dqmPathTimeRange        = 10000.
+process.FastTimerService.dqmPathTimeResolution   =     5.
+process.FastTimerService.dqmModuleTimeRange      =  1000.
+process.FastTimerService.dqmModuleTimeResolution =     1.
 
 # print-outs
 print '--- runHLTBTagAnalyzer_PhaseII_cfg.py ---\n'
