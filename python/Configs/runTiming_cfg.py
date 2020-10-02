@@ -201,7 +201,7 @@ if opts.dumpPython is not None:
 
 
 #timing test
-# from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
+from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
 process = customise_timer_service_print(process)
 process = customise_timer_service(process)
 # process = customise_timer_service_singlejob(process)

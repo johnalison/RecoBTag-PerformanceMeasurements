@@ -314,10 +314,10 @@ _singlePFJet100 = cms.EDFilter('HLT1PFJet',
 
 process.hltSingleAK4PFCHSJet100 = _singlePFJet100.clone(inputTag = 'hltAK4PFCHSJetsCorrected', MinPt = 100.)
 
-process.L1TPFCHSFilter180 = cms.EDFilter('L1TPFJetFilter',
+process.L1TPFCHSFilter112 = cms.EDFilter('L1TPFJetFilter',
     inputTag = cms.InputTag("ak4PFL1PuppiCorrected"),
     MinN = cms.int32(1),
-    MinPt = cms.double(180.),
+    MinPt = cms.double(112.),
     MaxEta = cms.double(2.4),
     saveTags = cms.bool(True)
 )
@@ -336,9 +336,9 @@ _l1tSinglePFJet100 = cms.EDFilter('HLTLevel1PFJet',
   triggerType = cms.int32(-114),
 )
 
-process.l1tDoubleAK4PFPuppiJet112MaxEta = _l1tSinglePFJet100.clone(
+process.l1tDoubleAK4PFPuppiJet55MaxEta = _l1tSinglePFJet100.clone(
     inputTag = 'ak4PFL1PuppiCorrected',
-    MinPt = 112.,
+    MinPt = 55.,
     MaxEta = 2.4,
     MinN = 2
 )
@@ -435,7 +435,7 @@ process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v
 #     L1GlobalInputTag = cms.InputTag( "hltGtStage2Digis" )
 # )
 process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1 = cms.Path(
-    process.l1tDoubleAK4PFPuppiJet112MaxEta
+    process.l1tDoubleAK4PFPuppiJet55MaxEta
     +process.HLTParticleFlowSequence
     +process.HLTAK4PFPuppiJetsReconstruction
     +process.hltSelectorPFPuppiJets80L1FastJet
@@ -446,7 +446,7 @@ process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1 = cms
     +process.hltBTagPFPuppiDeepCSV0p71Double6Jets80
 )
 process.L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1 = cms.Path(
-    process.l1tDoubleAK4PFPuppiJet112MaxEta
+    process.l1tDoubleAK4PFPuppiJet55MaxEta
 )
 
 
@@ -518,16 +518,16 @@ process.RECOoutput = cms.OutputModule('PoolOutputModule',
 )
 
 #timing test
-# from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
-process = customise_timer_service_print(process)
-process = customise_timer_service(process)
-# process = customise_timer_service_singlejob(process)
-process.FastTimerService.dqmTimeRange            = 20000.
-process.FastTimerService.dqmTimeResolution       =    10.
-process.FastTimerService.dqmPathTimeRange        = 10000.
-process.FastTimerService.dqmPathTimeResolution   =     5.
-process.FastTimerService.dqmModuleTimeRange      =  1000.
-process.FastTimerService.dqmModuleTimeResolution =     1.
+from HLTrigger.Timer.FastTimer import customise_timer_service_print,customise_timer_service,customise_timer_service_singlejob
+# process = customise_timer_service_print(process)
+# process = customise_timer_service(process)
+# # process = customise_timer_service_singlejob(process)
+# process.FastTimerService.dqmTimeRange            = 20000.
+# process.FastTimerService.dqmTimeResolution       =    10.
+# process.FastTimerService.dqmPathTimeRange        = 10000.
+# process.FastTimerService.dqmPathTimeResolution   =     5.
+# process.FastTimerService.dqmModuleTimeRange      =  1000.
+# process.FastTimerService.dqmModuleTimeResolution =     1.
 
 process.RECOoutput_step = cms.EndPath(process.RECOoutput)
 process.schedule.append(process.RECOoutput_step)
