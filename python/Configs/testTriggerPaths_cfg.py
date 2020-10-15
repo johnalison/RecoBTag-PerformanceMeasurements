@@ -315,13 +315,13 @@ _singlePFJet100 = cms.EDFilter('HLT1PFJet',
 
 process.hltSingleAK4PFCHSJet100 = _singlePFJet100.clone(inputTag = 'hltAK4PFCHSJetsCorrected', MinPt = 100.)
 
-process.L1TPFCHSFilter112 = cms.EDFilter('L1TPFJetFilter',
-    inputTag = cms.InputTag("ak4PFL1PuppiCorrected"),
-    MinN = cms.int32(1),
-    MinPt = cms.double(112.),
-    MaxEta = cms.double(2.4),
-    saveTags = cms.bool(True)
-)
+# process.L1TPFCHSFilter112 = cms.EDFilter('L1TPFJetFilter',
+#     inputTag = cms.InputTag("ak4PFL1PuppiCorrected"),
+#     MinN = cms.int32(1),
+#     MinPt = cms.double(112.),
+#     MaxEta = cms.double(2.4),
+#     saveTags = cms.bool(True)
+# )
 
  # (from JME)
 _l1tSinglePFJet100 = cms.EDFilter('HLTLevel1PFJet',
@@ -394,7 +394,7 @@ process.l1tPFPuppiHT450 = _hltHT100.clone(
 )
 
 
-process.l1t1PFPuppiCentralJet70 = cms.EDFilter( "L1TPFJetFilter",
+process.l1t1PFPuppiCentralJet70 = cms.EDFilter( "HLTLevel1PFJet",
     saveTags = cms.bool( True ),
     MinPt = cms.double( 70.0 ),
     MinN = cms.int32( 1 ),
@@ -407,7 +407,7 @@ process.l1t1PFPuppiCentralJet70 = cms.EDFilter( "L1TPFJetFilter",
     MaxMass = cms.double( -1.0 )
 )
 
-process.l1t2PFPuppiCentralJet55 = cms.EDFilter( "L1TPFJetFilter",
+process.l1t2PFPuppiCentralJet55 = cms.EDFilter( "HLTLevel1PFJet",
     saveTags = cms.bool( True ),
     MinPt = cms.double( 55.0 ),
     MinN = cms.int32( 2 ),
@@ -420,7 +420,7 @@ process.l1t2PFPuppiCentralJet55 = cms.EDFilter( "L1TPFJetFilter",
     MaxMass = cms.double( -1.0 )
 )
 
-process.l1t3PFPuppiCentralJet45 = cms.EDFilter( "L1TPFJetFilter",
+process.l1t3PFPuppiCentralJet45 = cms.EDFilter( "HLTLevel1PFJet",
     saveTags = cms.bool( True ),
     MinPt = cms.double( 40.0 ),
     MinN = cms.int32( 4 ),
