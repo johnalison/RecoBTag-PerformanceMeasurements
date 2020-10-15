@@ -242,7 +242,8 @@ process.hltBTagPFPuppiDeepCSV4p5Triple = cms.EDFilter( "HLTPFJetTag",
 
 process.hltDoublePFPuppiJets128Eta2p4 = cms.EDFilter( "HLT1PFJet",
     saveTags = cms.bool( True ),
-    MinPt = cms.double( 128.0 ),
+    # MinPt = cms.double( 128.0 ),
+    MinPt = cms.double( 180.0 ),
     MinN = cms.int32( 2 ),
     MaxEta = cms.double( 2.4 ),
     MinEta = cms.double( -1.0 ),
@@ -338,7 +339,8 @@ _l1tSinglePFJet100 = cms.EDFilter('HLTLevel1PFJet',
 
 process.l1tDoubleAK4PFPuppiJet55MaxEta = _l1tSinglePFJet100.clone(
     inputTag = 'ak4PFL1PuppiCorrected',
-    MinPt = 55.,
+    # MinPt = 55.,
+    MinPt = 112.,
     MaxEta = 2.4,
     MinN = 2
 )
@@ -377,7 +379,12 @@ process.l1tPFPuppiHT = _hltHTMHT.clone(
 process.l1tPFPuppiHT377 = _hltHT100.clone(
     htLabels = ['l1tPFPuppiHT'],
     mhtLabels = ['l1tPFPuppiHT'],
-    minHt = [377.]
+    minHt = [367.]
+)
+process.l1tPFPuppiHT400 = _hltHT100.clone(
+    htLabels = ['l1tPFPuppiHT'],
+    mhtLabels = ['l1tPFPuppiHT'],
+    minHt = [390.]
 )
 # 90% eff
 process.l1tPFPuppiHT450 = _hltHT100.clone(
@@ -386,6 +393,45 @@ process.l1tPFPuppiHT450 = _hltHT100.clone(
     minHt = [450.]
 )
 
+
+process.l1t1PFPuppiCentralJet70 = cms.EDFilter( "L1TPFJetFilter",
+    saveTags = cms.bool( True ),
+    MinPt = cms.double( 70.0 ),
+    MinN = cms.int32( 1 ),
+    MaxEta = cms.double( 2.4 ),
+    MinEta = cms.double( -1.0 ),
+    MinMass = cms.double( -1.0 ),
+    inputTag = cms.InputTag( "ak4PFL1PuppiCorrected" ),
+    MinE = cms.double( -1.0 ),
+    triggerType = cms.int32( 0 ),
+    MaxMass = cms.double( -1.0 )
+)
+
+process.l1t2PFPuppiCentralJet55 = cms.EDFilter( "L1TPFJetFilter",
+    saveTags = cms.bool( True ),
+    MinPt = cms.double( 55.0 ),
+    MinN = cms.int32( 2 ),
+    MaxEta = cms.double( 2.4 ),
+    MinEta = cms.double( -1.0 ),
+    MinMass = cms.double( -1.0 ),
+    inputTag = cms.InputTag( "ak4PFL1PuppiCorrected" ),
+    MinE = cms.double( -1.0 ),
+    triggerType = cms.int32( 0 ),
+    MaxMass = cms.double( -1.0 )
+)
+
+process.l1t3PFPuppiCentralJet45 = cms.EDFilter( "L1TPFJetFilter",
+    saveTags = cms.bool( True ),
+    MinPt = cms.double( 40.0 ),
+    MinN = cms.int32( 4 ),
+    MaxEta = cms.double( 2.4 ),
+    MinEta = cms.double( -1.0 ),
+    MinMass = cms.double( -1.0 ),
+    inputTag = cms.InputTag( "ak4PFL1PuppiCorrected" ),
+    MinE = cms.double( -1.0 ),
+    triggerType = cms.int32( 0 ),
+    MaxMass = cms.double( -1.0 )
+)
 
 ## paths
 # needed L1 seed
@@ -402,7 +448,11 @@ process.l1tPFPuppiHT450 = _hltHT100.clone(
 # )
 process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
     process.l1tPFPuppiHT
-    +process.l1tPFPuppiHT450
+    # +process.l1tPFPuppiHT450
+    +process.l1tPFPuppiHT400
+    +process.l1t1PFPuppiCentralJet70
+    +process.l1t2PFPuppiCentralJet55
+    +process.l1t3PFPuppiCentralJet45
     +process.HLTParticleFlowSequence
     +process.HLTAK4PFPuppiJetsReconstruction
     +process.hltPFPuppiCentralJetQuad30
@@ -418,7 +468,11 @@ process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_
 )
 process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
     process.l1tPFPuppiHT
-    +process.l1tPFPuppiHT450
+    # +process.l1tPFPuppiHT450
+    +process.l1tPFPuppiHT400
+    +process.l1t1PFPuppiCentralJet70
+    +process.l1t2PFPuppiCentralJet55
+    +process.l1t3PFPuppiCentralJet45
 )
 
 
