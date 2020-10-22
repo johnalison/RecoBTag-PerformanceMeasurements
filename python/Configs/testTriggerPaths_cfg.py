@@ -70,21 +70,23 @@ elif opt_reco == 'HLT_TRKv02':      from JMETriggerAnalysis.Common.configs.hltPh
 elif opt_reco == 'HLT_TRKv02_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv02_TICL_cfg import cms, process
 elif opt_reco == 'HLT_TRKv06':      from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv06_cfg      import cms, process
 elif opt_reco == 'HLT_TRKv06_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv06_TICL_cfg import cms, process
+elif opt_reco == 'HLT_TRKv06p1':      from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv06p1_cfg      import cms, process
+elif opt_reco == 'HLT_TRKv06p1_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv06p1_TICL_cfg import cms, process
+elif opt_reco == 'HLT_TRKv07p2':      from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv07p2_cfg      import cms, process
+elif opt_reco == 'HLT_TRKv07p2_TICL': from JMETriggerAnalysis.Common.configs.hltPhase2_TRKv07p2_TICL_cfg import cms, process
 else:
    logmsg = '\n\n'+' '*2+'Valid arguments for option "reco" are'
    for recoArg in [
      'HLT_TRKv00',
-     'HLT_TRKv00_skimmedTracks',
      'HLT_TRKv00_TICL',
-     'HLT_TRKv00_TICL_skimmedTracks',
      'HLT_TRKv02',
-     'HLT_TRKv02_skimmedTracks',
      'HLT_TRKv02_TICL',
-     'HLT_TRKv02_TICL_skimmedTracks',
      'HLT_TRKv06',
-     'HLT_TRKv06_skimmedTracks',
      'HLT_TRKv06_TICL',
-     'HLT_TRKv06_TICL_skimmedTracks',
+     'HLT_TRKv06p1',
+     'HLT_TRKv06p1_TICL',
+     'HLT_TRKv07p2',
+     'HLT_TRKv07p2_TICL',
    ]:
      logmsg += '\n'+' '*4+recoArg
    raise RuntimeError('invalid argument for option "reco": "'+opt_reco+'"'+logmsg+'\n')
@@ -109,7 +111,32 @@ elif opt_BTVreco == 'cutsV2':
       from RecoBTag.PerformanceMeasurements.Configs.hltPhase2_BTV_cutsV2 import customize_hltPhase2_BTV
       process = customize_hltPhase2_BTV(process)
 else:
-   raise RuntimeError('invalid argument for option "BTVreco": "'+opt_BTVreco+'"')
+    logmsg = '\n\n'+' '*2+'Valid arguments for option "BTVreco" are'
+    for recoArg in [
+        'default',
+        'cutsV1',
+        'cutsV2',
+    ]:
+        logmsg += '\n'+' '*4+recoArg
+    raise RuntimeError('invalid argument for option "BTVreco": "'+opt_BTVreco+'"')
+
+
+###
+### filter for QCD muon enriched
+###
+process.muGenFilter = cms.EDFilter("MCSmartSingleParticleFilter",
+    MaxDecayRadius = cms.untracked.vdouble(2000.0, 2000.0),
+    MaxDecayZ = cms.untracked.vdouble(4000.0, 4000.0),
+    MaxEta = cms.untracked.vdouble(2.5, 2.5),
+    MinDecayZ = cms.untracked.vdouble(-4000.0, -4000.0),
+    MinEta = cms.untracked.vdouble(-2.5, -2.5),
+    MinPt = cms.untracked.vdouble(5.0, 5.0),
+    ParticleID = cms.untracked.vint32(13, -13),
+    Status = cms.untracked.vint32(1, 1),
+    moduleLabel = cms.untracked.InputTag("generatorSmeared","","SIM")
+)
+
+
 
 
 ###
@@ -474,6 +501,14 @@ process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v
     +process.l1t2PFPuppiCentralJet55
     +process.l1t3PFPuppiCentralJet45
 )
+process.L1PlusQCDMuon_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1 = cms.Path(
+    process.muGenFilter
+    +process.l1tPFPuppiHT
+    +process.l1tPFPuppiHT400
+    +process.l1t1PFPuppiCentralJet70
+    +process.l1t2PFPuppiCentralJet55
+    +process.l1t3PFPuppiCentralJet45
+)
 
 
 # needed L1 seed
@@ -550,13 +585,16 @@ else:
 #        debugInfo   = cms.untracked.PSet(threshold = cms.untracked.string('DEBUG')),
 #        cerr           = cms.untracked.PSet(threshold  = cms.untracked.string('WARNING'))
 # )
+
 process.schedule = cms.Schedule(*[
   process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1,
+  process.L1PlusQCDMuon_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1,
   process.L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1,
   process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_4p5_v1,
   process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_v1,
 
 ])
+
 # EDM output
 process.RECOoutput = cms.OutputModule('PoolOutputModule',
   dataset = cms.untracked.PSet(
