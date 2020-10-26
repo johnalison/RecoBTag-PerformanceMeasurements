@@ -1,13 +1,35 @@
 # RecoBTag-PerformanceMeasurements
 
-## Software setup for CMSSW_11_1_2_patch3/CMSSW_11_1_2
+## Software setup for CMSSW_11_1_4
 * **Step #1** : create local CMSSW area and add the relevant packages.
 ```
-cmsrel CMSSW_11_1_2_patch3
-cd CMSSW_11_1_2_patch3/src
+cmsrel CMSSW_11_1_4
+cd CMSSW_11_1_4/src
 cmsenv
 
 git cms-init
+
+# L1T
+git cms-merge-topic cms-l1t-offline:l1t-phase2-v3.1.9
+
+# HLT: interface for L1T seeds
+git cms-merge-topic trtomei:Phase2-L1T-HLT-Interface
+
+# HGCal
+git cms-merge-topic rovere:TICLv2_11_1_X
+cp -r ${CMSSW_DATA_PATH}/data-RecoHGCal-TICL/V00-01-00/RecoHGCal/TICL/data/ ${CMSSW_BASE}/src/RecoHGCal/TICL
+wget https://github.com/rovere/RecoHGCal-TICL/raw/9d2c6f72c86233fa5573e93d5535b32e90c835ee/tf_models/energy_id_v0.pb -O ${CMSSW_BASE}/src/RecoHGCal/TICL/data/tf_models/energy_id_v0.pb
+
+# JME: updates to Puppi (required only for TRK-vX, with X>=7.2)
+git cms-merge-topic missirol:devel_hltPhase2_puppi_usePUProxyValue_1114
+
+git cms-merge-topic Sam-Harper:MCStartFilterInputCollFix_1110pre6
+
+git cms-addpkg RecoBTag
+git cms-addpkg RecoBTag/TensorFlow
+git cms-addpkg RecoBTag/Combined
+
+git cms-merge-topic emilbols:BTV_CMSSW_11_1_X
 
 # [optional; required only for PF-Hadron calibrations]
 # workaround for PFSimParticle::trackerSurfaceMomentum
@@ -17,34 +39,20 @@ git remote add hatakeyamak https://github.com/hatakeyamak/cmssw.git
 git fetch hatakeyamak
 git diff 0cf67551731c80dc85130e4b8ec73c8f44d53cb0^ 0cf67551731c80dc85130e4b8ec73c8f44d53cb0 | git apply
 
-# updates to use l1t::PFJet with HLT plugins
-git cms-addpkg DataFormats/HLTReco
-git cms-addpkg DataFormats/L1TParticleFlow
-git cms-addpkg HLTrigger/HLTcore
-git cms-addpkg HLTrigger/HLTfilters
-git cms-addpkg HLTrigger/JetMET
-git remote add SWuchterl https://github.com/SWuchterl/cmssw.git
-git fetch SWuchterl
+# [optional; required only for JME-Trigger NTuple]
+# selected manual backport of BadPFMuonDz MET-filter
+# https://github.com/cms-sw/cmssw/pull/30015
+git cms-addpkg RecoMET/METFilters
+git diff 442ae0775276f4388f8d51742ea915c1b91e1506 bb38311862c83068b2434f35850c9a17e29dd2f7 RecoMET/METFilters/python | git apply
+git checkout bb38311862c83068b2434f35850c9a17e29dd2f7 RecoMET/METFilters/plugins/BadParticleFilter.cc
 
-git cherry-pick 5747777c3a8d88ac190bf52a00a941654de6d14c
-git cherry-pick d6cde53061f932f81f0b97605e60defabdc25860
-git cherry-pick 979fc95a010ee06a597a757d95b50092490dc798
+# [optional; required only for JME-Trigger NTuple workflow with 'pvdqm > 1']
+# analyzer for primary vertices (courtesy of W. Erdmann)
+git clone https://github.com/missirol/PVAnalysis.git usercode -o missirol -b phase2
 
-
-# updates to Puppi (required only for TRK-vX, with X>=7.2)
-git cms-merge-topic missirol:devel_hltPhase2_puppi_usePUProxyValue_1112pa3 -u
-
-#For BTV:
-
-git cms-addpkg RecoBTag
-git cms-addpkg RecoBTag/TensorFlow
-git cms-addpkg RecoBTag/Combined
-
-git cms-merge-topic emilbols:BTV_CMSSW_11_1_X -u
-git clone -b PhaseIIOnline --depth 1 https://github.com/johnalison/RecoBTag-PerformanceMeasurements.git RecoBTag/PerformanceMeasurements
-
-#For basic JME objects/PF etc
 git clone https://github.com/missirol/JMETriggerAnalysis.git -o missirol -b phase2
+
+git clone -b PhaseIIOnline --depth 1 https://github.com/johnalison/RecoBTag-PerformanceMeasurements.git RecoBTag/PerformanceMeasurements
 
 scram b -j8
 
