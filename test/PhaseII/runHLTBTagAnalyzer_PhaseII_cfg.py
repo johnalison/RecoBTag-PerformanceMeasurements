@@ -280,6 +280,9 @@ process.GlobalTag.toGet.append(cms.PSet(
   label = cms.untracked.string('AK4PF'),
 ))
 
+process.CondDB.connect = 'sqlite_fip:RecoBTag/PerformanceMeasurements/data/L1TObjScaling.db'
+process.L1TScalingESSource.connect = 'sqlite_fip:RecoBTag/PerformanceMeasurements/data/L1TObjScaling.db'
+
 #~ outFilename = 'JetTree_mc.root'
 outFilename = opts.outName
 
