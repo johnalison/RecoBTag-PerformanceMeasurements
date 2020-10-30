@@ -105,6 +105,9 @@ def main():
         datatier = job.split('/')[3]
         requestname = '_'.join(pdname.split('_')[:3]) + '_' + cond
         if len(requestname) > 100: requestname = '_'.join(pdname.split('_')[:2]) + '_' + cond
+        requestname=requestname.replace("Phase2HLTTDRSummer20ReRECOMiniAOD","Phase2")
+        requestname=requestname.replace("TuneCP5","CP5")
+        requestname=requestname.replace("111X_mcRun4_realistic_T15","11X")
         config.General.requestName = requestname
         config.Data.inputDataset = job
         if datatier == 'MINIAODSIM':
