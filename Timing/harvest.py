@@ -21,9 +21,13 @@ process.load('DQMServices.Core.DQMStore_cfi')
 process.load('HLTrigger.Timer.fastTimerServiceClient_cfi')
 process.fastTimerServiceClient.dqmPath = "HLT/TimerService"
 
-process.load("HLTrigger.Timer.FastTimerService_cfi")
-process.FastTimerService.dqmPathTimeRange    =  250.   # ms
-process.FastTimerService.dqmModuleTimeRange  =   250.   # ms
+process.load("HLTrigger.Timer.FastTimerService_cfi") #ms
+process.FastTimerService.dqmTimeRange            = 20000.
+process.FastTimerService.dqmTimeResolution       =    10.
+process.FastTimerService.dqmPathTimeRange        = 10000.
+process.FastTimerService.dqmPathTimeResolution   =     5.
+process.FastTimerService.dqmModuleTimeRange      =  1000.
+process.FastTimerService.dqmModuleTimeResolution =     1.
 
 # DQM file saver
 process.load('DQMServices.Components.DQMFileSaver_cfi')
