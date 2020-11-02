@@ -1250,6 +1250,7 @@ if opts.runTiming:
     process.FastTimerService.dqmPathTimeResolution   =     5.
     process.FastTimerService.dqmModuleTimeRange      =  1000.
     process.FastTimerService.dqmModuleTimeResolution =     1.
+    process.dqmOutput.fileName = cms.untracked.string(opts.output)
 else:
     process.RECOoutput_step = cms.EndPath(process.RECOoutput)
     process.schedule.append(process.RECOoutput_step)
