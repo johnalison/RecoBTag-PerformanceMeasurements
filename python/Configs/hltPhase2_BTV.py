@@ -313,23 +313,23 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     )
 
 
-    process.hltPFCHSJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
-        saveTags = cms.bool( True ),
-        MinPt = cms.double( 30.0 ),
-        MinN = cms.int32( 1 ),
-        MaxEta = cms.double( 4.5 ),
-        MinEta = cms.double( -1.0 ),
-        MinMass = cms.double( -1.0 ),
-        # inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
-        inputTag = cms.InputTag( "hltAK4PFCHSJets" ),
-        MinE = cms.double( -1.0 ),
-        triggerType = cms.int32( 86 ), #??????????????????????
-        MaxMass = cms.double( -1.0 )
-    )
-    process.hltPFCHSJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
-        TriggerTypes = cms.vint32( 86 ), #??????????????????????
-        HLTObject = cms.InputTag( "hltPFCHSJetForBtagSelector" )
-    )
+    # process.hltPFCHSJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
+    #     saveTags = cms.bool( True ),
+    #     MinPt = cms.double( 30.0 ),
+    #     MinN = cms.int32( 1 ),
+    #     MaxEta = cms.double( 4.5 ),
+    #     MinEta = cms.double( -1.0 ),
+    #     MinMass = cms.double( -1.0 ),
+    #     # inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
+    #     inputTag = cms.InputTag( "hltAK4PFCHSJets" ),
+    #     MinE = cms.double( -1.0 ),
+    #     triggerType = cms.int32( 86 ), #??????????????????????
+    #     MaxMass = cms.double( -1.0 )
+    # )
+    # process.hltPFCHSJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
+    #     TriggerTypes = cms.vint32( 86 ), #??????????????????????
+    #     HLTObject = cms.InputTag( "hltPFCHSJetForBtagSelector" )
+    # )
 
 
     #################################################################################
@@ -524,23 +524,23 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         useTrackQuality = cms.bool(False)
     )
 
-    process.hltPFPuppiJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
-        saveTags = cms.bool( True ),
-        MinPt = cms.double( 30.0 ),
-        MinN = cms.int32( 1 ),
-        MaxEta = cms.double( 4.5 ),
-        MinEta = cms.double( -4.5 ),
-        MinMass = cms.double( -1.0 ),
-        # inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
-        inputTag = cms.InputTag( "hltAK4PFPuppiJets" ),
-        MinE = cms.double( -1.0 ),
-        triggerType = cms.int32( 86 ), #??????????????????????
-        MaxMass = cms.double( -1.0 )
-    )
-    process.hltPFPuppiJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
-        TriggerTypes = cms.vint32( 86 ), #??????????????????????
-        HLTObject = cms.InputTag( "hltPFPuppiJetForBtagSelector" )
-    )
+    # process.hltPFPuppiJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
+    #     saveTags = cms.bool( True ),
+    #     MinPt = cms.double( 30.0 ),
+    #     MinN = cms.int32( 1 ),
+    #     MaxEta = cms.double( 4.5 ),
+    #     MinEta = cms.double( -4.5 ),
+    #     MinMass = cms.double( -1.0 ),
+    #     # inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
+    #     inputTag = cms.InputTag( "hltAK4PFPuppiJets" ),
+    #     MinE = cms.double( -1.0 ),
+    #     triggerType = cms.int32( 86 ), #??????????????????????
+    #     MaxMass = cms.double( -1.0 )
+    # )
+    # process.hltPFPuppiJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
+    #     TriggerTypes = cms.vint32( 86 ), #??????????????????????
+    #     HLTObject = cms.InputTag( "hltPFPuppiJetForBtagSelector" )
+    # )
 
 
 

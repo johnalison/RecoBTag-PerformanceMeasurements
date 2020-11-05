@@ -262,23 +262,23 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
 
 
 
-    process.hltPFCHSJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
-        saveTags = cms.bool( True ),
-        MinPt = cms.double( 30.0 ),
-        MinN = cms.int32( 1 ),
-        MaxEta = cms.double( 4.5 ),
-        MinEta = cms.double( -1.0 ),
-        MinMass = cms.double( -1.0 ),
-        # inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
-        inputTag = cms.InputTag( "hltAK4PFCHSJets" ),
-        MinE = cms.double( -1.0 ),
-        triggerType = cms.int32( 86 ), #??????????????????????
-        MaxMass = cms.double( -1.0 )
-    )
-    process.hltPFCHSJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
-        TriggerTypes = cms.vint32( 86 ), #??????????????????????
-        HLTObject = cms.InputTag( "hltPFCHSJetForBtagSelector" )
-    )
+    # process.hltPFCHSJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
+    #     saveTags = cms.bool( True ),
+    #     MinPt = cms.double( 30.0 ),
+    #     MinN = cms.int32( 1 ),
+    #     MaxEta = cms.double( 4.5 ),
+    #     MinEta = cms.double( -1.0 ),
+    #     MinMass = cms.double( -1.0 ),
+    #     # inputTag = cms.InputTag( "hltAK4PFCHSJetsCorrected" ),
+    #     inputTag = cms.InputTag( "hltAK4PFCHSJets" ),
+    #     MinE = cms.double( -1.0 ),
+    #     triggerType = cms.int32( 86 ), #??????????????????????
+    #     MaxMass = cms.double( -1.0 )
+    # )
+    # process.hltPFCHSJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
+    #     TriggerTypes = cms.vint32( 86 ), #??????????????????????
+    #     HLTObject = cms.InputTag( "hltPFCHSJetForBtagSelector" )
+    # )
 
 
     #################################################################################
@@ -515,23 +515,23 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         useTrackQuality = cms.bool(False)
     )
 
-    process.hltPFPuppiJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
-        saveTags = cms.bool( True ),
-        MinPt = cms.double( 30.0 ),
-        MinN = cms.int32( 1 ),
-        MaxEta = cms.double( 4.5 ),
-        MinEta = cms.double( -4.5 ),
-        MinMass = cms.double( -1.0 ),
-        # inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
-        inputTag = cms.InputTag( "hltAK4PFPuppiJets" ),
-        MinE = cms.double( -1.0 ),
-        triggerType = cms.int32( 86 ), #??????????????????????
-        MaxMass = cms.double( -1.0 )
-    )
-    process.hltPFPuppiJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
-        TriggerTypes = cms.vint32( 86 ), #??????????????????????
-        HLTObject = cms.InputTag( "hltPFPuppiJetForBtagSelector" )
-    )
+    # process.hltPFPuppiJetForBtagSelector = cms.EDFilter( "HLT1PFJet",
+    #     saveTags = cms.bool( True ),
+    #     MinPt = cms.double( 30.0 ),
+    #     MinN = cms.int32( 1 ),
+    #     MaxEta = cms.double( 4.5 ),
+    #     MinEta = cms.double( -4.5 ),
+    #     MinMass = cms.double( -1.0 ),
+    #     # inputTag = cms.InputTag( "hltAK4PFPuppiJetsCorrected" ),
+    #     inputTag = cms.InputTag( "hltAK4PFPuppiJets" ),
+    #     MinE = cms.double( -1.0 ),
+    #     triggerType = cms.int32( 86 ), #??????????????????????
+    #     MaxMass = cms.double( -1.0 )
+    # )
+    # process.hltPFPuppiJetForBtag = cms.EDProducer( "HLTPFJetCollectionProducer",
+    #     TriggerTypes = cms.vint32( 86 ), #??????????????????????
+    #     HLTObject = cms.InputTag( "hltPFPuppiJetForBtagSelector" )
+    # )
 
     #################################################################################
     ################################## PUPPI DeepFlavour ########################################
@@ -613,9 +613,9 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     )
 
     process.HLTBtagDeepFlavourSequencePFPuppi = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelector # maybe for the future
-        +process.hltPFPuppiJetForBtag # maybe for the future
-        +process.hltDeepBLifetimeTagInfosPFPuppi
+        # process.hltPFPuppiJetForBtagSelector # maybe for the future
+        # +process.hltPFPuppiJetForBtag # maybe for the future
+        process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltDeepInclusiveVertexFinderPF
         +process.hltDeepInclusiveSecondaryVerticesPF
         +process.hltDeepTrackVertexArbitratorPF
@@ -628,9 +628,9 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
 
 
     process.HLTBtagDeepCSVSequencePF = cms.Sequence(
-        process.hltPFCHSJetForBtagSelector # maybe for the future
-        +process.hltPFCHSJetForBtag # maybe for the future
-        +process.hltDeepBLifetimeTagInfosPF
+        # process.hltPFCHSJetForBtagSelector # maybe for the future
+        # +process.hltPFCHSJetForBtag # maybe for the future
+        process.hltDeepBLifetimeTagInfosPF
         +process.hltDeepInclusiveVertexFinderPF
         +process.hltDeepInclusiveSecondaryVerticesPF
         +process.hltDeepTrackVertexArbitratorPF
@@ -640,9 +640,9 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         +process.hltDeepCombinedSecondaryVertexBJetTagsPF)
 
     process.HLTBtagDeepCSVSequencePFPuppi = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelector
-        +process.hltPFPuppiJetForBtag
-        +process.hltDeepBLifetimeTagInfosPFPuppi
+        # process.hltPFPuppiJetForBtagSelector
+        # +process.hltPFPuppiJetForBtag
+        process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltDeepInclusiveVertexFinderPF
         +process.hltDeepInclusiveSecondaryVerticesPF
         +process.hltDeepTrackVertexArbitratorPF
@@ -663,15 +663,15 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     )
 
     process.HLTBtagProbabiltySequencePF = cms.Sequence(
-        process.hltPFCHSJetForBtagSelector # maybe for the future
-        +process.hltPFCHSJetForBtag # maybe for the future
-        +process.hltDeepBLifetimeTagInfosPF
+        # process.hltPFCHSJetForBtagSelector # maybe for the future
+        # +process.hltPFCHSJetForBtag # maybe for the future
+        process.hltDeepBLifetimeTagInfosPF
         +process.hltPfJetProbabilityBJetTags)
 
     process.HLTBtagBProbabiltySequencePF = cms.Sequence(
-        process.hltPFCHSJetForBtagSelector # maybe for the future
-        +process.hltPFCHSJetForBtag # maybe for the future
-        +process.hltDeepBLifetimeTagInfosPF
+        # process.hltPFCHSJetForBtagSelector # maybe for the future
+        # +process.hltPFCHSJetForBtag # maybe for the future
+        process.hltDeepBLifetimeTagInfosPF
         +process.hltPfJetBProbabilityBJetTags)
 
 
@@ -687,15 +687,15 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     )
 
     process.HLTBtagProbabiltySequencePFPuppi = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelector
-        +process.hltPFPuppiJetForBtag
-        +process.hltDeepBLifetimeTagInfosPFPuppi
+        # process.hltPFPuppiJetForBtagSelector
+        # +process.hltPFPuppiJetForBtag
+        process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltPfJetProbabilityBJetTagsPuppi)
 
     process.HLTBtagBProbabiltySequencePFPuppi = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelector
-        +process.hltPFPuppiJetForBtag
-        +process.hltDeepBLifetimeTagInfosPFPuppi
+        # process.hltPFPuppiJetForBtagSelector
+        # +process.hltPFPuppiJetForBtag
+        process.hltDeepBLifetimeTagInfosPFPuppi
         +process.hltPfJetBProbabilityBJetTagsPuppi)
 
     return process
