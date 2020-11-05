@@ -52,6 +52,15 @@ options.register('trackPtSeed', 0.4,
     "Global Pt Seed  (default is 0.4)"
 )
 
+options.register('trigNames',  'HLT_Mu12_trkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_*,HLT_Mu23_trkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_*',
+    VarParsing.multiplicity.list,
+    VarParsing.varType.string,
+    "Trigger Names (defaults are HLT_Mu12_trkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_* and HLT_Mu23_trkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_*)"
+)
+
+    #HLT_ZeroBias_Beamspot_v*
+
+
 options.register('globalTag', '110X_mcRun3_2021_realistic_v6',
     VarParsing.multiplicity.singleton,
     VarParsing.varType.string,
@@ -8543,7 +8552,7 @@ process.hltDeepCombinedSecondaryVertexBJetTagsInfos = cms.EDProducer("DeepNNTagI
 )
 
 
-process.hltDeepCombinedSecondaryVertexBJetTagsInfosCalo = cms.EDProducer("TrackDeepNNTagInfoProducer",
+process.hltDeepCombinedSecondaryVertexBJetTagsInfosCalo = cms.EDProducer("TrackDeepNNTagInfoProducer", #check this
     computer = cms.PSet(
         SoftLeptonFlip = cms.bool(False),
         charmCut = cms.double(1.5),
@@ -8689,7 +8698,7 @@ process.hltDeepSecondaryVertexTagInfosPF = cms.EDProducer("CandSecondaryVertexPr
     extSVCollection = cms.InputTag("hltDeepInclusiveMergedVerticesPF"),
     extSVDeltaRToJet = cms.double(0.3),
     minimumTrackWeight = cms.double(0.5),
-    trackIPTagInfos = cms.InputTag("hltDeepBLifetimeTagInfosPF"),
+    trackIPTagInfos = cms.InputTag("hltDeepBLifetimeTagInfosPF"), #FIXME
     trackSelection = cms.PSet(
         a_dR = cms.double(-0.001053),
         a_pT = cms.double(0.005263),
@@ -22741,7 +22750,7 @@ process.noFilter_PFDeepCSV = cms.Path(process.HLTBeginSequence+process.hltPrenoF
 
 
 process.noFilter_CaloDeepCSV = cms.Path(process.HLTBeginSequence+process.hltPrenoFilterCaloDeepCSV+process.HLTAK4CaloJetsSequence+process.HLTBtagDeepCSVSequenceL3+process.HLTEndSequence)
-
+#HELLO CaloDeepCSV
 
 
 
@@ -23038,7 +23047,9 @@ process.out = cms.OutputModule("PoolOutputModule",
 
 #-------------------------------------
 from RecoBTag.PerformanceMeasurements.BTagHLTAnalyzer_cff import *
-process.btagana = bTagHLTAnalyzer.clone()
+bta = bTagAnalyzer_func(trigPaths=options.trigNames)
+process.btagana = bta.clone()
+
 
 #------------------
 #Handle groups
@@ -23090,6 +23101,8 @@ process = customize_HLT_trkIter2GlobalPtSeedXXForBTag(process,0.4)
 from RecoBTag.PerformanceMeasurements.customise import customize_HLTDeepCSVPF
 process = customize_HLTDeepCSVPF(process,options.trackPtSeed)
 
+from RecoBTag.PerformanceMeasurements.customise import customize_CaloJet 
+process = customize_CaloJet(process,options.trackPtSeed)
 
 ## Define analyzer sequence
 process.analyzerSeq = cms.Sequence( )
