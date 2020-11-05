@@ -287,7 +287,7 @@ private:
   edm::EDGetTokenT<l1t::PFTrackCollection> L1_BarrelTrackColl_;
   edm::EDGetTokenT<l1t::PFTrackCollection> L1_HGCalTrackColl_;
   edm::EDGetTokenT<l1t::PFJetCollection> L1_PFJetsColl_;
-  edm::EDGetTokenT<l1t::PFJetCollection> L1_PuppiJetsColl_;
+  edm::EDGetTokenT<reco::CaloJetCollection> L1_PuppiJetsColl_;
 
   TFile*  rootFile_;
   double minJetPt_;
@@ -374,7 +374,7 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   L1_BarrelTrackColl_   = consumes<l1t::PFTrackCollection>(iConfig.getParameter<edm::InputTag>("L1BarrelTrackColl"));
   L1_HGCalTrackColl_   = consumes<l1t::PFTrackCollection>(iConfig.getParameter<edm::InputTag>("L1HGcalTrackColl"));
   L1_PFJetsColl_   = consumes<l1t::PFJetCollection>(iConfig.getParameter<edm::InputTag>("L1PFJets"));
-  L1_PuppiJetsColl_   = consumes<l1t::PFJetCollection>(iConfig.getParameter<edm::InputTag>("L1PuppiJets"));
+  L1_PuppiJetsColl_   = consumes<reco::CaloJetCollection>(iConfig.getParameter<edm::InputTag>("L1PuppiJets"));
 
 //
 //  branchNamePrefix_ = iConfig.getParameter<std::string>("BranchNamePrefix");
@@ -514,7 +514,7 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
     iEvent.getByToken(L1_HGCalTrackColl_,l1_hgcalTracks);
     edm::Handle<l1t::PFJetCollection> l1_pfJets;
     iEvent.getByToken(L1_PFJetsColl_,l1_pfJets);
-    edm::Handle<l1t::PFJetCollection> l1_puppiJets;
+    edm::Handle<reco::CaloJetCollection> l1_puppiJets;
     iEvent.getByToken(L1_PuppiJetsColl_,l1_puppiJets);
 
     EventInfo.nL1_Vertices=0;
@@ -592,7 +592,8 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 											  << triggerList.size() << "," << trigRes->size() ;
 
   bool passTrig = processTrig(trigRes, triggerList);
-  // if(!passTrig) return;
+
+  if(!passTrig) return;
 
   //------------------------------------------------------
   // Jet info
@@ -723,7 +724,7 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 	}// loop on jets
       }// isValid
     }// runDeepFlavourTagVariables_
-    
+
   }
 
 
@@ -740,7 +741,7 @@ bool BTagHLTAnalyzerT<IPTI,VTX>::processTrig(const edm::Handle<edm::TriggerResul
   bool passTrig = false;
   for (unsigned int i = 0; i < trigRes->size(); ++i) {
 
-    // if ( !trigRes->at(i).accept() ) continue;
+    if ( !trigRes->at(i).accept() ) continue;
 
 
     for (std::vector<std::string>::const_iterator itTrigPathNames = triggerPathNames_.begin();
