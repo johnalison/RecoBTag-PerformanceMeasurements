@@ -2098,6 +2098,22 @@ groupSet = cms.PSet(
         "PV_ndf",
         "PV_isgood",
         "PV_isfake",
+
+        "nGenJets",
+        "GenJet_pT",
+        "GenJet_eta",
+        "GenJet_phi",
+        "GenJet_mass",
+
+        "HLT_HT_2p4_pt",
+        "HLT_HT_2p4_phi",
+        "HLT_HT_2p4_sumEt",
+        "HLT_HT_4p5_pt",
+        "HLT_HT_4p5_phi",
+        "HLT_HT_4p5_sumEt",
+        "HLT_HT_jme_pt",
+        "HLT_HT_jme_phi",
+        "HLT_HT_jme_sumEt",
       ),
     ),
 
@@ -2719,6 +2735,22 @@ cms.PSet(
     "L1_HGCalTrack_dz",
     "L1_HGCalTrack_dxy",
 
+    "nL1_Tracks",
+    "L1_Track_pt",
+    "L1_Track_eta",
+    "L1_Track_phi",
+    "L1_Track_m",
+    "L1_Track_dz",
+    "L1_Track_dxy",
+
+    "nL1_ExtendedTracks",
+    "L1_ExtendedTrack_pt",
+    "L1_ExtendedTrack_eta",
+    "L1_ExtendedTrack_phi",
+    "L1_ExtendedTrack_m",
+    "L1_ExtendedTrack_dz",
+    "L1_ExtendedTrack_dxy",
+
     "nL1_Vertices",
     "L1_Vertex_z",
     "L1_Vertex_sum",
@@ -2738,6 +2770,10 @@ cms.PSet(
     "L1_PuppiJets_m",
     "L1_PuppiJets_dxy",
     "L1_PuppiJets_dz",
+
+    "L1_HT_pt",
+    "L1_HT_phi",
+    "L1_HT_sumEt",
 
             ),
   ),

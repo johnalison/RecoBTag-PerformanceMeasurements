@@ -102,7 +102,7 @@ typedef math::XYZPoint Point;
 //#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 #include "DataFormats/JetReco/interface/JetCollection.h"
-//#include "DataFormats/JetReco/interface/GenJetCollection.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
 //#include "DataFormats/PatCandidates/interface/Jet.h"
 //#include "DataFormats/PatCandidates/interface/Muon.h"
 
@@ -119,6 +119,8 @@ typedef math::XYZPoint Point;
 #include "RecoBTag/SecondaryVertex/interface/CombinedSVComputer.h"
 #include "RecoBTag/SecondaryVertex/interface/TrackKinematics.h"
 #include "RecoBTag/SecondaryVertex/interface/V0Filter.h"
+#include <DataFormats/METReco/interface/MET.h>
+#include <DataFormats/METReco/interface/METFwd.h>
 //#include "RecoBTag/ImpactParameter/plugins/IPProducer.h"
 #include "RecoVertex/VertexPrimitives/interface/ConvertToFromReco.h"
 
@@ -141,6 +143,8 @@ typedef math::XYZPoint Point;
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "TrackingTools/IPTools/interface/IPTools.h"
+#include "DataFormats/L1TrackTrigger/interface/TTTypes.h"
+#include "DataFormats/L1TrackTrigger/interface/TTTrack.h"
 
 //#include "fastjet/contrib/Njettiness.hh"
 
@@ -282,12 +286,21 @@ private:
 
   edm::EDGetTokenT<reco::VertexCollection> primaryVertexColl_;
 
+  edm::EDGetTokenT<reco::GenJetCollection> genJetColl_;
+
   bool runL1Variables_;
   edm::EDGetTokenT<l1t::TkPrimaryVertexCollection> L1_VertexColl_;
   edm::EDGetTokenT<l1t::PFTrackCollection> L1_BarrelTrackColl_;
   edm::EDGetTokenT<l1t::PFTrackCollection> L1_HGCalTrackColl_;
+  edm::EDGetTokenT<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> L1_TrackColl_;
+  edm::EDGetTokenT<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> L1_ExtendedTrackColl_;
   edm::EDGetTokenT<l1t::PFJetCollection> L1_PFJetsColl_;
   edm::EDGetTokenT<reco::CaloJetCollection> L1_PuppiJetsColl_;
+  edm::EDGetTokenT<reco::METCollection> L1_HTColl_;
+
+  edm::EDGetTokenT<reco::METCollection> HLT_HT_2p4Coll_;
+  edm::EDGetTokenT<reco::METCollection> HLT_HT_4p5Coll_;
+  edm::EDGetTokenT<reco::METCollection> HLT_HT_JMEColl_;
 
   TFile*  rootFile_;
   double minJetPt_;
@@ -317,6 +330,8 @@ private:
 
   edm::ESHandle<TransientTrackBuilder> trackBuilder ;
   edm::Handle<reco::VertexCollection> primaryVertex ;
+
+  edm::Handle<reco::GenJetCollection> genjets ;
 
 
   // helper class for associating PF candidates to jets
@@ -369,12 +384,21 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   // Modules
   primaryVertexColl_   = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("HLTprimaryVertexColl"));
 
+  genJetColl_   = consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("GenJets"));
+
   runL1Variables_ = iConfig.getParameter<bool>("analyzeL1Objects");
   L1_VertexColl_   = consumes<l1t::TkPrimaryVertexCollection>(iConfig.getParameter<edm::InputTag>("L1VertexColl"));
   L1_BarrelTrackColl_   = consumes<l1t::PFTrackCollection>(iConfig.getParameter<edm::InputTag>("L1BarrelTrackColl"));
   L1_HGCalTrackColl_   = consumes<l1t::PFTrackCollection>(iConfig.getParameter<edm::InputTag>("L1HGcalTrackColl"));
+  L1_TrackColl_   = consumes<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>>(iConfig.getParameter<edm::InputTag>("L1Tracks"));
+  L1_ExtendedTrackColl_   = consumes<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>>(iConfig.getParameter<edm::InputTag>("L1ExtendedTracks"));
   L1_PFJetsColl_   = consumes<l1t::PFJetCollection>(iConfig.getParameter<edm::InputTag>("L1PFJets"));
   L1_PuppiJetsColl_   = consumes<reco::CaloJetCollection>(iConfig.getParameter<edm::InputTag>("L1PuppiJets"));
+  L1_HTColl_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("L1HT"));
+
+  HLT_HT_2p4Coll_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTEta2p4"));
+  HLT_HT_4p5Coll_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTEta4p5"));
+  HLT_HT_JMEColl_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTJME"));
 
 //
 //  branchNamePrefix_ = iConfig.getParameter<std::string>("BranchNamePrefix");
@@ -502,6 +526,17 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
     ++EventInfo.nPV;
   }
 
+    iEvent.getByToken(genJetColl_,genjets);
+    EventInfo.nGenJets = 0;
+    for(size_t i = 0; i < genjets->size(); ++i){
+        const reco::GenJet & iGenJet = (*genjets)[i];
+        EventInfo.GenJet_pT[EventInfo.nGenJets] = iGenJet.pt();
+        EventInfo.GenJet_eta[EventInfo.nGenJets] = iGenJet.eta();
+        EventInfo.GenJet_phi[EventInfo.nGenJets] = iGenJet.phi();
+        EventInfo.GenJet_mass[EventInfo.nGenJets] = iGenJet.mass();
+        ++EventInfo.nGenJets;
+    }
+
   //----------------------------------------
   // L1 objects
   //----------------------------------------
@@ -512,10 +547,16 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
     iEvent.getByToken(L1_BarrelTrackColl_,l1_barrelTracks);
     edm::Handle<l1t::PFTrackCollection> l1_hgcalTracks;
     iEvent.getByToken(L1_HGCalTrackColl_,l1_hgcalTracks);
+    edm::Handle<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> l1_tracks;
+    iEvent.getByToken(L1_TrackColl_,l1_tracks);
+    edm::Handle<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> l1_extendedTracks;
+    iEvent.getByToken(L1_ExtendedTrackColl_,l1_extendedTracks);
     edm::Handle<l1t::PFJetCollection> l1_pfJets;
     iEvent.getByToken(L1_PFJetsColl_,l1_pfJets);
     edm::Handle<reco::CaloJetCollection> l1_puppiJets;
     iEvent.getByToken(L1_PuppiJetsColl_,l1_puppiJets);
+    edm::Handle<reco::METCollection> l1_ht;
+    iEvent.getByToken(L1_HTColl_,l1_ht);
 
     EventInfo.nL1_Vertices=0;
     for (unsigned int i = 0; i< l1_vertices->size() ; ++i) {
@@ -546,6 +587,31 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
       ++EventInfo.nL1_HGCalTracks;
     }
 
+    EventInfo.nL1_Tracks=0;
+    for (unsigned int i = 0; i< l1_tracks->size() ; ++i) {
+      EventInfo.L1_Track_pt[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].momentum().mag();
+      EventInfo.L1_Track_eta[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].eta();
+      EventInfo.L1_Track_phi[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].phi();
+      // EventInfo.L1_Track_m[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].mass();
+      // EventInfo.L1_Track_dz[EventInfo.nL1_Tracks]      = dz((*l1_tracks)[i], pv->position());
+      // EventInfo.L1_Track_dxy[EventInfo.nL1_Tracks]      = dxy((*l1_tracks)[i], pv->position());
+      EventInfo.L1_Track_dz[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].z0();
+      EventInfo.L1_Track_dxy[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].d0();
+      ++EventInfo.nL1_Tracks;
+    }
+    EventInfo.nL1_ExtendedTracks=0;
+    for (unsigned int i = 0; i< l1_extendedTracks->size() ; ++i) {
+      EventInfo.L1_ExtendedTrack_pt[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].momentum().mag();
+      EventInfo.L1_ExtendedTrack_eta[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].eta();
+      EventInfo.L1_ExtendedTrack_phi[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].phi();
+      // EventInfo.L1_ExtendedTrack_m[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].mass();
+      // EventInfo.L1_ExtendedTrack_dz[EventInfo.nL1_ExtendedTracks]      = dz((*l1_extendedTracks)[i], pv->position());
+      // EventInfo.L1_ExtendedTrack_dxy[EventInfo.nL1_ExtendedTracks]      = dxy((*l1_extendedTracks)[i], pv->position());
+      EventInfo.L1_ExtendedTrack_dz[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].z0();
+      EventInfo.L1_ExtendedTrack_dxy[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].d0();
+      ++EventInfo.nL1_ExtendedTracks;
+    }
+
     EventInfo.nL1_PFJets=0;
     for (unsigned int i = 0; i< l1_pfJets->size() ; ++i) {
       EventInfo.L1_PFJets_pt[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].pt();
@@ -566,7 +632,27 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
       // EventInfo.L1_PuppiJet_dxy[EventInfo.nL1_PuppiJets]      = dxy((*l1_puppiJets)[i], pv->position());
       ++EventInfo.nL1_PuppiJets;
     }
+
+    EventInfo.L1_HT_pt = (*l1_ht).at(0).pt();
+    EventInfo.L1_HT_phi = (*l1_ht).at(0).phi();
+    EventInfo.L1_HT_sumEt = (*l1_ht).at(0).sumEt();
   }
+
+  edm::Handle<reco::METCollection> ht_2p4;
+  iEvent.getByToken(HLT_HT_2p4Coll_,ht_2p4);
+  edm::Handle<reco::METCollection> ht_4p5;
+  iEvent.getByToken(HLT_HT_4p5Coll_,ht_4p5);
+  edm::Handle<reco::METCollection> ht_jme;
+  iEvent.getByToken(HLT_HT_JMEColl_,ht_jme);
+  EventInfo.HLT_HT_2p4_pt = (*ht_2p4).at(0).pt();
+  EventInfo.HLT_HT_2p4_phi = (*ht_2p4).at(0).phi();
+  EventInfo.HLT_HT_2p4_sumEt = (*ht_2p4).at(0).sumEt();
+  EventInfo.HLT_HT_4p5_pt = (*ht_4p5).at(0).pt();
+  EventInfo.HLT_HT_4p5_phi = (*ht_4p5).at(0).phi();
+  EventInfo.HLT_HT_4p5_sumEt = (*ht_4p5).at(0).sumEt();
+  EventInfo.HLT_HT_jme_pt = (*ht_jme).at(0).pt();
+  EventInfo.HLT_HT_jme_phi = (*ht_jme).at(0).phi();
+  EventInfo.HLT_HT_jme_sumEt = (*ht_jme).at(0).sumEt();
 
 
   //----------------------------------------
@@ -750,6 +836,7 @@ bool BTagHLTAnalyzerT<IPTI,VTX>::processTrig(const edm::Handle<edm::TriggerResul
       int triggerIdx = ( itTrigPathNames - triggerPathNames_.begin() );
       int bitIdx = int(triggerIdx/32);
       if ( NameCompatible(*itTrigPathNames,triggerList[i]) ) {
+          // std::cout << " Setting Bit on " << triggerList[i] << " bitIdx " << bitIdx << " "<<(triggerIdx - bitIdx*32) << " "<<( 1 << (triggerIdx - bitIdx*32) )<< std::endl;
 	passTrig = true;
 	EventInfo.BitTrigger[bitIdx] |= ( 1 << (triggerIdx - bitIdx*32) );
       }

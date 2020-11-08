@@ -292,55 +292,69 @@ process.btagana.MinPt                 = 25
 # process.btagana.triggerTable          = cms.InputTag('TriggerResults::RECO2') # Data and MC
 process.btagana.triggerTable          = cms.InputTag('TriggerResults') # Data and MC
 process.btagana.HLTTriggerPathNames   = cms.vstring(
-    'MC_JME',
-    'QCDMuon',
-    'noFilter_PFDeepCSVPuppi',
-    'noFilter_PFDeepFlavourPuppi',
-    'L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1',
-    'L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1',
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_4p5_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_4p5_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_4p5_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_4p5_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_4p5_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_4p5_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_4p5_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_4p5_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_4p5_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_4p5_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_4p5_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_4p5_v1',
+    'MC_JME', # 0 0
+    'QCDMuon',# 0 1
+    'noFilter_PFDeepCSVPuppi', # 0 2
+    'noFilter_PFDeepFlavourPuppi', # 0 3
+    'L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1', # 0 4
+    'L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1', # 0 5
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_4p5_v1', # 0 6
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_4p5_v1', # 0 7
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_4p5_v1', # 0 8
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_4p5_v1', # 0 9
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_4p5_v1', # 0 10
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_4p5_v1', # 0 11
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_4p5_v1', # 0 12
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_4p5_v1', # 0 13
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_4p5_v1', # 0 14
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_4p5_v1', # 0 15
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_4p5_v1', # 0 16
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_4p5_v1', # 0 17
 
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_2p4_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_2p4_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_2p4_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_2p4_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_2p4_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_2p4_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_2p4_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_2p4_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_2p4_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_2p4_v1',
-  'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_2p4_v1',
-  'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_2p4_v1', # 0 18
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_2p4_v1', # 0 19
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_2p4_v1', # 0 20
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_2p4_v1', # 0 21
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_2p4_v1', # 0 22
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_2p4_v1', # 0 23
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_2p4_v1', # 0 24
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_2p4_v1', # 0 25
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_2p4_v1', # 0 26
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_2p4_v1', # 0 27
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_2p4_v1', # 0 28
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_2p4_v1', # 0 29
 
-    'Offline_BadPFMuon',
-    'Offline_BadPFMuonDz',
-    'Offline_BadChargedCandidate',
-    'L1T_SinglePFPuppiJet200off',
-    'HLT_AK4PFJet550',
-    'HLT_AK4PFCHSJet550',
-    'HLT_AK4PFPuppiJet550',
-    'L1T_PFPuppiHT450off',
-    'HLT_PFPuppiHT1050',
-    'L1T_PFPuppiMET200off',
-    'L1T_PFPuppiMET245off',
-    'HLT_PFMET250',
-    'HLT_PFCHSMET250',
-    'HLT_PFPuppiMET250',
-    'HLT_PFPuppiMET120',
-    'HLT_PFPuppiMET120_PFPuppiMHT120',
-    'HLT_PFPuppiMET120_PFPuppiMHT120_PFPuppiHT60',
+    'Offline_BadPFMuon', # 0 30
+    'Offline_BadPFMuonDz', # 0 31
+    'Offline_BadChargedCandidate', # 1 0
+    'L1T_SinglePFPuppiJet200off', # 1 1
+    'HLT_AK4PFJet550', # 1 2
+    'HLT_AK4PFCHSJet550', # 1 3
+    'HLT_AK4PFPuppiJet550', # 1 4
+    'L1T_PFPuppiHT450off', # 1 5
+    'HLT_PFPuppiHT1050', # 1 6
+    'L1T_PFPuppiMET200off', # 1 7
+    'L1T_PFPuppiMET245off', # 1 8
+    'HLT_PFMET250', # 1 9
+    'HLT_PFCHSMET250', # 1 10
+    'HLT_PFPuppiMET250', # 1 11
+    'HLT_PFPuppiMET120', # 1 12
+    'HLT_PFPuppiMET120_PFPuppiMHT120', # 1 13
+    'HLT_PFPuppiMET120_PFPuppiMHT120_PFPuppiHT60', # 1 14
+
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1',  # 1 15
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1', # 1 16
+    'HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1', # 1 17
+    'HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1', # 1 18
+
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 19
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 20
+    'HLT_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 21
+    'HLT_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 22
+    'HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 23
+    'HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 24
+    'HLTNoL1_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 25
+    'HLTNoL1_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 26
     )
 # process.btagana.primaryVertexColl     = cms.InputTag('hltVerticesPF')
 process.btagana.primaryVertexColl     = cms.InputTag('offlinePrimaryVertices') #change with new Offline like sequence
@@ -372,6 +386,8 @@ process.btagana.PFJetDeepCSVTags     = cms.InputTag('hltDeepCombinedSecondaryVer
 process.btagana.PFJetBPBJetTags      = cms.InputTag('hltPfJetBProbabilityBJetTags')
 process.btagana.PFJetPBJetTags       = cms.InputTag('hltPfJetProbabilityBJetTags')
 
+process.btagana.GenJets            = cms.InputTag('ak4GenJetsNoNu::HLT')
+
 process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJetsCorrected')
 process.btagana.PuppiJetTags         = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi')
 process.btagana.PuppiDeepFlavourTags = cms.InputTag('hltPfDeepFlavourTagInfos')
@@ -380,17 +396,25 @@ process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVer
 process.btagana.PuppiJetBPBJetTags   = cms.InputTag('hltPfJetBProbabilityBJetTagsPuppi')
 process.btagana.PuppiJetPBJetTags    = cms.InputTag('hltPfJetProbabilityBJetTagsPuppi')
 process.btagana.PuppiJetCSVTags      = cms.InputTag('hltCombinedSecondaryVertexBJetTagsPFPuppi')
-process.btagana.PuppiJetDeepFlavourTags      = cms.InputTag('hltPfDeepFlavourJetTags:probb')
-process.btagana.PuppiJetDeepFlavourTags_bb      = cms.InputTag('hltPfDeepFlavourJetTags:probbb')
-process.btagana.PuppiJetDeepFlavourTags_lb      = cms.InputTag('hltPfDeepFlavourJetTags:problepb')
+process.btagana.PuppiJetDeepFlavourTags     = cms.InputTag('hltPfDeepFlavourJetTags:probb')
+process.btagana.PuppiJetDeepFlavourTags_bb  = cms.InputTag('hltPfDeepFlavourJetTags:probbb')
+process.btagana.PuppiJetDeepFlavourTags_lb  = cms.InputTag('hltPfDeepFlavourJetTags:problepb')
 
-process.btagana.analyzeL1Objects     =  cms.bool(True)
-process.btagana.L1VertexColl         =  cms.InputTag('L1TkPrimaryVertex')
-process.btagana.L1BarrelTrackColl    =  cms.InputTag('pfTracksFromL1TracksBarrel')
-process.btagana.L1HGcalTrackColl     =  cms.InputTag('pfTracksFromL1TracksHGCal')
-process.btagana.L1PFJets             =  cms.InputTag('ak4PFL1PuppiCorrected')
-process.btagana.L1PuppiJets          =  cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates')
-# process.btagana.L1PuppiJets          =  cms.InputTag('l1tSlwPFPuppiJetsCorrected')
+process.btagana.HLTPuppiHTEta2p4            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4')
+process.btagana.HLTPuppiHTEta4p5            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p5')
+process.btagana.HLTPuppiHTJME               = cms.InputTag('hltPFPuppiHT')
+
+process.btagana.analyzeL1Objects            =  cms.bool(True)
+process.btagana.L1VertexColl                =  cms.InputTag('L1TkPrimaryVertex')
+process.btagana.L1BarrelTrackColl           =  cms.InputTag('pfTracksFromL1TracksBarrel')
+process.btagana.L1HGcalTrackColl            =  cms.InputTag('pfTracksFromL1TracksHGCal')
+process.btagana.L1PFJets                    =  cms.InputTag('ak4PFL1PuppiCorrected')
+process.btagana.L1PuppiJets                 =  cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates')
+# process.btagana.L1PuppiJets               =  cms.InputTag('l1tSlwPFPuppiJetsCorrected')
+# process.btagana.L1HT                        =  cms.InputTag('l1tPFPuppiHT')
+process.btagana.L1HT                        =  cms.InputTag('l1tPFPuppiHTMaxEta2p4')
+process.btagana.L1ExtendedTracks            =  cms.InputTag('TTTracksFromExtendedTrackletEmulation','Level1TTTracks')
+process.btagana.L1Tracks                    =  cms.InputTag('TTTracksFromTrackletEmulation','Level1TTTracks')
 
 #---------------------------------------
 ## Event counter

@@ -790,6 +790,18 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4
     )
 
+    process.HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1 = cms.Path(
+        process.HLTParticleFlowSequence
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltPFPuppiCentralJetQuad30MaxEta2p4
+        +process.hlt1PFPuppiCentralJet75MaxEta2p4
+        +process.hlt2PFPuppiCentralJet60MaxEta2p4
+        +process.hlt3PFPuppiCentralJet45MaxEta2p4
+        +process.hlt4PFPuppiCentralJet40MaxEta2p4
+        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
+        +process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4
+    )
+
     process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1 = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
         +process.l1tPFPuppiHT400offMaxEta2p4
@@ -797,6 +809,17 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
         +process.HLTParticleFlowSequence
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltPFPuppiCentralJetQuad30MaxEta4p5
+        +process.hlt1PFPuppiCentralJet75MaxEta4p5
+        +process.hlt2PFPuppiCentralJet60MaxEta4p5
+        +process.hlt3PFPuppiCentralJet45MaxEta4p5
+        +process.hlt4PFPuppiCentralJet40MaxEta4p5
+        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p5
+        +process.hltPFPuppiCentralJetsQuad30HT330MaxEta4p5
+    )
+    process.HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1 = cms.Path(
+        process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiCentralJetQuad30MaxEta4p5
         +process.hlt1PFPuppiCentralJet75MaxEta4p5
@@ -821,6 +844,15 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hlt3PFPuppiCentralJet45MaxEta2p4
         +process.hlt4PFPuppiCentralJet40MaxEta2p4
     )
+    process.HLTNoL1_QuadPFPuppiJet_75_60_45_40_2p4_v1 = cms.Path(
+        process.HLTParticleFlowSequence
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltPFPuppiCentralJetQuad30MaxEta2p4
+        +process.hlt1PFPuppiCentralJet75MaxEta2p4
+        +process.hlt2PFPuppiCentralJet60MaxEta2p4
+        +process.hlt3PFPuppiCentralJet45MaxEta2p4
+        +process.hlt4PFPuppiCentralJet40MaxEta2p4
+    )
 
     process.HLT_QuadPFPuppiJet_75_60_45_40_4p5_v1 = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
@@ -829,6 +861,15 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
         +process.HLTParticleFlowSequence
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltPFPuppiCentralJetQuad30MaxEta4p5
+        +process.hlt1PFPuppiCentralJet75MaxEta4p5
+        +process.hlt2PFPuppiCentralJet60MaxEta4p5
+        +process.hlt3PFPuppiCentralJet45MaxEta4p5
+        +process.hlt4PFPuppiCentralJet40MaxEta4p5
+    )
+    process.HLTNoL1_QuadPFPuppiJet_75_60_45_40_4p5_v1 = cms.Path(
+        process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiCentralJetQuad30MaxEta4p5
         +process.hlt1PFPuppiCentralJet75MaxEta4p5
@@ -1010,6 +1051,22 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hltDoublePFPuppiJets128MaxEta4p5
     )
 
+    process.HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1 = cms.Path(
+        process.HLTParticleFlowSequence
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltSelectorPFPuppiJets80L1FastJet
+        +process.hltSelector6PFPuppiCentralJetsL1FastJet
+        +process.hltDoublePFPuppiJets128MaxEta2p4
+    )
+
+    process.HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1 = cms.Path(
+        process.HLTParticleFlowSequence
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltSelectorPFPuppiJets80L1FastJet
+        +process.hltSelector6PFPuppiCentralJetsL1FastJet
+        +process.hltDoublePFPuppiJets128MaxEta4p5
+    )
+
     process.L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
     )
@@ -1025,10 +1082,38 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.HLTBtagDeepFlavourSequencePFPuppi
     )
 
+    process.L1Objects = cms.Path(
+        process.l1tPFPuppiHTMaxEta2p4
+    )
+    process.HLTObjects = cms.Path(
+        process.HLTParticleFlowSequence
+        # +process.HLTPFPuppiJMEReconstruction
+        +process.HLTAK4PFPuppiJetsReconstruction
+        +process.hltPFPuppiHT
+        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p5
+        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
+    )
+
     process.schedule_().extend([
       process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1,
       process.L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1,
 
+      process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1,
+      process.HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1,
+      process.HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1,
+      process.HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1,
+
+      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1,
+      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1,
+      process.HLT_QuadPFPuppiJet_75_60_45_40_2p4_v1,
+      process.HLT_QuadPFPuppiJet_75_60_45_40_4p5_v1,
+      process.HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1,
+      process.HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1,
+      process.HLTNoL1_QuadPFPuppiJet_75_60_45_40_2p4_v1,
+      process.HLTNoL1_QuadPFPuppiJet_75_60_45_40_4p5_v1,
+
+      process.L1Objects,
+      process.HLTObjects,
       process.QCDMuon,
       process.noFilter_PFDeepCSVPuppi,
       process.noFilter_PFDeepFlavourPuppi,

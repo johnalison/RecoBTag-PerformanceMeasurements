@@ -11,6 +11,7 @@ const UInt_t nMaxQuarks = 1000;
 const UInt_t nMaxHadrons = 100;
 const UInt_t nMaxGenLeps = 100;
 const UInt_t nMaxGenQuarks = 100;
+const UInt_t nMaxGenJets = 100;
 const UInt_t nMaxGenV0 = 100;
 const UInt_t nMaxGenPruned = 100;
 const UInt_t nMaxPatMuon = 1000;
@@ -119,6 +120,12 @@ class EventInfoBranches {
     int   Genquark_pdgID[nMaxGenQuarks];
     int   Genquark_mother[nMaxGenQuarks];
 
+    int   nGenJets;
+    float GenJet_pT[nMaxGenJets];
+    float GenJet_eta[nMaxGenJets];
+    float GenJet_phi[nMaxGenJets];
+    float GenJet_mass[nMaxGenJets];
+
     int   nGenV0;
     float GenV0_pT[nMaxGenV0];
     float GenV0_eta[nMaxGenV0];
@@ -218,6 +225,20 @@ class EventInfoBranches {
     float L1_HGCalTrack_m[nMaxL1Tracks_];
     float L1_HGCalTrack_dxy[nMaxL1Tracks_];
     float L1_HGCalTrack_dz[nMaxL1Tracks_];
+    int nL1_Tracks;
+    float L1_Track_pt[nMaxL1Tracks_];
+    float L1_Track_eta[nMaxL1Tracks_];
+    float L1_Track_phi[nMaxL1Tracks_];
+    float L1_Track_m[nMaxL1Tracks_];
+    float L1_Track_dxy[nMaxL1Tracks_];
+    float L1_Track_dz[nMaxL1Tracks_];
+    int nL1_ExtendedTracks;
+    float L1_ExtendedTrack_pt[nMaxL1Tracks_];
+    float L1_ExtendedTrack_eta[nMaxL1Tracks_];
+    float L1_ExtendedTrack_phi[nMaxL1Tracks_];
+    float L1_ExtendedTrack_m[nMaxL1Tracks_];
+    float L1_ExtendedTrack_dxy[nMaxL1Tracks_];
+    float L1_ExtendedTrack_dz[nMaxL1Tracks_];
     int nL1_PFJets;
     float L1_PFJets_pt[nMaxL1Jets_];
     float L1_PFJets_eta[nMaxL1Jets_];
@@ -232,6 +253,20 @@ class EventInfoBranches {
     float L1_PuppiJets_m[nMaxL1Jets_];
     float L1_PuppiJets_dxy[nMaxL1Jets_];
     float L1_PuppiJets_dz[nMaxL1Jets_];
+
+    float L1_HT_pt;
+    float L1_HT_phi;
+    float L1_HT_sumEt;
+
+    float HLT_HT_2p4_pt;
+    float HLT_HT_2p4_phi;
+    float HLT_HT_2p4_sumEt;
+    float HLT_HT_4p5_pt;
+    float HLT_HT_4p5_phi;
+    float HLT_HT_4p5_sumEt;
+    float HLT_HT_jme_pt;
+    float HLT_HT_jme_phi;
+    float HLT_HT_jme_sumEt;
 
     int   ttbar_chan, ttbar_trigWord, ttbar_metfilterWord, ttbar_allmepartons, ttbar_matchmepartons;
     int   ttbar_ng,ttbar_gid[25];
@@ -327,6 +362,12 @@ class EventInfoBranches {
       if(variableParser.isToBeStored("Genquark_phi")) tree->Branch("Genquark_phi",    Genquark_phi   , "Genquark_phi[nGenquark]/F");
       if(variableParser.isToBeStored("Genquark_pdgID")) tree->Branch("Genquark_pdgID",  Genquark_pdgID , "Genquark_pdgID[nGenquark]/I");
       if(variableParser.isToBeStored("Genquark_mother")) tree->Branch("Genquark_mother", Genquark_mother, "Genquark_mother[nGenquark]/I");
+
+      if(variableParser.isToBeStored("nGenJets")) tree->Branch("nGenJets",     &nGenJets       ,"nGenJets/I");
+      if(variableParser.isToBeStored("GenJet_pT")) tree->Branch("GenJet_pT",     GenJet_pT    , "GenJet_pT[nGenJets]/F");
+      if(variableParser.isToBeStored("GenJet_eta")) tree->Branch("GenJet_eta",    GenJet_eta   , "GenJet_eta[nGenJets]/F");
+      if(variableParser.isToBeStored("GenJet_phi")) tree->Branch("GenJet_phi",    GenJet_phi   , "GenJet_phi[nGenJets]/F");
+      if(variableParser.isToBeStored("GenJet_mass")) tree->Branch("GenJet_mass",  GenJet_mass , "GenJet_mass[nGenJets]/F");
 
       if(variableParser.isToBeStored("nGenPruned")) tree->Branch("nGenPruned",     &nGenPruned       ,"nGenPruned/I");
       if(variableParser.isToBeStored("GenPruned_pT")) tree->Branch("GenPruned_pT",     GenPruned_pT    , "GenPruned_pT[nGenPruned]/F");
@@ -450,6 +491,20 @@ class EventInfoBranches {
        if(variableParser.isToBeStored("L1_HGCalTrack_m")) tree->Branch(("L1_HGCalTrack_m")           ,&L1_HGCalTrack_m          ,("L1_HGCalTrack_m[nL1_HGCalTracks]/F"));
        if(variableParser.isToBeStored("L1_HGCalTrack_dz")) tree->Branch(("L1_HGCalTrack_dz")           ,&L1_HGCalTrack_dz          ,("L1_HGCalTrack_dz[nL1_HGCalTracks]/F"));
        if(variableParser.isToBeStored("L1_HGCalTrack_dxy")) tree->Branch(("L1_HGCalTrack_dxy")           ,&L1_HGCalTrack_dxy          ,("L1_HGCalTrack_dxy[nL1_HGCalTracks]/F"));
+       if(variableParser.isToBeStored("nL1_Tracks")) tree->Branch(("nL1_Tracks")           ,&nL1_Tracks          ,("nL1_Tracks/I"));
+       if(variableParser.isToBeStored("L1_Track_pt")) tree->Branch(("L1_Track_pt")           ,&L1_Track_pt          ,("L1_Track_pt[nL1_Tracks]/F"));
+       if(variableParser.isToBeStored("L1_Track_eta")) tree->Branch(("L1_Track_eta")           ,&L1_Track_eta          ,("L1_Track_eta[nL1_Tracks]/F"));
+       if(variableParser.isToBeStored("L1_Track_phi")) tree->Branch(("L1_Track_phi")           ,&L1_Track_phi          ,("L1_Track_phi[nL1_Tracks]/F"));
+       if(variableParser.isToBeStored("L1_Track_m")) tree->Branch(("L1_Track_m")           ,&L1_Track_m          ,("L1_Track_m[nL1_Tracks]/F"));
+       if(variableParser.isToBeStored("L1_Track_dz")) tree->Branch(("L1_Track_dz")           ,&L1_Track_dz          ,("L1_Track_dz[nL1_Tracks]/F"));
+       if(variableParser.isToBeStored("L1_Track_dxy")) tree->Branch(("L1_Track_dxy")           ,&L1_Track_dxy          ,("L1_Track_dxy[nL1_Tracks]/F"));
+       if(variableParser.isToBeStored("nL1_ExtendedTracks")) tree->Branch(("nL1_ExtendedTracks")           ,&nL1_ExtendedTracks          ,("nL1_ExtendedTracks/I"));
+       if(variableParser.isToBeStored("L1_ExtendedTrack_pt")) tree->Branch(("L1_ExtendedTrack_pt")           ,&L1_ExtendedTrack_pt          ,("L1_ExtendedTrack_pt[nL1_ExtendedTracks]/F"));
+       if(variableParser.isToBeStored("L1_ExtendedTrack_eta")) tree->Branch(("L1_ExtendedTrack_eta")           ,&L1_ExtendedTrack_eta          ,("L1_ExtendedTrack_eta[nL1_ExtendedTracks]/F"));
+       if(variableParser.isToBeStored("L1_ExtendedTrack_phi")) tree->Branch(("L1_ExtendedTrack_phi")           ,&L1_ExtendedTrack_phi          ,("L1_ExtendedTrack_phi[nL1_ExtendedTracks]/F"));
+       if(variableParser.isToBeStored("L1_ExtendedTrack_m")) tree->Branch(("L1_ExtendedTrack_m")           ,&L1_ExtendedTrack_m          ,("L1_ExtendedTrack_m[nL1_ExtendedTracks]/F"));
+       if(variableParser.isToBeStored("L1_ExtendedTrack_dz")) tree->Branch(("L1_ExtendedTrack_dz")           ,&L1_ExtendedTrack_dz          ,("L1_ExtendedTrack_dz[nL1_ExtendedTracks]/F"));
+       if(variableParser.isToBeStored("L1_ExtendedTrack_dxy")) tree->Branch(("L1_ExtendedTrack_dxy")           ,&L1_ExtendedTrack_dxy          ,("L1_ExtendedTrack_dxy[nL1_ExtendedTracks]/F"));
 
        if(variableParser.isToBeStored("nL1_Vertices")) tree->Branch(("nL1_Vertices")           ,&nL1_Vertices          ,("nL1_Vertices/I"));
        if(variableParser.isToBeStored("L1_Vertex_z")) tree->Branch(("L1_Vertex_z")           ,&L1_Vertex_z          ,("L1_Vertex_z[nL1_Vertices]/F"));
@@ -469,6 +524,20 @@ class EventInfoBranches {
        if(variableParser.isToBeStored("L1_PuppiJets_m")) tree->Branch(("L1_PuppiJets_m")           ,&L1_PuppiJets_m          ,("L1_PuppiJets_m[nL1_PuppiJets]/F"));
        if(variableParser.isToBeStored("L1_PuppiJets_dxy")) tree->Branch(("L1_PuppiJets_dxy")           ,&L1_PuppiJets_dxy          ,("L1_PuppiJets_dxy[nL1_PuppiJets]/F"));
        if(variableParser.isToBeStored("L1_PuppiJets_dz")) tree->Branch(("L1_PuppiJets_dz")           ,&L1_PuppiJets_dz          ,("L1_PuppiJets_dz[nL1_PuppiJets]/F"));
+
+       if(variableParser.isToBeStored("L1_HT_pt")) tree->Branch(("L1_HT_pt")           ,&L1_HT_pt          ,("L1_HT_pt/F"));
+       if(variableParser.isToBeStored("L1_HT_phi")) tree->Branch(("L1_HT_phi")           ,&L1_HT_phi          ,("L1_HT_phi/F"));
+       if(variableParser.isToBeStored("L1_HT_sumEt")) tree->Branch(("L1_HT_sumEt")           ,&L1_HT_sumEt          ,("L1_HT_sumEt/F"));
+
+       if(variableParser.isToBeStored("HLT_HT_2p4_pt")) tree->Branch(("HLT_HT_2p4_pt")           ,&HLT_HT_2p4_pt          ,("HLT_HT_2p4_pt/F"));
+       if(variableParser.isToBeStored("HLT_HT_2p4_phi")) tree->Branch(("HLT_HT_2p4_phi")           ,&HLT_HT_2p4_phi          ,("HLT_HT_2p4_phi/F"));
+       if(variableParser.isToBeStored("HLT_HT_2p4_sumEt")) tree->Branch(("HLT_HT_2p4_sumEt")           ,&HLT_HT_2p4_sumEt          ,("HLT_HT_2p4_sumEt/F"));
+       if(variableParser.isToBeStored("HLT_HT_4p5_pt")) tree->Branch(("HLT_HT_4p5_pt")           ,&HLT_HT_4p5_pt          ,("HLT_HT_4p5_pt/F"));
+       if(variableParser.isToBeStored("HLT_HT_4p5_phi")) tree->Branch(("HLT_HT_4p5_phi")           ,&HLT_HT_4p5_phi          ,("HLT_HT_4p5_phi/F"));
+       if(variableParser.isToBeStored("HLT_HT_4p5_sumEt")) tree->Branch(("HLT_HT_4p5_sumEt")           ,&HLT_HT_4p5_sumEt          ,("HLT_HT_4p5_sumEt/F"));
+       if(variableParser.isToBeStored("HLT_HT_jme_pt")) tree->Branch(("HLT_HT_jme_pt")           ,&HLT_HT_jme_pt          ,("HLT_HT_jme_pt/F"));
+       if(variableParser.isToBeStored("HLT_HT_jme_phi")) tree->Branch(("HLT_HT_jme_phi")           ,&HLT_HT_jme_phi          ,("HLT_HT_jme_phi/F"));
+       if(variableParser.isToBeStored("HLT_HT_jme_sumEt")) tree->Branch(("HLT_HT_jme_sumEt")           ,&HLT_HT_jme_sumEt          ,("HLT_HT_jme_sumEt/F"));
     }
 
     void ReadBranches(TTree *tree, VariableParser variableParser){
@@ -554,6 +623,12 @@ class EventInfoBranches {
       if(variableParser.isToBeStored("Genquark_phi")) tree->SetBranchAddress("Genquark_phi",    Genquark_phi   );
       if(variableParser.isToBeStored("Genquark_pdgID")) tree->SetBranchAddress("Genquark_pdgID",  Genquark_pdgID );
       if(variableParser.isToBeStored("Genquark_mother")) tree->SetBranchAddress("Genquark_mother", Genquark_mother);
+
+      if(variableParser.isToBeStored("nGenJets")) tree->SetBranchAddress("nGenJets",     &nGenJets       );
+      if(variableParser.isToBeStored("GenJet_pT")) tree->SetBranchAddress("GenJet_pT",     GenJet_pT   );
+      if(variableParser.isToBeStored("GenJet_eta")) tree->SetBranchAddress("GenJet_eta",    GenJet_eta   );
+      if(variableParser.isToBeStored("GenJet_phi")) tree->SetBranchAddress("GenJet_phi",    GenJet_phi   );
+      if(variableParser.isToBeStored("GenJet_mass")) tree->SetBranchAddress("GenJet_mass",  GenJet_mass );
 
       if(variableParser.isToBeStored("nGenPruned")) tree->SetBranchAddress("nGenPruned",     &nGenPruned       );
       if(variableParser.isToBeStored("GenPruned_pT")) tree->SetBranchAddress("GenPruned_pT",     GenPruned_pT    );
