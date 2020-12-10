@@ -21,6 +21,8 @@
 #include <memory>
 
 // user include files
+#include "DataFormats/Common/interface/Ref.h"
+#include "DataFormats/Common/interface/RefToBase.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
@@ -52,7 +54,8 @@ typedef math::XYZPoint Point;
 //#include "SimDataFormats/TrackingAnalysis/interface/TrackingParticle.h"
 
 //#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
-//#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "RecoBTag/PerformanceMeasurements/interface/CategoryFinder.h"
 
 // reco track and vertex
@@ -81,6 +84,8 @@ typedef math::XYZPoint Point;
 #include "DataFormats/BTauReco/interface/SecondaryVertexTagInfo.h"
 #include "DataFormats/BTauReco/interface/ParticleMasses.h"
 
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfo.h"
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfoMatching.h"
 
 //#include "SimDataFormats/Associations/interface/TrackToTrackingParticleAssociator.h"
 //#include "SimTracker/TrackHistory/interface/TrackCategories.h"
@@ -99,7 +104,7 @@ typedef math::XYZPoint Point;
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
-//#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 #include "DataFormats/JetReco/interface/JetCollection.h"
 #include "DataFormats/JetReco/interface/GenJetCollection.h"
@@ -134,7 +139,6 @@ typedef math::XYZPoint Point;
 //#include "RecoBTag/PerformanceMeasurements/interface/BookHistograms.h"
 #include "RecoBTag/PerformanceMeasurements/interface/VariableParser.h"
 
-//#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "FWCore/Common/interface/Provenance.h"
 #include "PhysicsTools/SelectorUtils/interface/PFJetIDSelectionFunctor.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
@@ -159,7 +163,7 @@ typedef std::vector<reco::ShallowTagInfo> ShallowTagCollection ;
 typedef edm::AssociationVector<edm::RefToBaseProd<reco::Jet>,std::vector<float> > HLTBTagValue;
 typedef std::vector<reco::DeepFlavourTagInfo> DeepFlavourTagInfoCollection;
 
-
+enum JetFlavor {UNDEFINED, G, UD, S, C, GCC, CC, B, GBB, BB, LeptonicB, LeptonicB_C, TAU};
 
 namespace BTagHLT {
   const math::XYZPoint & position(const reco::Vertex & sv) {return sv.position();}
@@ -217,6 +221,17 @@ public:
   double dz(const l1t::PFTrack &ltrack, const Point &myBeamSpot);
   double dxy(const l1t::PFTrack &ltrack, const Point &myBeamSpot);
 
+  JetFlavor jet_flavour(
+        const reco::PFJet& jet,
+          const reco::JetFlavourInfo& jetInfo,
+          const reco::GenParticleRef& parton,
+          const std::vector<reco::GenParticle>& gToBB,
+          const std::vector<reco::GenParticle>& gToCC,
+          const std::vector<reco::GenParticle>& neutrinosLepB,
+          const std::vector<reco::GenParticle>& neutrinosLepB_C,
+          const std::vector<reco::GenParticle>& alltaus,
+          bool usePhysForLightAndUndefined=false);
+
 private:
   virtual void beginJob() ;
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
@@ -272,7 +287,11 @@ private:
   edm::EDGetTokenT<HLTBTagValue> PFJetProbTag_;
   edm::EDGetTokenT<HLTBTagValue> PFJetBProbTag_;
 
+  bool runTruthFlavor_;
   edm::EDGetTokenT<PFJetCollection> PuppiJetCollectionTag_;
+  edm::EDGetTokenT<reco::JetFlavourInfoMatchingCollection> PuppiJetFlavorInfoCollectionTag_;
+  edm::EDGetTokenT<edm::Association<reco::GenParticleCollection>> PuppiJetPartonMatchCollectionTag_;
+  edm::EDGetTokenT<edm::Association<reco::GenJetCollection>> PuppiJetGenJetMatchCollectionTag_;
   edm::EDGetTokenT<ShallowTagCollection> PuppiJetTagCollectionTag_;
   edm::EDGetTokenT<std::vector<SVTagInfo> > PuppiSVCollectionTag_;
   edm::EDGetTokenT<DeepFlavourTagInfoCollection> PuppiDeepFlavourCollectionTag_;
@@ -286,7 +305,11 @@ private:
 
   edm::EDGetTokenT<reco::VertexCollection> primaryVertexColl_;
 
+  edm::EDGetTokenT<double> qcdWeightPU140_;
+  edm::EDGetTokenT<double> qcdWeightPU200_;
+
   edm::EDGetTokenT<reco::GenJetCollection> genJetColl_;
+  edm::EDGetTokenT<reco::GenParticleCollection> genParticleColl_;
 
   bool runL1Variables_;
   edm::EDGetTokenT<l1t::TkPrimaryVertexCollection> L1_VertexColl_;
@@ -299,12 +322,18 @@ private:
   edm::EDGetTokenT<reco::METCollection> L1_HTColl_;
 
   edm::EDGetTokenT<reco::METCollection> HLT_HT_2p4Coll_;
-  edm::EDGetTokenT<reco::METCollection> HLT_HT_4p5Coll_;
+  edm::EDGetTokenT<reco::METCollection> HLT_HT_4p0Coll_;
   edm::EDGetTokenT<reco::METCollection> HLT_HT_JMEColl_;
+
+    edm::EDGetTokenT<edm::HepMCProduct> hepMCProductToken_;
+    edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
+    edm::EDGetTokenT<edm::View<PileupSummaryInfo>> pileupInfoToken_;
 
   TFile*  rootFile_;
   double minJetPt_;
   double maxJetEta_;
+  // double qcdWeightPU140_;
+  // double qcdWeightPU200_;
 
   bool isData_;
   bool runHLTJetVariables_;
@@ -330,9 +359,23 @@ private:
 
   edm::ESHandle<TransientTrackBuilder> trackBuilder ;
   edm::Handle<reco::VertexCollection> primaryVertex ;
+  edm::Handle<double> pu140weight ;
+  edm::Handle<double> pu200weight ;
 
   edm::Handle<reco::GenJetCollection> genjets ;
+  edm::Handle<reco::GenParticleCollection> genparticles ;
 
+
+  // to get the truth flavor
+    // std::vector <reco::GenParticle> neutrinosLepB;
+    // std::vector <reco::GenParticle> neutrinosLepB_C;
+    //
+    // std::vector<reco::GenParticle> gToBB;
+    // std::vector<reco::GenParticle> gToCC;
+    // std::vector<reco::GenParticle> alltaus_;
+    //
+    // std::vector<reco::GenParticle> Bhadron_;
+    // std::vector<reco::GenParticle> Bhadron_daughter_;
 
   // helper class for associating PF candidates to jets
   //IPProducerHelpers::FromJetAndCands m_helper;
@@ -345,6 +388,9 @@ private:
   double decayLength_;
   double deltaR_;
 
+
+  TH1F* triggerDecisions;
+  TH1F* triggerDecisionsWeighted;
 
   std::unordered_set<std::string> variables; // This unordered_set is going to contain the name of each single variable to be stored in the output tree
 
@@ -377,6 +423,8 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
 
   minJetPt_  = iConfig.getParameter<double>("MinPt");
   maxJetEta_ = iConfig.getParameter<double>("MaxEta");
+  qcdWeightPU140_ = consumes<double>(iConfig.getParameter<edm::InputTag>("qcdWeightPU140"));
+  qcdWeightPU200_ = consumes<double>(iConfig.getParameter<edm::InputTag>("qcdWeightPU200"));
 
   runHLTJetVariables_ = iConfig.getParameter<bool>("runHLTJetVariables");
   runDeepFlavourTagVariables_ = iConfig.getParameter<bool>("runDeepFlavourTagVariables");
@@ -385,8 +433,10 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   primaryVertexColl_   = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("HLTprimaryVertexColl"));
 
   genJetColl_   = consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("GenJets"));
+  genParticleColl_   = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("GenParticles"));
 
   runL1Variables_ = iConfig.getParameter<bool>("analyzeL1Objects");
+  runTruthFlavor_ = iConfig.getParameter<bool>("runTruthFlavor");
   L1_VertexColl_   = consumes<l1t::TkPrimaryVertexCollection>(iConfig.getParameter<edm::InputTag>("L1VertexColl"));
   L1_BarrelTrackColl_   = consumes<l1t::PFTrackCollection>(iConfig.getParameter<edm::InputTag>("L1BarrelTrackColl"));
   L1_HGCalTrackColl_   = consumes<l1t::PFTrackCollection>(iConfig.getParameter<edm::InputTag>("L1HGcalTrackColl"));
@@ -397,7 +447,7 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   L1_HTColl_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("L1HT"));
 
   HLT_HT_2p4Coll_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTEta2p4"));
-  HLT_HT_4p5Coll_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTEta4p5"));
+  HLT_HT_4p0Coll_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTEta4p0"));
   HLT_HT_JMEColl_   = consumes<reco::METCollection>(iConfig.getParameter<edm::InputTag>("HLTPuppiHTJME"));
 
 //
@@ -417,6 +467,9 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   PFJetBProbTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PFJetBPBJetTags"));
 
   PuppiJetCollectionTag_   = consumes<PFJetCollection>(iConfig.getParameter<edm::InputTag>("PuppiJets"));
+  PuppiJetFlavorInfoCollectionTag_   = consumes<reco::JetFlavourInfoMatchingCollection>(iConfig.getParameter<edm::InputTag>("PuppiJetsFlavorInfos"));
+  PuppiJetPartonMatchCollectionTag_   = consumes<edm::Association<reco::GenParticleCollection>>(iConfig.getParameter<edm::InputTag>("PuppiJetsMatchedGenPartons"));
+  PuppiJetGenJetMatchCollectionTag_   = consumes<edm::Association<reco::GenJetCollection>>(iConfig.getParameter<edm::InputTag>("PuppiJetsMatchedGenJets"));
   PuppiJetTagCollectionTag_ = consumes<ShallowTagCollection>(iConfig.getParameter<edm::InputTag>("PuppiJetTags"));
   PuppiSVCollectionTag_   = consumes<std::vector<SVTagInfo> >(iConfig.getParameter<edm::InputTag>("PuppiSVs"));
   PuppiDeepFlavourCollectionTag_ = consumes<DeepFlavourTagInfoCollection>(iConfig.getParameter<edm::InputTag>("PuppiDeepFlavourTags"));
@@ -433,6 +486,10 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   triggerPathNames_        = iConfig.getParameter<std::vector<std::string> >("HLTTriggerPathNames");
 
 
+hepMCProductToken_ = consumes<edm::HepMCProduct>(iConfig.getParameter<edm::InputTag>("HepMCProduct"));
+genEventInfoProductToken_ = consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("GenEventInfoProduct"));
+// pileupInfoToken_ = consumes<PileupSummaryInfo>(iConfig.getParameter<edm::InputTag>("PileupSummaryInfo"));
+pileupInfoToken_ = consumes<edm::View<PileupSummaryInfo>>(iConfig.getParameter<edm::InputTag>("PileupSummaryInfo"));
 
   ///////////////
   // TTree
@@ -453,6 +510,14 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   JetInfo[1].RegisterBranches(smalltree, variableParser, "PFJet");
   JetInfo[2].RegisterBranches(smalltree, variableParser, "PuppiJet");
   // JetInfo[3].RegisterBranches(smalltree, variableParser, "PFClusterJet");
+
+  triggerDecisions = new TH1F("triggerDecisions", ("triggerDecisions; ;Entries"),  1,1,2);
+  triggerDecisions->SetCanExtend(1);
+  triggerDecisions->GetXaxis()->FindBin("all");
+  triggerDecisionsWeighted = new TH1F("triggerDecisionsWeighted", ("triggerDecisionsWeighted; ;Entries"),  1,1,2);
+  triggerDecisionsWeighted->SetCanExtend(1);
+  triggerDecisionsWeighted->GetXaxis()->FindBin("all");
+
 
 }
 
@@ -483,6 +548,80 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 
   isData_ = iEvent.isRealData();
 
+    edm::Handle<edm::HepMCProduct> hepMCProduct;
+    iEvent.getByToken(hepMCProductToken_,hepMCProduct);
+    edm::Handle<GenEventInfoProduct> genEventInfo;
+    iEvent.getByToken(genEventInfoProductToken_,genEventInfo);
+    edm::Handle<PileupSummaryInfo> pileupInfoView;
+    iEvent.getByToken(pileupInfoToken_, pileupInfoView);
+
+    float hepMCGenEvent_scale_ = -1.f;
+    float genEventInfo_qScale_ = -1.f;
+    int pileupInfo_BX0_numPUInteractions_ = -1;
+    float pileupInfo_BX0_numTrueInteractions_ = -1.f;
+    float pileupInfo_BX0_max_pT_hats_ = -1.f;
+    uint pileupInfo_BX0_n_pThat000to020_ = 0;
+    uint pileupInfo_BX0_n_pThat020to030_ = 0;
+    uint pileupInfo_BX0_n_pThat030to050_ = 0;
+    uint pileupInfo_BX0_n_pThat050to080_ = 0;
+    uint pileupInfo_BX0_n_pThat080to120_ = 0;
+    uint pileupInfo_BX0_n_pThat120to170_ = 0;
+    uint pileupInfo_BX0_n_pThat170to300_ = 0;
+    uint pileupInfo_BX0_n_pThat300to470_ = 0;
+    uint pileupInfo_BX0_n_pThat470to600_ = 0;
+    uint pileupInfo_BX0_n_pThat600toInf_ = 0;
+
+  // MC: HepMCProduct
+  if (! isData_) {
+    auto const& hepMCProduct = iEvent.get(hepMCProductToken_);
+    auto const* hepMCGenEvent = hepMCProduct.GetEvent();
+    if (hepMCGenEvent) {
+      hepMCGenEvent_scale_ = hepMCGenEvent->event_scale();
+    }
+  }
+  // MC: GenEventInfoProduct
+  if (! isData_) {
+    auto const& genEventInfo = iEvent.get(genEventInfoProductToken_);
+    genEventInfo_qScale_ = genEventInfo.qScale();
+  }
+    if (! isData_) {
+        auto const& pileupInfoView = iEvent.get(pileupInfoToken_);
+        for (auto const& pileupInfo_i : pileupInfoView) {
+            if (pileupInfo_i.getBunchCrossing() == 0) {
+                pileupInfo_BX0_numTrueInteractions_ = pileupInfo_i.getTrueNumInteractions();
+                pileupInfo_BX0_numPUInteractions_ = pileupInfo_i.getPU_NumInteractions();
+                pileupInfo_BX0_max_pT_hats_ = *std::max_element(pileupInfo_i.getPU_pT_hats().begin(), pileupInfo_i.getPU_pT_hats().end());
+                for (uint idx=0; idx<=pileupInfo_i.getPU_pT_hats().size(); ++idx) {
+                    auto const i_pThat = (idx == pileupInfo_i.getPU_pT_hats().size()) ? genEventInfo_qScale_ : pileupInfo_i.getPU_pT_hats().at(idx);
+                    if(0. <= i_pThat and i_pThat < 20.) ++pileupInfo_BX0_n_pThat000to020_;
+                    else if(20. <= i_pThat and i_pThat < 30.) ++pileupInfo_BX0_n_pThat020to030_;
+                    else if(30. <= i_pThat and i_pThat < 50.) ++pileupInfo_BX0_n_pThat030to050_;
+                    else if(50. <= i_pThat and i_pThat < 80.) ++pileupInfo_BX0_n_pThat050to080_;
+                    else if(80. <= i_pThat and i_pThat < 120.) ++pileupInfo_BX0_n_pThat080to120_;
+                    else if(120. <= i_pThat and i_pThat < 170.) ++pileupInfo_BX0_n_pThat120to170_;
+                    else if(170. <= i_pThat and i_pThat < 300.) ++pileupInfo_BX0_n_pThat170to300_;
+                    else if(300. <= i_pThat and i_pThat < 470.) ++pileupInfo_BX0_n_pThat300to470_;
+                    else if(470. <= i_pThat and i_pThat < 600.) ++pileupInfo_BX0_n_pThat470to600_;
+                    else if(600. <= i_pThat) ++pileupInfo_BX0_n_pThat600toInf_;
+                }
+            }
+        }
+    }
+
+    EventInfo.HepMCGenEvent_scale = hepMCGenEvent_scale_;
+    EventInfo.GenEventInfo_qScale = genEventInfo_qScale_;
+    EventInfo.pileupInfo_BX0_numTrueInteractions = pileupInfo_BX0_numTrueInteractions_;
+    EventInfo.pileupInfo_BX0_numPUInteractions = pileupInfo_BX0_numPUInteractions_;
+    EventInfo.pileupInfo_BX0_max_pT_hats = pileupInfo_BX0_max_pT_hats_;
+    EventInfo.pileupInfo_BX0_n_pThat020to030 = pileupInfo_BX0_n_pThat020to030_;
+    EventInfo.pileupInfo_BX0_n_pThat030to050 = pileupInfo_BX0_n_pThat030to050_;
+    EventInfo.pileupInfo_BX0_n_pThat050to080 = pileupInfo_BX0_n_pThat050to080_;
+    EventInfo.pileupInfo_BX0_n_pThat080to120= pileupInfo_BX0_n_pThat080to120_;
+    EventInfo.pileupInfo_BX0_n_pThat120to170 = pileupInfo_BX0_n_pThat120to170_;
+    EventInfo.pileupInfo_BX0_n_pThat170to300 = pileupInfo_BX0_n_pThat170to300_;
+    EventInfo.pileupInfo_BX0_n_pThat300to470 = pileupInfo_BX0_n_pThat300to470_;
+    EventInfo.pileupInfo_BX0_n_pThat470to600 = pileupInfo_BX0_n_pThat470to600_;
+    EventInfo.pileupInfo_BX0_n_pThat600toInf = pileupInfo_BX0_n_pThat600toInf_;
 
 
   if ( !isData_ && EventInfo.Run > 0 ) EventInfo.Run = -EventInfo.Run;
@@ -494,6 +633,11 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
   // Primary vertex
   //------------------
   iEvent.getByToken(primaryVertexColl_,primaryVertex);
+  iEvent.getByToken(qcdWeightPU140_,pu140weight);
+  iEvent.getByToken(qcdWeightPU200_,pu200weight);
+
+  EventInfo.qcdWeightPU140 = *pu140weight;
+  EventInfo.qcdWeightPU200 = *pu200weight;
 
   bool pvFound = (primaryVertex->size() != 0);
   if ( pvFound ) {
@@ -543,16 +687,16 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
   if(runL1Variables_){
     edm::Handle<l1t::TkPrimaryVertexCollection> l1_vertices;
     iEvent.getByToken(L1_VertexColl_,l1_vertices);
-    edm::Handle<l1t::PFTrackCollection> l1_barrelTracks;
-    iEvent.getByToken(L1_BarrelTrackColl_,l1_barrelTracks);
-    edm::Handle<l1t::PFTrackCollection> l1_hgcalTracks;
-    iEvent.getByToken(L1_HGCalTrackColl_,l1_hgcalTracks);
-    edm::Handle<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> l1_tracks;
-    iEvent.getByToken(L1_TrackColl_,l1_tracks);
-    edm::Handle<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> l1_extendedTracks;
-    iEvent.getByToken(L1_ExtendedTrackColl_,l1_extendedTracks);
-    edm::Handle<l1t::PFJetCollection> l1_pfJets;
-    iEvent.getByToken(L1_PFJetsColl_,l1_pfJets);
+    // edm::Handle<l1t::PFTrackCollection> l1_barrelTracks;
+    // iEvent.getByToken(L1_BarrelTrackColl_,l1_barrelTracks);
+    // edm::Handle<l1t::PFTrackCollection> l1_hgcalTracks;
+    // iEvent.getByToken(L1_HGCalTrackColl_,l1_hgcalTracks);
+    // edm::Handle<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> l1_tracks;
+    // iEvent.getByToken(L1_TrackColl_,l1_tracks);
+    // edm::Handle<std::vector<TTTrack<Ref_Phase2TrackerDigi_>>> l1_extendedTracks;
+    // iEvent.getByToken(L1_ExtendedTrackColl_,l1_extendedTracks);
+    // edm::Handle<l1t::PFJetCollection> l1_pfJets;
+    // iEvent.getByToken(L1_PFJetsColl_,l1_pfJets);
     edm::Handle<reco::CaloJetCollection> l1_puppiJets;
     iEvent.getByToken(L1_PuppiJetsColl_,l1_puppiJets);
     edm::Handle<reco::METCollection> l1_ht;
@@ -566,62 +710,62 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
     }
 
     EventInfo.nL1_BarrelTracks=0;
-    for (unsigned int i = 0; i< l1_barrelTracks->size() ; ++i) {
-      EventInfo.L1_BarrelTrack_pt[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].pt();
-      EventInfo.L1_BarrelTrack_eta[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].eta();
-      EventInfo.L1_BarrelTrack_phi[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].phi();
-      EventInfo.L1_BarrelTrack_m[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].mass();
-      EventInfo.L1_BarrelTrack_dz[EventInfo.nL1_BarrelTracks]      = dz((*l1_barrelTracks)[i], pv->position());
-      EventInfo.L1_BarrelTrack_dxy[EventInfo.nL1_BarrelTracks]      = dxy((*l1_barrelTracks)[i], pv->position());
-      ++EventInfo.nL1_BarrelTracks;
-    }
+    // for (unsigned int i = 0; i< l1_barrelTracks->size() ; ++i) {
+    //   EventInfo.L1_BarrelTrack_pt[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].pt();
+    //   EventInfo.L1_BarrelTrack_eta[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].eta();
+    //   EventInfo.L1_BarrelTrack_phi[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].phi();
+    //   EventInfo.L1_BarrelTrack_m[EventInfo.nL1_BarrelTracks]      = (*l1_barrelTracks)[i].mass();
+    //   EventInfo.L1_BarrelTrack_dz[EventInfo.nL1_BarrelTracks]      = dz((*l1_barrelTracks)[i], pv->position());
+    //   EventInfo.L1_BarrelTrack_dxy[EventInfo.nL1_BarrelTracks]      = dxy((*l1_barrelTracks)[i], pv->position());
+    //   ++EventInfo.nL1_BarrelTracks;
+    // }
 
     EventInfo.nL1_HGCalTracks=0;
-    for (unsigned int i = 0; i< l1_hgcalTracks->size() ; ++i) {
-      EventInfo.L1_HGCalTrack_pt[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].pt();
-      EventInfo.L1_HGCalTrack_eta[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].eta();
-      EventInfo.L1_HGCalTrack_phi[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].phi();
-      EventInfo.L1_HGCalTrack_m[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].mass();
-      EventInfo.L1_HGCalTrack_dz[EventInfo.nL1_HGCalTracks]      = dz((*l1_hgcalTracks)[i], pv->position());
-      EventInfo.L1_HGCalTrack_dxy[EventInfo.nL1_HGCalTracks]      = dxy((*l1_hgcalTracks)[i], pv->position());
-      ++EventInfo.nL1_HGCalTracks;
-    }
+    // for (unsigned int i = 0; i< l1_hgcalTracks->size() ; ++i) {
+    //   EventInfo.L1_HGCalTrack_pt[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].pt();
+    //   EventInfo.L1_HGCalTrack_eta[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].eta();
+    //   EventInfo.L1_HGCalTrack_phi[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].phi();
+    //   EventInfo.L1_HGCalTrack_m[EventInfo.nL1_HGCalTracks]      = (*l1_hgcalTracks)[i].mass();
+    //   EventInfo.L1_HGCalTrack_dz[EventInfo.nL1_HGCalTracks]      = dz((*l1_hgcalTracks)[i], pv->position());
+    //   EventInfo.L1_HGCalTrack_dxy[EventInfo.nL1_HGCalTracks]      = dxy((*l1_hgcalTracks)[i], pv->position());
+    //   ++EventInfo.nL1_HGCalTracks;
+    // }
 
     EventInfo.nL1_Tracks=0;
-    for (unsigned int i = 0; i< l1_tracks->size() ; ++i) {
-      EventInfo.L1_Track_pt[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].momentum().mag();
-      EventInfo.L1_Track_eta[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].eta();
-      EventInfo.L1_Track_phi[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].phi();
-      // EventInfo.L1_Track_m[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].mass();
-      // EventInfo.L1_Track_dz[EventInfo.nL1_Tracks]      = dz((*l1_tracks)[i], pv->position());
-      // EventInfo.L1_Track_dxy[EventInfo.nL1_Tracks]      = dxy((*l1_tracks)[i], pv->position());
-      EventInfo.L1_Track_dz[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].z0();
-      EventInfo.L1_Track_dxy[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].d0();
-      ++EventInfo.nL1_Tracks;
-    }
+    // for (unsigned int i = 0; i< l1_tracks->size() ; ++i) {
+    //   EventInfo.L1_Track_pt[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].momentum().mag();
+    //   EventInfo.L1_Track_eta[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].eta();
+    //   EventInfo.L1_Track_phi[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].phi();
+    //   // EventInfo.L1_Track_m[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].mass();
+    //   // EventInfo.L1_Track_dz[EventInfo.nL1_Tracks]      = dz((*l1_tracks)[i], pv->position());
+    //   // EventInfo.L1_Track_dxy[EventInfo.nL1_Tracks]      = dxy((*l1_tracks)[i], pv->position());
+    //   EventInfo.L1_Track_dz[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].z0();
+    //   EventInfo.L1_Track_dxy[EventInfo.nL1_Tracks]      = (*l1_tracks)[i].d0();
+    //   ++EventInfo.nL1_Tracks;
+    // }
     EventInfo.nL1_ExtendedTracks=0;
-    for (unsigned int i = 0; i< l1_extendedTracks->size() ; ++i) {
-      EventInfo.L1_ExtendedTrack_pt[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].momentum().mag();
-      EventInfo.L1_ExtendedTrack_eta[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].eta();
-      EventInfo.L1_ExtendedTrack_phi[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].phi();
-      // EventInfo.L1_ExtendedTrack_m[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].mass();
-      // EventInfo.L1_ExtendedTrack_dz[EventInfo.nL1_ExtendedTracks]      = dz((*l1_extendedTracks)[i], pv->position());
-      // EventInfo.L1_ExtendedTrack_dxy[EventInfo.nL1_ExtendedTracks]      = dxy((*l1_extendedTracks)[i], pv->position());
-      EventInfo.L1_ExtendedTrack_dz[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].z0();
-      EventInfo.L1_ExtendedTrack_dxy[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].d0();
-      ++EventInfo.nL1_ExtendedTracks;
-    }
+    // for (unsigned int i = 0; i< l1_extendedTracks->size() ; ++i) {
+    //   EventInfo.L1_ExtendedTrack_pt[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].momentum().mag();
+    //   EventInfo.L1_ExtendedTrack_eta[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].eta();
+    //   EventInfo.L1_ExtendedTrack_phi[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].phi();
+    //   // EventInfo.L1_ExtendedTrack_m[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].mass();
+    //   // EventInfo.L1_ExtendedTrack_dz[EventInfo.nL1_ExtendedTracks]      = dz((*l1_extendedTracks)[i], pv->position());
+    //   // EventInfo.L1_ExtendedTrack_dxy[EventInfo.nL1_ExtendedTracks]      = dxy((*l1_extendedTracks)[i], pv->position());
+    //   EventInfo.L1_ExtendedTrack_dz[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].z0();
+    //   EventInfo.L1_ExtendedTrack_dxy[EventInfo.nL1_ExtendedTracks]      = (*l1_extendedTracks)[i].d0();
+    //   ++EventInfo.nL1_ExtendedTracks;
+    // }
 
     EventInfo.nL1_PFJets=0;
-    for (unsigned int i = 0; i< l1_pfJets->size() ; ++i) {
-      EventInfo.L1_PFJets_pt[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].pt();
-      EventInfo.L1_PFJets_eta[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].eta();
-      EventInfo.L1_PFJets_phi[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].phi();
-      EventInfo.L1_PFJets_m[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].mass();
-      // EventInfo.L1_PFJet_dz[EventInfo.nL1_PFJets]      = dz((*l1_pfJets)[i], pv->position());
-      // EventInfo.L1_PFJet_dxy[EventInfo.nL1_PFJets]      = dxy((*l1_pfJets)[i], pv->position());
-      ++EventInfo.nL1_PFJets;
-    }
+    // for (unsigned int i = 0; i< l1_pfJets->size() ; ++i) {
+    //   EventInfo.L1_PFJets_pt[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].pt();
+    //   EventInfo.L1_PFJets_eta[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].eta();
+    //   EventInfo.L1_PFJets_phi[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].phi();
+    //   EventInfo.L1_PFJets_m[EventInfo.nL1_PFJets]      = (*l1_pfJets)[i].mass();
+    //   // EventInfo.L1_PFJet_dz[EventInfo.nL1_PFJets]      = dz((*l1_pfJets)[i], pv->position());
+    //   // EventInfo.L1_PFJet_dxy[EventInfo.nL1_PFJets]      = dxy((*l1_pfJets)[i], pv->position());
+    //   ++EventInfo.nL1_PFJets;
+    // }
     EventInfo.nL1_PuppiJets=0;
     for (unsigned int i = 0; i< l1_puppiJets->size() ; ++i) {
       EventInfo.L1_PuppiJets_pt[EventInfo.nL1_PuppiJets]      = (*l1_puppiJets)[i].pt();
@@ -640,16 +784,16 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 
   edm::Handle<reco::METCollection> ht_2p4;
   iEvent.getByToken(HLT_HT_2p4Coll_,ht_2p4);
-  edm::Handle<reco::METCollection> ht_4p5;
-  iEvent.getByToken(HLT_HT_4p5Coll_,ht_4p5);
+  edm::Handle<reco::METCollection> ht_4p0;
+  iEvent.getByToken(HLT_HT_4p0Coll_,ht_4p0);
   edm::Handle<reco::METCollection> ht_jme;
   iEvent.getByToken(HLT_HT_JMEColl_,ht_jme);
   EventInfo.HLT_HT_2p4_pt = (*ht_2p4).at(0).pt();
   EventInfo.HLT_HT_2p4_phi = (*ht_2p4).at(0).phi();
   EventInfo.HLT_HT_2p4_sumEt = (*ht_2p4).at(0).sumEt();
-  EventInfo.HLT_HT_4p5_pt = (*ht_4p5).at(0).pt();
-  EventInfo.HLT_HT_4p5_phi = (*ht_4p5).at(0).phi();
-  EventInfo.HLT_HT_4p5_sumEt = (*ht_4p5).at(0).sumEt();
+  EventInfo.HLT_HT_4p0_pt = (*ht_4p0).at(0).pt();
+  EventInfo.HLT_HT_4p0_phi = (*ht_4p0).at(0).phi();
+  EventInfo.HLT_HT_4p0_sumEt = (*ht_4p0).at(0).sumEt();
   EventInfo.HLT_HT_jme_pt = (*ht_jme).at(0).pt();
   EventInfo.HLT_HT_jme_phi = (*ht_jme).at(0).phi();
   EventInfo.HLT_HT_jme_sumEt = (*ht_jme).at(0).sumEt();
@@ -686,6 +830,95 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
   //------------------------------------------------------
   int iJetColl = 0 ;
 
+    // needed to get truth flavor of jets
+    // copied from DeepNTuplizer
+
+    iEvent.getByToken(genParticleColl_,genparticles);
+    // neutrinosLepB.clear();
+    // neutrinosLepB_C.clear();
+    // gToBB.clear();
+    // gToCC.clear();
+    // alltaus_.clear();
+    // Bhadron_.clear();
+    // Bhadron_daughter_.clear();
+    std::vector <reco::GenParticle> neutrinosLepB;
+    std::vector <reco::GenParticle> neutrinosLepB_C;
+
+    std::vector<reco::GenParticle> gToBB;
+    std::vector<reco::GenParticle> gToCC;
+    std::vector<reco::GenParticle> alltaus_;
+
+    std::vector<reco::GenParticle> Bhadron_;
+    std::vector<reco::GenParticle> Bhadron_daughter_;
+
+    // for (const reco::Candidate &genC : *genParticlesHandle){
+    for (const reco::Candidate &genC : *genparticles){
+        const reco::GenParticle &gen = static_cast< const reco::GenParticle &>(genC);
+        if((abs(gen.pdgId())>500&&abs(gen.pdgId())<600)||(abs(gen.pdgId())>5000&&abs(gen.pdgId())<6000)){
+            Bhadron_.push_back(gen);
+            if(gen.numberOfDaughters()>0){
+                if( (abs(gen.daughter(0)->pdgId())>500&&abs(gen.daughter(0)->pdgId())<600)||(abs(gen.daughter(0)->pdgId())>5000&&abs(gen.daughter(0)->pdgId())<6000)){
+                    if(gen.daughter(0)->numberOfDaughters()>0)
+                    {
+                        const reco::GenParticle &daughter_ = static_cast< const reco::GenParticle &>(*(gen.daughter(0)->daughter(0)));
+                        if(daughter_.vx()!=gen.vx()){
+                            Bhadron_daughter_.push_back(daughter_);
+                        }
+                    }
+                    else{
+                        Bhadron_daughter_.push_back(gen);
+                    }
+                }
+                else{
+                    const reco::GenParticle &daughter_ = static_cast< const reco::GenParticle &>(*gen.daughter(0));
+                    Bhadron_daughter_.push_back(daughter_);
+                }
+            }else{
+                Bhadron_daughter_.push_back(gen);
+            }
+        }
+    }
+    // for (const reco::Candidate &genC : *genParticlesHandle){
+    for (const reco::Candidate &genC : *genparticles){
+        const reco::GenParticle &gen = static_cast< const reco::GenParticle &>(genC);
+        if(abs(gen.pdgId())==12||abs(gen.pdgId())==14||abs(gen.pdgId())==16){
+            const reco::GenParticle* mother =  static_cast< const reco::GenParticle*> (gen.mother());
+            if(mother!=NULL) {
+                if((abs(mother->pdgId())>500&&abs(mother->pdgId())<600)||(abs(mother->pdgId())>5000&&abs(mother->pdgId())<6000)) {
+                    neutrinosLepB.emplace_back(gen);
+                }
+                if((abs(mother->pdgId())>400&&abs(mother->pdgId())<500)||(abs(mother->pdgId())>4000&&abs(mother->pdgId())<5000)) {
+                    neutrinosLepB_C.emplace_back(gen);
+                }
+            }
+            else{
+                std::cout << "No mother" << std::endl;
+            }
+        }
+
+        int id(std::abs(gen.pdgId()));
+        int status(gen.status());
+
+        if (id == 21 && status >= 21 && status <= 59){ //// Pythia8 hard scatter, ISR, or FSR
+            if ( gen.numberOfDaughters() == 2 ){
+                const reco::Candidate* d0 = gen.daughter(0);
+                const reco::Candidate* d1 = gen.daughter(1);
+                if ( std::abs(d0->pdgId()) == 5 && std::abs(d1->pdgId()) == 5 && d0->pdgId()*d1->pdgId() < 0 && reco::deltaR(*d0, *d1) < 0.4){
+                    gToBB.push_back(gen);
+                }
+                if ( std::abs(d0->pdgId()) == 4 && std::abs(d1->pdgId()) == 4 && d0->pdgId()*d1->pdgId() < 0 && reco::deltaR(*d0, *d1) < 0.4){
+                    gToCC.push_back(gen) ;
+                }
+            }
+        }
+
+        if(id == 15 && false){
+        alltaus_.push_back(gen);
+        }
+    }
+
+
+
   // edm::Handle <CaloJetCollection> caloJetsColl;
   // iEvent.getByToken (CaloJetCollectionTag_, caloJetsColl);
   // bool havePassingCaloJet = havePassingJets<CaloJetCollection>(caloJetsColl);
@@ -699,21 +932,27 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
   //
   ++iJetColl;
 
-  edm::Handle <PFJetCollection> pfJetsColl;
-  iEvent.getByToken (PFJetCollectionTag_, pfJetsColl);
-  bool havePassingPFJet = havePassingJets<PFJetCollection>(pfJetsColl);
+  // edm::Handle <PFJetCollection> pfJetsColl;
+  // iEvent.getByToken (PFJetCollectionTag_, pfJetsColl);
+  // bool havePassingPFJet = havePassingJets<PFJetCollection>(pfJetsColl);
 
-  if(havePassingPFJet){
-    processHLTPFJets(pfJetsColl, PFJetTagCollectionTag_, PFJetCSVTag_, PFJetDeepCSVTag_,
-                    PFJetProbTag_, PFJetBProbTag_, PuppiJetDeepFlavourTag_,
-                    PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
-  }
+  // if(havePassingPFJet){
+  //   processHLTPFJets(pfJetsColl, PFJetTagCollectionTag_, PFJetCSVTag_, PFJetDeepCSVTag_,
+  //                   PFJetProbTag_, PFJetBProbTag_, PuppiJetDeepFlavourTag_,
+  //                   PuppiJetDeepFlavourTag_bb_,PuppiJetDeepFlavourTag_lb_, iEvent, iSetup, iJetColl);
+  // }
 
   ++iJetColl;
 
   edm::Handle <PFJetCollection> puppiJetsColl;
+  edm::Handle <reco::JetFlavourInfoMatchingCollection> puppiJetsFlavorInfoColl;
+  edm::Handle <edm::Association<reco::GenParticleCollection>> puppiJetsPartonMatchColl;
+  edm::Handle <edm::Association<reco::GenJetCollection>> puppiJetsGenJetMatchColl;
   iEvent.getByToken (PuppiJetCollectionTag_, puppiJetsColl);
   bool havePassingPuppiJet = havePassingJets<PFJetCollection>(puppiJetsColl);
+  iEvent.getByToken (PuppiJetFlavorInfoCollectionTag_, puppiJetsFlavorInfoColl);
+  iEvent.getByToken (PuppiJetPartonMatchCollectionTag_, puppiJetsPartonMatchColl);
+  iEvent.getByToken (PuppiJetGenJetMatchCollectionTag_, puppiJetsGenJetMatchColl);
 
   if(havePassingPuppiJet){
     processHLTPFJets(puppiJetsColl, PuppiJetTagCollectionTag_, PuppiJetCSVTag_, PuppiJetDeepCSVTag_,
@@ -730,11 +969,112 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 	//// Loop over the jets
 	for ( PFJetCollection::const_iterator jet = puppiJetsColl->begin(); jet != puppiJetsColl->end(); ++jet ) {
 
+        unsigned int idx = jet - puppiJetsColl->begin();
+      // edm::RefToBase<reco::Jet> jetRef = jets->refAt(idx);
+      // edm::RefToBase<reco::PFJet> jetRef = puppiJetsColl.refAt(idx);
+      // edm::RefToBase<reco::Jet> jetRef(edm::Ref<edm::View<reco::PFJet> >(puppiJetsColl, jet - puppiJetsColl->begin()));
+      // edm::RefToBase<reco::Jet> jetRef(edm::Ref<reco::Jet> (puppiJetsColl, jet - puppiJetsColl->begin()));
+      edm::RefToBase<reco::Jet> jetRef(edm::Ref<PFJetCollection>(puppiJetsColl, idx));
+
+
+      reco::GenParticleRef parton = (*puppiJetsPartonMatchColl)[jetRef];
+      // if (parton.isNonnull() && parton.isAvailable()) {
+      //     ajet.setGenParton(parton, embedGenPartonMatch_);
+      // }
+      reco::GenJetRef genjet = (*puppiJetsGenJetMatchColl)[jetRef];
+
+      int isB_(0);
+      int isGBB_(0);
+      int isBB_(0);
+      int isC_(0);
+      int isGCC_(0);
+      int isCC_(0);
+      int isUD_(0);
+      int isTau_(0);
+      int isS_(0);
+      int isG_(0);
+      int isLeptonicB_(0);
+      int isLeptonicB_C_(0);
+      int isUndefined_(0);
+
+      auto jetFlavorInfo = (*puppiJetsFlavorInfoColl)[edm::RefToBase<reco::Jet>(jetRef)];
+      // std::cout<<jetFlavorInfo.getHadronFlavour()<<std::endl;
+      // std::cout<<jetFlavorInfo.getPartonFlavour()<<std::endl;
+
+      reco::PFJet myjet = *jet;
+
+      JetFlavor myFlavor = jet_flavour(myjet, jetFlavorInfo, parton, gToBB, gToCC, neutrinosLepB, neutrinosLepB_C, alltaus_);
+
+      switch(myFlavor) {
+          case JetFlavor::B:  isB_=1; break;
+          case JetFlavor::LeptonicB: isLeptonicB_=1; break;
+          case JetFlavor::LeptonicB_C: isLeptonicB_C_=1; break;
+          case JetFlavor::GBB: isGBB_=1; break;
+          case JetFlavor::BB: isBB_=1; break;
+          case JetFlavor::C:  isC_=1; break;
+          case JetFlavor::GCC: isGCC_=1; break;
+          case JetFlavor::CC: isCC_=1; break;
+          case JetFlavor::TAU: isTau_=1;break;
+          case JetFlavor::G:  isG_=1; break;
+          case JetFlavor::UD: isUD_=1; break;
+          case JetFlavor::S:  isS_=1; break;
+          default : isUndefined_=1; break;
+      }
+
+      // neutrinosLepB.clear();
+      // neutrinosLepB_C.clear();
+      // gToBB.clear();
+      // gToCC.clear();
+      // alltaus_.clear();
+      // Bhadron_.clear();
+      // Bhadron_daughter_.clear();
+
+      // std::cout<<"neutrinosLepB "<<neutrinosLepB.size()<<std::endl;
+      // std::cout<<"neutrinosLepB_C "<<neutrinosLepB_C.size()<<std::endl;
+      // std::cout<<"gToBB "<<gToBB.size()<<std::endl;
+      // std::cout<<"gToCC "<<gToCC.size()<<std::endl;
+      // std::cout<<"alltaus_ "<<alltaus_.size()<<std::endl;
+      // std::cout<<"Bhadron_ "<<Bhadron_.size()<<std::endl;
+      // std::cout<<"Bhadron_daughter_ "<<Bhadron_daughter_.size()<<std::endl;
+      //
+      // std::cout<<"myFlavor "<<myFlavor<<std::endl;
+
+
+
 	  double ptjet  = jet->pt()  ;
 	  double etajet = jet->eta() ;
 	  double phijet = jet->phi() ;
 
 	  if( ptjet < minJetPt_ || std::fabs( etajet ) > maxJetEta_ ) continue;
+
+      JetInfo[iJetColl].Jet_isB[idx] = isB_;
+      JetInfo[iJetColl].Jet_isLeptonicB[idx] = isLeptonicB_;
+      JetInfo[iJetColl].Jet_isLeptonicB_C[idx] = isLeptonicB_C_;
+      JetInfo[iJetColl].Jet_isGBB[idx] = isGBB_;
+      JetInfo[iJetColl].Jet_isBB[idx] = isBB_;
+      JetInfo[iJetColl].Jet_isC[idx] = isC_;
+      JetInfo[iJetColl].Jet_isGCC[idx] = isGCC_;
+      JetInfo[iJetColl].Jet_isCC[idx] = isCC_;
+      JetInfo[iJetColl].Jet_isTau[idx] = isTau_;
+      JetInfo[iJetColl].Jet_isG[idx] = isG_;
+      JetInfo[iJetColl].Jet_isUD[idx] = isUD_;
+      JetInfo[iJetColl].Jet_isS[idx] = isS_;
+      JetInfo[iJetColl].Jet_isUndefined[idx] = isUndefined_;
+
+      if (genjet.isNonnull() && genjet.isAvailable()) {
+          JetInfo[iJetColl].Jet_GenJetHasMatch[idx]=1;//->push_back(*genjet);
+          JetInfo[iJetColl].Jet_GenJet_pt[idx]=(*genjet).pt();
+          JetInfo[iJetColl].Jet_GenJet_eta[idx]=(*genjet).eta();
+          JetInfo[iJetColl].Jet_GenJet_phi[idx]=(*genjet).phi();
+          JetInfo[iJetColl].Jet_GenJet_mass[idx]=(*genjet).mass();
+      }else{
+           JetInfo[iJetColl].Jet_GenJetHasMatch[idx]=0;
+      }
+
+      // auto jetFlavorInfo = puppiJetsFlavorInfoColl.at(JetInfo[iJetColl].nJet);
+
+      // auto jetFlavorInfo = (*jetFlavInfoMatch)[edm::RefToBase<reco::Jet>(jetRef)];
+
 
 	  for(DeepFlavourTagInfoCollection::const_iterator deepFlavTagInfo = deepFlavourTagsColl->begin(); deepFlavTagInfo != deepFlavourTagsColl->end(); ++deepFlavTagInfo){
 
@@ -745,64 +1085,67 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 
 	      const auto & features = deepFlavTagInfo->features();
 
+          // std::cout<<"used index"<<JetInfo[iJetColl].nJet<<std::endl;
+
 	      size_t csize = features.c_pf_features.size();
-	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip3dVal[JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip3dVal;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip3dSig[JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip3dSig;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_quality[ JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].quality;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_chi2[    JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].chi2;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_EtaRel     [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackEtaRel      ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_PtRel      [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPtRel	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_PPar       [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPPar	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_DeltaR     [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackDeltaR	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_PParRatio  [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPParRatio	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip2dVal   [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip2dVal	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip2dSig   [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip2dSig	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_JetDistVal [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackJetDistVal	 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_ptrel      [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].ptrel			 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_drminsv    [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].drminsv		 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_vtx_ass    [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].vtx_ass		 ;
-	      JetInfo[iJetColl].DeepFlavourInput_charged_puppiw     [JetInfo[iJetColl].nJet] = (csize == 0) ? -999 : features.c_pf_features[0].puppiw                  ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip3dVal[idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip3dVal;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip3dSig[idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip3dSig;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_quality[ idx] = (csize == 0) ? -999 : features.c_pf_features[0].quality;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_chi2[    idx] = (csize == 0) ? -999 : features.c_pf_features[0].chi2;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_EtaRel     [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackEtaRel      ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_PtRel      [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPtRel	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_PPar       [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPPar	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_DeltaR     [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackDeltaR	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_PParRatio  [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackPParRatio	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip2dVal   [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip2dVal	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_Sip2dSig   [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackSip2dSig	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_JetDistVal [idx] = (csize == 0) ? -999 : features.c_pf_features[0].btagPf_trackJetDistVal	 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_ptrel      [idx] = (csize == 0) ? -999 : features.c_pf_features[0].ptrel			 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_drminsv    [idx] = (csize == 0) ? -999 : features.c_pf_features[0].drminsv		 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_vtx_ass    [idx] = (csize == 0) ? -999 : features.c_pf_features[0].vtx_ass		 ;
+	      JetInfo[iJetColl].DeepFlavourInput_charged_puppiw     [idx] = (csize == 0) ? -999 : features.c_pf_features[0].puppiw                  ;
+
 
 
 	      size_t nsize = features.n_pf_features.size();
-	      JetInfo[iJetColl].DeepFlavourInput_neutral_drminsv[JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].drminsv;
-	      JetInfo[iJetColl].DeepFlavourInput_neutral_hadFrac[JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].hadFrac;
-	      JetInfo[iJetColl].DeepFlavourInput_neutral_ptrel  [JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].ptrel;
-	      JetInfo[iJetColl].DeepFlavourInput_neutral_deltaR [JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].deltaR;
-	      JetInfo[iJetColl].DeepFlavourInput_neutral_isGamma[JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].isGamma;
-	      JetInfo[iJetColl].DeepFlavourInput_neutral_puppiw [JetInfo[iJetColl].nJet] = (nsize == 0) ? -999 : features.n_pf_features[0].puppiw;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_drminsv[idx] = (nsize == 0) ? -999 : features.n_pf_features[0].drminsv;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_hadFrac[idx] = (nsize == 0) ? -999 : features.n_pf_features[0].hadFrac;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_ptrel  [idx] = (nsize == 0) ? -999 : features.n_pf_features[0].ptrel;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_deltaR [idx] = (nsize == 0) ? -999 : features.n_pf_features[0].deltaR;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_isGamma[idx] = (nsize == 0) ? -999 : features.n_pf_features[0].isGamma;
+	      JetInfo[iJetColl].DeepFlavourInput_neutral_puppiw [idx] = (nsize == 0) ? -999 : features.n_pf_features[0].puppiw;
 
 
 	      size_t svsize = features.sv_features.size();
-	      JetInfo[iJetColl].DeepFlavourInput_sv_d3d[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].d3d;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_d3dsig[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].d3dsig;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_normchi2[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].normchi2;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_pt[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].pt;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_deltaR[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].deltaR;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_mass[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].mass;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_ntracks[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].ntracks;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_chi2[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].chi2;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_dxy[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].dxy;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_dxysig[     JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].dxysig;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_costhetasvpv[  JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].costhetasvpv;
-	      JetInfo[iJetColl].DeepFlavourInput_sv_enratio[JetInfo[iJetColl].nJet] = (svsize == 0) ? -999 :features.sv_features[0].enratio;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_d3d[     idx] = (svsize == 0) ? -999 :features.sv_features[0].d3d;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_d3dsig[  idx] = (svsize == 0) ? -999 :features.sv_features[0].d3dsig;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_normchi2[idx] = (svsize == 0) ? -999 :features.sv_features[0].normchi2;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_pt[     idx] = (svsize == 0) ? -999 :features.sv_features[0].pt;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_deltaR[  idx] = (svsize == 0) ? -999 :features.sv_features[0].deltaR;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_mass[idx] = (svsize == 0) ? -999 :features.sv_features[0].mass;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_ntracks[     idx] = (svsize == 0) ? -999 :features.sv_features[0].ntracks;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_chi2[  idx] = (svsize == 0) ? -999 :features.sv_features[0].chi2;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_dxy[idx] = (svsize == 0) ? -999 :features.sv_features[0].dxy;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_dxysig[     idx] = (svsize == 0) ? -999 :features.sv_features[0].dxysig;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_costhetasvpv[  idx] = (svsize == 0) ? -999 :features.sv_features[0].costhetasvpv;
+	      JetInfo[iJetColl].DeepFlavourInput_sv_enratio[idx] = (svsize == 0) ? -999 :features.sv_features[0].enratio;
 
-	      JetInfo[iJetColl].DeepFlavourInput_trackSumJetEtRatio[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSumJetEtRatio;
-	      JetInfo[iJetColl].DeepFlavourInput_trackSumJetDeltaR[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSumJetDeltaR;
-	      JetInfo[iJetColl].DeepFlavourInput_vertexCategory[JetInfo[iJetColl].nJet] = features.tag_info_features.vertexCategory;
-	      JetInfo[iJetColl].DeepFlavourInput_trackSip2dValAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip2dValAboveCharm;
-	      JetInfo[iJetColl].DeepFlavourInput_trackSip2dSigAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip2dSigAboveCharm;
-	      JetInfo[iJetColl].DeepFlavourInput_trackSip3dValAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip3dValAboveCharm;
-	      JetInfo[iJetColl].DeepFlavourInput_trackSip3dSigAboveCharm[JetInfo[iJetColl].nJet] = features.tag_info_features.trackSip3dSigAboveCharm;
-	      JetInfo[iJetColl].DeepFlavourInput_jetNSelectedTracks[JetInfo[iJetColl].nJet] = features.tag_info_features.jetNSelectedTracks;
-	      JetInfo[iJetColl].DeepFlavourInput_jetNTracksEtaRel[JetInfo[iJetColl].nJet] = features.tag_info_features.jetNTracksEtaRel;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSumJetEtRatio[idx] = features.tag_info_features.trackSumJetEtRatio;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSumJetDeltaR[idx] = features.tag_info_features.trackSumJetDeltaR;
+	      JetInfo[iJetColl].DeepFlavourInput_vertexCategory[idx] = features.tag_info_features.vertexCategory;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip2dValAboveCharm[idx] = features.tag_info_features.trackSip2dValAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip2dSigAboveCharm[idx] = features.tag_info_features.trackSip2dSigAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip3dValAboveCharm[idx] = features.tag_info_features.trackSip3dValAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_trackSip3dSigAboveCharm[idx] = features.tag_info_features.trackSip3dSigAboveCharm;
+	      JetInfo[iJetColl].DeepFlavourInput_jetNSelectedTracks[idx] = features.tag_info_features.jetNSelectedTracks;
+	      JetInfo[iJetColl].DeepFlavourInput_jetNTracksEtaRel[idx] = features.tag_info_features.jetNTracksEtaRel;
 
-	      JetInfo[iJetColl].DeepFlavourInput_jet_pt[JetInfo[iJetColl].nJet] = features.jet_features.pt;
-	      JetInfo[iJetColl].DeepFlavourInput_jet_eta[JetInfo[iJetColl].nJet] = features.jet_features.eta;
-	      JetInfo[iJetColl].DeepFlavourInput_c_pf_features[JetInfo[iJetColl].nJet] = features.c_pf_features.size();
-	      JetInfo[iJetColl].DeepFlavourInput_n_pf_features[JetInfo[iJetColl].nJet] = features.n_pf_features.size();
-	      JetInfo[iJetColl].DeepFlavourInput_sv_features[JetInfo[iJetColl].nJet] = features.sv_features.size();
-	      JetInfo[iJetColl].DeepFlavourInput_npv[JetInfo[iJetColl].nJet] = features.npv;
+	      JetInfo[iJetColl].DeepFlavourInput_jet_pt[idx] = features.jet_features.pt;
+	      JetInfo[iJetColl].DeepFlavourInput_jet_eta[idx] = features.jet_features.eta;
+	      JetInfo[iJetColl].DeepFlavourInput_c_pf_features[idx] = features.c_pf_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_n_pf_features[idx] = features.n_pf_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_sv_features[idx] = features.sv_features.size();
+	      JetInfo[iJetColl].DeepFlavourInput_npv[idx] = features.npv;
 
 
 	    }// jet matched tagifo
@@ -833,9 +1176,13 @@ bool BTagHLTAnalyzerT<IPTI,VTX>::processTrig(const edm::Handle<edm::TriggerResul
     for (std::vector<std::string>::const_iterator itTrigPathNames = triggerPathNames_.begin();
         itTrigPathNames != triggerPathNames_.end(); ++itTrigPathNames)
     {
+        triggerDecisions->GetXaxis()->FindBin((*itTrigPathNames).c_str());
+        triggerDecisionsWeighted->GetXaxis()->FindBin((*itTrigPathNames).c_str());
       int triggerIdx = ( itTrigPathNames - triggerPathNames_.begin() );
       int bitIdx = int(triggerIdx/32);
       if ( NameCompatible(*itTrigPathNames,triggerList[i]) ) {
+          triggerDecisions->Fill(triggerList[i].c_str(), 1.);
+          triggerDecisionsWeighted->Fill(triggerList[i].c_str(), 1.);
           // std::cout << " Setting Bit on " << triggerList[i] << " bitIdx " << bitIdx << " "<<(triggerIdx - bitIdx*32) << " "<<( 1 << (triggerIdx - bitIdx*32) )<< std::endl;
 	passTrig = true;
 	EventInfo.BitTrigger[bitIdx] |= ( 1 << (triggerIdx - bitIdx*32) );
@@ -1538,6 +1885,9 @@ void BTagHLTAnalyzerT<IPTI,VTX>::beginJob() {
 // ------------ method called once each job just after ending the event loop  ------------
 template<typename IPTI,typename VTX>
 void BTagHLTAnalyzerT<IPTI,VTX>::endJob() {
+    edm::Service<TFileService> fileService;
+    fileService->getBareDirectory()->WriteObject(triggerDecisions, "triggerDecisions");
+    fileService->getBareDirectory()->WriteObject(triggerDecisionsWeighted, "triggerDecisionsWeighted");
 }
 
 
@@ -1715,6 +2065,133 @@ void BTagHLTAnalyzerT<IPTI,VTX>::setTracksSV(const TrackRefCalo & trackRef, cons
       }
     }
   }
+}
+
+template<typename IPTI,typename VTX>
+JetFlavor BTagHLTAnalyzerT<IPTI,VTX>::jet_flavour(
+    const reco::PFJet& jet,
+    const reco::JetFlavourInfo& jetInfo,
+    const reco::GenParticleRef& parton,
+    const std::vector<reco::GenParticle>& gToBB,
+    const std::vector<reco::GenParticle>& gToCC,
+    const std::vector<reco::GenParticle>& neutrinosLepB,
+    const std::vector<reco::GenParticle>& neutrinosLepB_C,
+    const std::vector<reco::GenParticle>& alltaus,
+    bool usePhysForLightAndUndefined)
+{
+    // int hflav = abs(jet.hadronFlavour());
+    // int pflav = abs(jet.partonFlavour());
+    int hflav = abs(jetInfo.getHadronFlavour());
+    int pflav = abs(jetInfo.getPartonFlavour());
+    int physflav = 0;
+    // if(jet.genParton()) physflav=abs(jet.genParton()->pdgId());
+    // if(jetInfo.genParton()) physflav=abs(jetInfo.genParton()->pdgId());
+    // if(jetInfo.genParton()) physflav=abs(jetInfo.genParton()->pdgId());
+    if(parton.isNonnull() && parton.isAvailable()){
+        // physflav=abs(parton.pdgId());
+        // physflav=abs(parton.pdgId());
+        physflav=abs((*parton).pdgId());
+    }
+    // std::cout<<"physflav "<<physflav<<std::endl;
+    // std::size_t nbs = jet.jetFlavourInfo().getbHadrons().size();
+    // std::size_t ncs = jet.jetFlavourInfo().getcHadrons().size();
+    std::size_t nbs = jetInfo.getbHadrons().size();
+    std::size_t ncs = jetInfo.getcHadrons().size();
+
+    // std::cout<<"nbs "<<nbs<<std::endl;
+    // std::cout<<"ncs "<<ncs<<std::endl;
+
+    unsigned int nbFromGSP(0);
+    for (reco::GenParticle p : gToBB) {
+        double dr(reco::deltaR(jet, p));
+        if (dr < 0.4) ++nbFromGSP;
+    }
+
+    unsigned int ncFromGSP(0);
+    for (reco::GenParticle p : gToCC) {
+        double dr(reco::deltaR(jet, p));
+        if (dr < 0.4) ++ncFromGSP;
+    }
+
+    if(hflav == 5) { //B jet
+        if(nbs > 1) {
+            if (nbFromGSP > 0) return JetFlavor::GBB;
+            else return JetFlavor::BB;
+        }
+        else if(nbs == 1) {
+            for (std::vector<reco::GenParticle>::const_iterator it = neutrinosLepB.begin(); it != neutrinosLepB.end(); ++it){
+                if(reco::deltaR(it->eta(),it->phi(),jet.eta(),jet.phi()) < 0.4) {
+                    return JetFlavor::LeptonicB;
+                }
+            }
+            for (std::vector<reco::GenParticle>::const_iterator it = neutrinosLepB_C.begin(); it != neutrinosLepB_C.end(); ++it){
+                if(reco::deltaR(it->eta(),it->phi(),jet.eta(),jet.phi()) < 0.4) {
+                    return JetFlavor::LeptonicB_C;
+                }
+            }
+            return JetFlavor::B;
+        }
+        else {
+            if(usePhysForLightAndUndefined){
+                if(physflav == 21) return JetFlavor::G;
+                else if(physflav == 3) return JetFlavor::S;
+                else if(physflav == 2 || physflav ==1) return JetFlavor::UD;
+                else return JetFlavor::UNDEFINED;
+            }
+            else return JetFlavor::UNDEFINED;
+        }
+    }
+    else if(hflav == 4) { //C jet
+        if (ncs > 1) {
+            if (ncFromGSP > 0) return JetFlavor::GCC;
+            else return JetFlavor::CC;
+        }
+        else return JetFlavor::C;
+    }
+    else { //not a heavy jet
+        if(alltaus.size()>0){ //check for tau in a simplistic way
+            bool ishadrtaucontained=true;
+            for(const auto& p:alltaus){
+                size_t ndau=p.numberOfDaughters();
+                for(size_t i=0;i<ndau;i++){
+                    const reco::Candidate* dau=p.daughter(i);
+                    int daupid=std::abs(dau->pdgId());
+                    if(daupid == 13 || daupid == 11){
+                        ishadrtaucontained=false;
+                        break;
+                    }
+                    if(daupid != 12 && daupid!=14 && daupid!=16 &&
+                            reco::deltaR(*dau,jet) > 0.4){
+                        ishadrtaucontained=false;
+                        break;
+                    }
+                }
+            }
+            if(ishadrtaucontained) return JetFlavor::TAU;
+        }
+        if(std::abs(pflav) == 4 || std::abs(pflav) == 5 || nbs || ncs) {
+            if(usePhysForLightAndUndefined){
+                if(physflav == 21) return JetFlavor::G;
+                else if(physflav == 3) return JetFlavor::S;
+                else if(physflav == 2 || physflav ==1) return JetFlavor::UD;
+                else return JetFlavor::UNDEFINED;
+            }
+            else return JetFlavor::UNDEFINED;
+        }
+        else if(usePhysForLightAndUndefined){
+            if(physflav == 21) return JetFlavor::G;
+            else if(physflav == 3) return JetFlavor::S;
+            else if(physflav == 2 || physflav ==1) return JetFlavor::UD;
+            else return JetFlavor::UNDEFINED;
+        }
+        else {
+            if(pflav == 21) return JetFlavor::G;
+            else if(pflav == 3) return JetFlavor::S;
+            else if(pflav == 2 || pflav ==1) return JetFlavor::UD;
+            else return JetFlavor::UNDEFINED;
+        }
+    }
+    return JetFlavor::UNDEFINED;
 }
 
 
