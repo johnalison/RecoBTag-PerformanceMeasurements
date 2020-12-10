@@ -2813,6 +2813,14 @@ cms.PSet(
     "PuppiJet.Jet_isS",
     "PuppiJet.Jet_isUndefined",
 
+    "PuppiJet.Jet_flavour",
+    "PuppiJet.Jet_partonFlavour",
+    "PuppiJet.Jet_hadronFlavour",
+    "PuppiJet.Jet_flavourCleaned",
+    "PuppiJet.Jet_partonid",
+    "PuppiJet.Jet_nbHadrons",
+    "PuppiJet.Jet_ncHadrons",
+
     "PuppiJet.Jet_GenJetHasMatch",
     "PuppiJet.Jet_GenJet_pt",
     "PuppiJet.Jet_GenJet_eta",

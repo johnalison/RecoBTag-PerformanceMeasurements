@@ -1018,7 +1018,8 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
           case JetFlavor::G:  isG_=1; break;
           case JetFlavor::UD: isUD_=1; break;
           case JetFlavor::S:  isS_=1; break;
-          default : isUndefined_=1; break;
+          case JetFlavor::UNDEFINED : isUndefined_=1; break;
+          // default : isUndefined_=1; break;
       }
 
       // neutrinosLepB.clear();
@@ -1045,7 +1046,53 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
 	  double etajet = jet->eta() ;
 	  double phijet = jet->phi() ;
 
+      int flavour  =-1  ;
+      if ( !isData_ ) {
+        // flavour = abs( pjet->partonFlavour() );
+        flavour = abs( jetFlavorInfo.getPartonFlavour() );
+        if ( flavour >= 1 && flavour <= 3 ) flavour = 1;
+      }
+
+      // int hflav = pjet->hadronFlavour();
+      int hflav = jetFlavorInfo.getHadronFlavour();
+      // int pflav = pjet->partonFlavour();
+      int pflav = jetFlavorInfo.getPartonFlavour();
+      int cflav = 0; //~correct flavour definition
+      if(!isData_) {
+        if(hflav != 0) {
+          cflav = hflav;
+        }
+        else { //not a heavy jet
+          if(std::abs(pflav) == 4 || std::abs(pflav) == 5) {
+            cflav = 0;
+          }
+          else {
+            cflav = pflav;
+          }
+        }
+      }
+
 	  if( ptjet < minJetPt_ || std::fabs( etajet ) > maxJetEta_ ) continue;
+
+      // JetInfo[iJetColl].Jet_partonid[JetInfo[iJetColl].nJet]  = pjet->genParton() ? pjet->genParton()->pdgId() : 0;
+      // if(parton.isNonnull() && parton.isAvailable()){
+      //     // physflav=abs(parton.pdgId());
+      //     // physflav=abs(parton.pdgId());
+      //     physflav=abs((*parton).pdgId());
+      if(parton.isNonnull() && parton.isAvailable()){
+          JetInfo[iJetColl].Jet_partonid[JetInfo[iJetColl].nJet]  = (*parton).pdgId();
+      }else{
+          JetInfo[iJetColl].Jet_partonid[JetInfo[iJetColl].nJet]  = 0;
+      }
+      // JetInfo[iJetColl].Jet_area[JetInfo[iJetColl].nJet]      = pjet->jetArea();
+      JetInfo[iJetColl].Jet_flavour[JetInfo[iJetColl].nJet]   = cflav;
+      JetInfo[iJetColl].Jet_flavourCleaned[JetInfo[iJetColl].nJet]  = cflav;
+      // JetInfo[iJetColl].Jet_partonFlavour[JetInfo[iJetColl].nJet]   = pjet->partonFlavour();
+      // JetInfo[iJetColl].Jet_hadronFlavour[JetInfo[iJetColl].nJet]   = pjet->hadronFlavour();
+      JetInfo[iJetColl].Jet_partonFlavour[JetInfo[iJetColl].nJet]   = jetFlavorInfo.getPartonFlavour();
+      JetInfo[iJetColl].Jet_hadronFlavour[JetInfo[iJetColl].nJet]   = jetFlavorInfo.getHadronFlavour();
+      JetInfo[iJetColl].Jet_nbHadrons[JetInfo[iJetColl].nJet] = jetFlavorInfo.getbHadrons().size();
+      JetInfo[iJetColl].Jet_ncHadrons[JetInfo[iJetColl].nJet] = jetFlavorInfo.getcHadrons().size();
 
       JetInfo[iJetColl].Jet_isB[idx] = isB_;
       JetInfo[iJetColl].Jet_isLeptonicB[idx] = isLeptonicB_;

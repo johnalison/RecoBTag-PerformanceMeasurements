@@ -67,6 +67,46 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
             logmsg += '\n'+' '*4+recoArg
         raise RuntimeError('invalid argument for option "BTVreco": "'+opt_BTVreco+'"')
 
+
+    # modify JME settings
+    process.source.inputCommands = cms.untracked.vstring([
+      'keep *_*_*_*',
+      'drop *_*_*_RECO',
+
+      # L1T
+      'keep *_pfTracksFromL1TracksBarrel_*_*',
+      'keep *_pfTracksFromL1TracksHGCal_*_*',
+      'keep *_l1pfCandidates_*_RECO',
+      'keep *_TTTracksFromTrackletEmulation_Level1TTTracks_RECO',
+      'keep *_TTTracksFromExtendedTrackletEmulation_Level1TTTracks_RECO',
+      'keep *_L1TkPrimaryVertex__RECO',
+      'keep *_l1pfCandidates_Puppi_RECO',
+      'keep *_ak4PFL1Calo__RECO',
+      'keep *_ak4PFL1CaloCorrected__RECO',
+      'keep *_ak4PFL1PF__RECO',
+      'keep *_ak4PFL1PFCorrected__RECO',
+      'keep *_ak4PFL1Puppi__RECO',
+      'keep *_ak4PFL1PuppiCorrected__RECO',
+      'keep *_l1PFMetCalo__RECO',
+      'keep *_l1PFMetPF__RECO',
+      'keep *_l1PFMetPuppi__RECO',
+
+      # Offline
+      'keep *_fixedGridRhoFastjetAll__RECO',
+      'keep *_offlineSlimmedPrimaryVertices__RECO',
+      'keep *_packedPFCandidates__RECO',
+      'keep *_slimmedMuons__RECO',
+      'keep *_slimmedJets__RECO',
+      'keep *_slimmedJetsPuppi__RECO',
+      'keep *_slimmedJetsAK8*_*_RECO',
+      'keep *_slimmedMETs__RECO',
+      'keep *_slimmedMETsPuppi__RECO',
+    ])
+
+
+
+
+
     ###
     ### filter for QCD muon enriched
     ###
