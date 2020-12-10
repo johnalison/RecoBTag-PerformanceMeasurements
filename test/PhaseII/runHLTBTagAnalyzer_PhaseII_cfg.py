@@ -208,7 +208,9 @@ if opts.inputFiles:
 else:
    process.source.fileNames = [
      # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/280000/003ACFBC-23B2-EA45-9A12-BECFF07760FC.root"
-     "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TTTo2L2Nu_TuneCP5_14TeV-powheg-pythia8/FEVT/NoPU_111X_mcRun4_realistic_T15_v1-v1/250000/95FB2E3E-1DA2-FC4C-82D6-0BEB5C0195E3.root"
+     # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/VBF_HHTo4B_CV_0_5_C2V_1_C3_1_TuneCP5_PSWeights_14TeV-madgraph-pythia8/FEVT/NoPU_111X_mcRun4_realistic_T15_v1-v1/100000/08904C2F-2A34-1C45-86B3-F05541DB0C00.root"
+     " /store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/GluGluToHHTo4B_node_SM_TuneCP5_14TeV-madgraph_pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v1/130000/45253B8E-D22A-BF43-9BA8-92F4C0391B0A.root"
+     # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TTTo2L2Nu_TuneCP5_14TeV-powheg-pythia8/FEVT/NoPU_111X_mcRun4_realistic_T15_v1-v1/250000/95FB2E3E-1DA2-FC4C-82D6-0BEB5C0195E3.root"
      # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/QCD_Pt-15to20_EMEnriched_TuneCP5_14TeV_pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_111X_mcRun4_realistic_T15_v1-v1/110000/2CFDBC2B-460F-9C45-9383-2F41381DD9C0.root"
    ]
 
@@ -222,6 +224,7 @@ else:
 
 groups = ["HLTEventInfo","HLTJetInfo","HLTTagVar","HLTJetTrack","HLTJetSV","HLTCSVTagVar","HLTDeepFlavourVar"]
 groups.append("L1ObjectInfo")
+groups.append("JetTruthInfo")
 
 
 from RecoBTag.PerformanceMeasurements.BTagAnalyzer_cff import *
@@ -256,14 +259,14 @@ if opts.globalTag is not None:
    process.GlobalTag = GlobalTag(process.GlobalTag, opts.globalTag, '')
 
 # fix for AK4PF Phase-2 JECs
-process.GlobalTag.toGet.append(cms.PSet(
-  record = cms.string('JetCorrectionsRecord'),
-  tag = cms.string('JetCorrectorParametersCollection_PhaseIIFall17_V5b_MC_AK4PF'),
-  label = cms.untracked.string('AK4PF'),
-))
+# process.GlobalTag.toGet.append(cms.PSet(
+#   record = cms.string('JetCorrectionsRecord'),
+#   tag = cms.string('JetCorrectorParametersCollection_PhaseIIFall17_V5b_MC_AK4PF'),
+#   label = cms.untracked.string('AK4PF'),
+# ))
 
-process.CondDB.connect = 'sqlite_fip:RecoBTag/PerformanceMeasurements/data/L1TObjScaling.db'
-process.L1TScalingESSource.connect = 'sqlite_fip:RecoBTag/PerformanceMeasurements/data/L1TObjScaling.db'
+# process.CondDB.connect = 'sqlite_fip:RecoBTag/PerformanceMeasurements/data/L1TObjScaling.db'
+# process.L1TScalingESSource.connect = 'sqlite_fip:RecoBTag/PerformanceMeasurements/data/L1TObjScaling.db'
 
 #~ outFilename = 'JetTree_mc.root'
 outFilename = opts.outName
@@ -275,6 +278,87 @@ process.TFileService = cms.Service("TFileService",
 )
 
 
+process.selectedHadronsAndPartons = cms.EDProducer("HadronAndPartonSelector",
+    fullChainPhysPartons = cms.bool(True),
+    particles = cms.InputTag("genParticles::HLT"),
+    partonMode = cms.string('Auto'),
+    src = cms.InputTag("generator","","SIM")
+)
+
+
+process.ak4JetFlavourInfos = cms.EDProducer("JetFlavourClustering",
+    bHadrons = cms.InputTag("selectedHadronsAndPartons","bHadrons"),
+    cHadrons = cms.InputTag("selectedHadronsAndPartons","cHadrons"),
+    ghostRescaling = cms.double(1e-18),
+    hadronFlavourHasPriority = cms.bool(False),
+    jetAlgorithm = cms.string('AntiKt'),
+    # jets = cms.InputTag("ak4PFJets"),
+    jets = cms.InputTag("hltAK4PFPuppiJetsCorrected"),
+    # jets = cms.InputTag("hltAK4PFPuppiJets"),
+    # jets = cms.InputTag("ak4PFJetsPuppi"),
+    weights = cms.InputTag("hltPFPuppi"),
+    # weights = cms.InputTag("puppi"),
+    leptons = cms.InputTag("selectedHadronsAndPartons","leptons"),
+    partons = cms.InputTag("selectedHadronsAndPartons","physicsPartons"),
+    rParam = cms.double(0.4),
+    relPtTolerance = cms.double(5)
+)
+
+process.jetPartonMatchPuppi = cms.EDProducer("MCMatcher",
+    checkCharge = cms.bool(False),
+    matched = cms.InputTag("genParticles::HLT"),
+    maxDPtRel = cms.double(3.0),
+    maxDeltaR = cms.double(0.4),
+    mcPdgId = cms.vint32(
+        1, 2, 3, 4, 5,
+        21
+    ),
+    mcStatus = cms.vint32(3, 23),
+    resolveAmbiguities = cms.bool(True),
+    resolveByMatchQuality = cms.bool(False),
+    # src = cms.InputTag("ak4PFJetsPuppi")
+    # src = cms.InputTag("hltAK4PFPuppiJets")
+    # src = cms.InputTag("ak4PFJetsPuppi")
+    src = cms.InputTag("hltAK4PFPuppiJetsCorrected")
+)
+
+process.jetGenJetMatchPuppi = cms.EDProducer("GenJetMatcher",
+    checkCharge = cms.bool(False),
+    # matched = cms.InputTag("slimmedGenJets"),
+    matched = cms.InputTag("ak4GenJetsNoNu::HLT"),
+    maxDeltaR = cms.double(0.4),
+    mcPdgId = cms.vint32(),
+    mcStatus = cms.vint32(),
+    resolveAmbiguities = cms.bool(True),
+    resolveByMatchQuality = cms.bool(False),
+    # src = cms.InputTag("ak4PFJetsPuppi")
+    # src = cms.InputTag("hltAK4PFPuppiJets")
+    # src = cms.InputTag("ak4PFJetsPuppi")
+    src = cms.InputTag("hltAK4PFPuppiJetsCorrected")
+)
+
+# process.patJetFlavourAssociationLegacyPuppi = cms.EDProducer("JetFlavourIdentifier",
+#     physicsDefinition = cms.bool(False),
+#     srcByReference = cms.InputTag("patJetPartonAssociationLegacyPuppi")
+# )
+# process.patJetPartonAssociationLegacyPuppi = cms.EDProducer("JetPartonMatcher",
+#     coneSizeToAssociate = cms.double(0.3),
+#     jets = cms.InputTag("ak4PFJetsPuppi"),
+#     partons = cms.InputTag("patJetPartonsLegacy")
+# )
+# process.patJetPartonsLegacy = cms.EDProducer("PartonSelector",
+#     src = cms.InputTag("genParticles"),
+#     withLeptons = cms.bool(False)
+# )
+
+process.jetMatchingPath = cms.Path(process.selectedHadronsAndPartons*process.ak4JetFlavourInfos*process.jetPartonMatchPuppi*process.jetGenJetMatchPuppi)
+process.schedule.extend([process.jetMatchingPath])
+
+from JMETriggerAnalysis.NTuplizers.qcdWeightProducer import qcdWeightProducer
+process.qcdWeightPU140 = qcdWeightProducer(BXFrequency = 30. * 1e6, PU = 140.)
+process.qcdWeightPU200 = qcdWeightProducer(BXFrequency = 30. * 1e6, PU = 200.)
+process.qcdWeightpath = cms.Path(process.qcdWeightPU140*process.qcdWeightPU200)
+process.schedule.extend([process.qcdWeightpath])
 
 #-------------------------------------
 from RecoBTag.PerformanceMeasurements.BTagHLTAnalyzer_cff import *
@@ -290,78 +374,53 @@ for requiredGroup in process.btagana.groups:
 process.btagana.MaxEta                = 4.5
 process.btagana.MinPt                 = 25
 # process.btagana.triggerTable          = cms.InputTag('TriggerResults::RECO2') # Data and MC
-process.btagana.triggerTable          = cms.InputTag('TriggerResults') # Data and MC
+# process.btagana.triggerTable          = cms.InputTag('TriggerResults') # Data and MC
+process.btagana.triggerTable          = cms.InputTag("TriggerResults","","RECO2") # Data and MC
 process.btagana.HLTTriggerPathNames   = cms.vstring(
-    'MC_JME', # 0 0
-    'QCDMuon',# 0 1
-    'noFilter_PFDeepCSVPuppi', # 0 2
-    'noFilter_PFDeepFlavourPuppi', # 0 3
-    'L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1', # 0 4
-    'L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1', # 0 5
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_4p5_v1', # 0 6
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_4p5_v1', # 0 7
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_4p5_v1', # 0 8
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_4p5_v1', # 0 9
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_4p5_v1', # 0 10
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_4p5_v1', # 0 11
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_4p5_v1', # 0 12
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_4p5_v1', # 0 13
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_4p5_v1', # 0 14
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_4p5_v1', # 0 15
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_4p5_v1', # 0 16
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_4p5_v1', # 0 17
+    'MC_JME',
+    'L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1',
+    'L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1',
 
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_2p4_v1', # 0 18
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_2p4_v1', # 0 19
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_2p4_v1', # 0 20
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_2p4_v1', # 0 21
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_2p4_v1', # 0 22
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_2p4_v1', # 0 23
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_2p4_v1', # 0 24
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_2p4_v1', # 0 25
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_2p4_v1', # 0 26
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_2p4_v1', # 0 27
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_2p4_v1', # 0 28
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_2p4_v1', # 0 29
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1',
+    'HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1',
 
-    'Offline_BadPFMuon', # 0 30
-    'Offline_BadPFMuonDz', # 0 31
-    'Offline_BadChargedCandidate', # 1 0
-    'L1T_SinglePFPuppiJet200off', # 1 1
-    'HLT_AK4PFJet550', # 1 2
-    'HLT_AK4PFCHSJet550', # 1 3
-    'HLT_AK4PFPuppiJet550', # 1 4
-    'L1T_PFPuppiHT450off', # 1 5
-    'HLT_PFPuppiHT1050', # 1 6
-    'L1T_PFPuppiMET200off', # 1 7
-    'L1T_PFPuppiMET245off', # 1 8
-    'HLT_PFMET250', # 1 9
-    'HLT_PFCHSMET250', # 1 10
-    'HLT_PFPuppiMET250', # 1 11
-    'HLT_PFPuppiMET120', # 1 12
-    'HLT_PFPuppiMET120_PFPuppiMHT120', # 1 13
-    'HLT_PFPuppiMET120_PFPuppiMHT120_PFPuppiHT60', # 1 14
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1',
+    'HLT_QuadPFPuppiJet_75_60_45_40_2p4_v1',
+    'HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1',
+    'HLTNoL1_QuadPFPuppiJet_75_60_45_40_2p4_v1',
 
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1',  # 1 15
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1', # 1 16
-    'HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1', # 1 17
-    'HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_4p5_v1', # 1 18
+    'L1Objects',
+    'HLTObjects',
+    'QCDMuon',
+    'Gen_QCDMuGenFilter',
+    'Gen_QCDEmEnrichingNoBCToEFilter',
+    'Gen_QCDEmEnrichingFilter',
+    'Gen_QCDBCToEFilter',
+    'noFilter_PFDeepCSVPuppi',
+    'noFilter_PFDeepFlavourPuppi',
 
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 19
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 20
-    'HLT_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 21
-    'HLT_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 22
-    'HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 23
-    'HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 24
-    'HLTNoL1_QuadPFPuppiJet_75_60_45_40_2p4_v1', # 1 25
-    'HLTNoL1_QuadPFPuppiJet_75_60_45_40_4p5_v1', # 1 26
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_2p4_v1',
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_2p4_v1',
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_2p4_v1',
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_2p4_v1',
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_2p4_v1',
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_2p4_v1',
+    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_2p4_v1',
     )
 # process.btagana.primaryVertexColl     = cms.InputTag('hltVerticesPF')
-process.btagana.primaryVertexColl     = cms.InputTag('offlinePrimaryVertices') #change with new Offline like sequence
+# process.btagana.primaryVertexColl     = cms.InputTag('offlinePrimaryVertices') #change with new Offline like sequence
+process.btagana.primaryVertexColl     = cms.InputTag('goodOfflinePrimaryVertices') #change with new Offline like sequence
 
 process.btagana.runHLTJetVariables     = cms.bool(True)
 process.btagana.runDeepFlavourTagVariables     = cms.bool(True)
 process.btagana.runOnData = False
+
+process.btagana.runTruthFlavor = cms.bool(True)
 
 # if opts.FastPV:
     # process.btagana.PFJets               = cms.InputTag('hltAK4PFCHSJetsCorrected')
@@ -386,13 +445,31 @@ process.btagana.PFJetDeepCSVTags     = cms.InputTag('hltDeepCombinedSecondaryVer
 process.btagana.PFJetBPBJetTags      = cms.InputTag('hltPfJetBProbabilityBJetTags')
 process.btagana.PFJetPBJetTags       = cms.InputTag('hltPfJetProbabilityBJetTags')
 
-process.btagana.GenJets            = cms.InputTag('ak4GenJetsNoNu::HLT')
+process.btagana.GenJets              = cms.InputTag('ak4GenJetsNoNu::HLT')
+process.btagana.GenParticles         = cms.InputTag("genParticles::HLT")
 
-process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJetsCorrected')
+
+process.btagana.HepMCProduct = cms.InputTag("generatorSmeared","","SIM")
+process.btagana.GenEventInfoProduct = cms.InputTag('generator')
+process.btagana.PileupSummaryInfo = cms.InputTag('addPileupInfo')
+
+process.btagana.qcdWeightPU140 = cms.InputTag('qcdWeightPU140')
+process.btagana.qcdWeightPU200 = cms.InputTag('qcdWeightPU200')
+
+
+
+# process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJetsCorrected')
+process.btagana.PuppiJets            = cms.InputTag('hltPFPuppiJetForBtag::RECO2')
+# process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJets')
+# process.btagana.PuppiJets            = cms.InputTag('ak4PFJetsPuppi')
+process.btagana.PuppiJetsFlavorInfos = cms.InputTag('ak4JetFlavourInfos')
+process.btagana.PuppiJetsMatchedGenJets = cms.InputTag('jetGenJetMatchPuppi')
+process.btagana.PuppiJetsMatchedGenPartons = cms.InputTag('jetPartonMatchPuppi')
 process.btagana.PuppiJetTags         = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi')
 process.btagana.PuppiDeepFlavourTags = cms.InputTag('hltPfDeepFlavourTagInfos')
 process.btagana.PuppiSVs             = cms.InputTag('hltDeepSecondaryVertexTagInfosPFPuppi')
-process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppi:probb')
+# process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppi:probb')
+process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppiMod:probb')
 process.btagana.PuppiJetBPBJetTags   = cms.InputTag('hltPfJetBProbabilityBJetTagsPuppi')
 process.btagana.PuppiJetPBJetTags    = cms.InputTag('hltPfJetProbabilityBJetTagsPuppi')
 process.btagana.PuppiJetCSVTags      = cms.InputTag('hltCombinedSecondaryVertexBJetTagsPFPuppi')
@@ -401,7 +478,8 @@ process.btagana.PuppiJetDeepFlavourTags_bb  = cms.InputTag('hltPfDeepFlavourJetT
 process.btagana.PuppiJetDeepFlavourTags_lb  = cms.InputTag('hltPfDeepFlavourJetTags:problepb')
 
 process.btagana.HLTPuppiHTEta2p4            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4')
-process.btagana.HLTPuppiHTEta4p5            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p5')
+# process.btagana.HLTPuppiHTEta4p0            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0')
+process.btagana.HLTPuppiHTEta4p0            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4')
 process.btagana.HLTPuppiHTJME               = cms.InputTag('hltPFPuppiHT')
 
 process.btagana.analyzeL1Objects            =  cms.bool(True)
@@ -478,12 +556,14 @@ if opts.pvdqm > 0:
     process.VertexHistograms_hltPixelVertices = vertexHistogrammer.clone(src = 'pixelVertices')
     process.VertexHistograms_hltTrimmedPixelVertices = vertexHistogrammer.clone(src = 'trimmedPixelVertices')
     process.VertexHistograms_hltPrimaryVertices = vertexHistogrammer.clone(src = 'offlinePrimaryVertices')
+    process.VertexHistograms_hltPrimaryVerticesGood = vertexHistogrammer.clone(src = 'goodOfflinePrimaryVertices')
     process.VertexHistograms_offlinePrimaryVertices = vertexHistogrammer.clone(src = 'offlineSlimmedPrimaryVertices')
 
     process.pvMonitoringSeq = cms.Sequence(
         process.VertexHistograms_hltPixelVertices
         + process.VertexHistograms_hltTrimmedPixelVertices
         + process.VertexHistograms_hltPrimaryVertices
+        + process.VertexHistograms_hltPrimaryVerticesGood
         + process.VertexHistograms_offlinePrimaryVertices
     )
 
