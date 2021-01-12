@@ -208,8 +208,9 @@ if opts.inputFiles:
 else:
    process.source.fileNames = [
      # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/280000/003ACFBC-23B2-EA45-9A12-BECFF07760FC.root"
+     "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/280001/24F29B43-B3E2-9048-9BFD-9A1FC232B4A6.root"
      # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/VBF_HHTo4B_CV_0_5_C2V_1_C3_1_TuneCP5_PSWeights_14TeV-madgraph-pythia8/FEVT/NoPU_111X_mcRun4_realistic_T15_v1-v1/100000/08904C2F-2A34-1C45-86B3-F05541DB0C00.root"
-     " /store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/GluGluToHHTo4B_node_SM_TuneCP5_14TeV-madgraph_pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v1/130000/45253B8E-D22A-BF43-9BA8-92F4C0391B0A.root"
+     # " /store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/GluGluToHHTo4B_node_SM_TuneCP5_14TeV-madgraph_pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v1/130000/45253B8E-D22A-BF43-9BA8-92F4C0391B0A.root"
      # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/TTTo2L2Nu_TuneCP5_14TeV-powheg-pythia8/FEVT/NoPU_111X_mcRun4_realistic_T15_v1-v1/250000/95FB2E3E-1DA2-FC4C-82D6-0BEB5C0195E3.root"
      # "/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/QCD_Pt-15to20_EMEnriched_TuneCP5_14TeV_pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_111X_mcRun4_realistic_T15_v1-v1/110000/2CFDBC2B-460F-9C45-9383-2F41381DD9C0.root"
    ]
@@ -292,16 +293,12 @@ process.ak4JetFlavourInfos = cms.EDProducer("JetFlavourClustering",
     ghostRescaling = cms.double(1e-18),
     hadronFlavourHasPriority = cms.bool(False),
     jetAlgorithm = cms.string('AntiKt'),
-    # jets = cms.InputTag("ak4PFJets"),
     jets = cms.InputTag("hltAK4PFPuppiJetsCorrected"),
-    # jets = cms.InputTag("hltAK4PFPuppiJets"),
-    # jets = cms.InputTag("ak4PFJetsPuppi"),
     weights = cms.InputTag("hltPFPuppi"),
-    # weights = cms.InputTag("puppi"),
     leptons = cms.InputTag("selectedHadronsAndPartons","leptons"),
     partons = cms.InputTag("selectedHadronsAndPartons","physicsPartons"),
     rParam = cms.double(0.4),
-    relPtTolerance = cms.double(5)
+    relPtTolerance = cms.double(5) # because of JES corrections applied
 )
 
 process.jetPartonMatchPuppi = cms.EDProducer("MCMatcher",
@@ -316,9 +313,6 @@ process.jetPartonMatchPuppi = cms.EDProducer("MCMatcher",
     mcStatus = cms.vint32(3, 23),
     resolveAmbiguities = cms.bool(True),
     resolveByMatchQuality = cms.bool(False),
-    # src = cms.InputTag("ak4PFJetsPuppi")
-    # src = cms.InputTag("hltAK4PFPuppiJets")
-    # src = cms.InputTag("ak4PFJetsPuppi")
     src = cms.InputTag("hltAK4PFPuppiJetsCorrected")
 )
 
@@ -331,9 +325,6 @@ process.jetGenJetMatchPuppi = cms.EDProducer("GenJetMatcher",
     mcStatus = cms.vint32(),
     resolveAmbiguities = cms.bool(True),
     resolveByMatchQuality = cms.bool(False),
-    # src = cms.InputTag("ak4PFJetsPuppi")
-    # src = cms.InputTag("hltAK4PFPuppiJets")
-    # src = cms.InputTag("ak4PFJetsPuppi")
     src = cms.InputTag("hltAK4PFPuppiJetsCorrected")
 )
 
@@ -378,19 +369,14 @@ process.btagana.MinPt                 = 25
 process.btagana.triggerTable          = cms.InputTag("TriggerResults","","RECO2") # Data and MC
 process.btagana.HLTTriggerPathNames   = cms.vstring(
     'MC_JME',
+      # L1T seeds
     'L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1',
-    'L1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p71_2p4_v1',
+    'L1_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p71_2p4_v1',
 
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1',
-    'HLTNoL1_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppi_2p4_v1',
-
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1',
-    'HLT_QuadPFPuppiJet_75_60_45_40_2p4_v1',
-    'HLTNoL1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_2p4_v1',
-    'HLTNoL1_QuadPFPuppiJet_75_60_45_40_2p4_v1',
-
+      # general paths and filters
     'L1Objects',
     'HLTObjects',
+    'HLTObjectsEta4',
     'QCDMuon',
     'Gen_QCDMuGenFilter',
     'Gen_QCDEmEnrichingNoBCToEFilter',
@@ -399,22 +385,25 @@ process.btagana.HLTTriggerPathNames   = cms.vstring(
     'noFilter_PFDeepCSVPuppi',
     'noFilter_PFDeepFlavourPuppi',
 
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p5_2p4_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p5_2p4_v1',
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p5_2p4_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p5_2p4_v1',
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p7_2p4_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p7_2p4_v1',
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p7_2p4_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p7_2p4_v1',
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p85_2p4_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepCSV_p85_2p4_v1',
-    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p85_2p4_v1',
-    'HLT_DoublePFPuppiJets128MaxDeta1p6_DoublePFPuppiBTagDeepFlavour_p85_2p4_v1',
+      # based on DeepCSV
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p17_2p4_v1',
+    'HLT_PFHT200PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepCSV0p27_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p32_4p0_v1',
+    'HLT_PFHT250PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepCSV0p37_4p0_v1',
+    'HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p75_2p4_v1',
+    'HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p75_4p0_v1',
+
+      # based on DeepJet
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p17_2p4_v1',
+    'HLT_PFHT200PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepFlavour0p27_2p4_v1',
+    'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p32_4p0_v1',
+    'HLT_PFHT250PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepFlavour0p37_4p0_v1',
+    'HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_p75_2p4_v1',
+    'HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_p75_4p0_v1',
     )
 # process.btagana.primaryVertexColl     = cms.InputTag('hltVerticesPF')
-# process.btagana.primaryVertexColl     = cms.InputTag('offlinePrimaryVertices') #change with new Offline like sequence
-process.btagana.primaryVertexColl     = cms.InputTag('goodOfflinePrimaryVertices') #change with new Offline like sequence
+process.btagana.primaryVertexColl     = cms.InputTag('offlinePrimaryVertices') #change with new Offline like sequence
+# process.btagana.primaryVertexColl     = cms.InputTag('goodOfflinePrimaryVertices') #change with new Offline like sequence
 
 process.btagana.runHLTJetVariables     = cms.bool(True)
 process.btagana.runDeepFlavourTagVariables     = cms.bool(True)
@@ -458,28 +447,23 @@ process.btagana.qcdWeightPU200 = cms.InputTag('qcdWeightPU200')
 
 
 
-# process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJetsCorrected')
-process.btagana.PuppiJets            = cms.InputTag('hltPFPuppiJetForBtag::RECO2')
-# process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJets')
-# process.btagana.PuppiJets            = cms.InputTag('ak4PFJetsPuppi')
+process.btagana.PuppiJets            = cms.InputTag('hltAK4PFPuppiJetsCorrected')
 process.btagana.PuppiJetsFlavorInfos = cms.InputTag('ak4JetFlavourInfos')
 process.btagana.PuppiJetsMatchedGenJets = cms.InputTag('jetGenJetMatchPuppi')
 process.btagana.PuppiJetsMatchedGenPartons = cms.InputTag('jetPartonMatchPuppi')
 process.btagana.PuppiJetTags         = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi')
 process.btagana.PuppiDeepFlavourTags = cms.InputTag('hltPfDeepFlavourTagInfos')
 process.btagana.PuppiSVs             = cms.InputTag('hltDeepSecondaryVertexTagInfosPFPuppi')
-# process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppi:probb')
-process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppiMod:probb')
-process.btagana.PuppiJetBPBJetTags   = cms.InputTag('hltPfJetBProbabilityBJetTagsPuppi')
-process.btagana.PuppiJetPBJetTags    = cms.InputTag('hltPfJetProbabilityBJetTagsPuppi')
-process.btagana.PuppiJetCSVTags      = cms.InputTag('hltCombinedSecondaryVertexBJetTagsPFPuppi')
+process.btagana.PuppiJetDeepCSVTags  = cms.InputTag('hltDeepCombinedSecondaryVertexBJetTagsPFPuppi:probb')
+# process.btagana.PuppiJetBPBJetTags   = cms.InputTag('hltPfJetBProbabilityBJetTagsPuppi')
+# process.btagana.PuppiJetPBJetTags    = cms.InputTag('hltPfJetProbabilityBJetTagsPuppi')
+# process.btagana.PuppiJetCSVTags      = cms.InputTag('hltCombinedSecondaryVertexBJetTagsPFPuppi')
 process.btagana.PuppiJetDeepFlavourTags     = cms.InputTag('hltPfDeepFlavourJetTags:probb')
 process.btagana.PuppiJetDeepFlavourTags_bb  = cms.InputTag('hltPfDeepFlavourJetTags:probbb')
 process.btagana.PuppiJetDeepFlavourTags_lb  = cms.InputTag('hltPfDeepFlavourJetTags:problepb')
 
 process.btagana.HLTPuppiHTEta2p4            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4')
-# process.btagana.HLTPuppiHTEta4p0            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0')
-process.btagana.HLTPuppiHTEta4p0            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4')
+process.btagana.HLTPuppiHTEta4p0            = cms.InputTag('hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0')
 process.btagana.HLTPuppiHTJME               = cms.InputTag('hltPFPuppiHT')
 
 process.btagana.analyzeL1Objects            =  cms.bool(True)

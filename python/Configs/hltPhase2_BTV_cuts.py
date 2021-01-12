@@ -183,8 +183,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	minimumNumberOfHits = cms.int32(3),
     	minimumNumberOfPixelHits = cms.int32(2),
     	minimumTransverseMomentum = cms.double(1.0),
-    	# primaryVertex = cms.InputTag("offlinePrimaryVertices"),
-    	primaryVertex = cms.InputTag("goodOfflinePrimaryVertices"),
+    	primaryVertex = cms.InputTag("offlinePrimaryVertices"),
+    	# primaryVertex = cms.InputTag("goodOfflinePrimaryVertices"),
     	useTrackQuality = cms.bool(False)
     )
 
@@ -208,8 +208,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	fitterTini = cms.double(256),
     	maxTimeSignificance = cms.double(3.5),
     	# mightGet = cms.optional.untracked.vstring,   #new
-    	# primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-    	primaryVertices = cms.InputTag("goodOfflinePrimaryVertices"),
+    	primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+    	# primaryVertices = cms.InputTag("goodOfflinePrimaryVertices"),
     	secondaryVertices = cms.InputTag("hltDeepInclusiveSecondaryVerticesPF"),
     	sigCut = cms.double(5),
     	trackMinLayers = cms.int32(4),
@@ -248,8 +248,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
     	mightGet = cms.optional.untracked.vstring, #####new
     	minHits = cms.uint32(8),
     	minPt = cms.double(0.8),
-    	# primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-    	primaryVertices = cms.InputTag("goodOfflinePrimaryVertices"),
+    	primaryVertices = cms.InputTag("offlinePrimaryVertices"),
+    	# primaryVertices = cms.InputTag("goodOfflinePrimaryVertices"),
     	tracks = cms.InputTag("particleFlowTmp"),
     	useDirectVertexFitter = cms.bool(True),
     	useVertexReco = cms.bool(True),
@@ -526,8 +526,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         minimumNumberOfHits = cms.int32(3),
         minimumNumberOfPixelHits = cms.int32(2),
         minimumTransverseMomentum = cms.double(1.0),
-        # primaryVertex = cms.InputTag("offlinePrimaryVertices"),
-        primaryVertex = cms.InputTag("goodOfflinePrimaryVertices"),
+        primaryVertex = cms.InputTag("offlinePrimaryVertices"),
+        # primaryVertex = cms.InputTag("goodOfflinePrimaryVertices"),
         useTrackQuality = cms.bool(False)
     )
 
@@ -595,8 +595,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
         secondary_vertices = cms.InputTag("hltDeepInclusiveSecondaryVerticesPF"),
         shallow_tag_infos = cms.InputTag("hltDeepCombinedSecondaryVertexBJetTagsInfosPuppi"),
         vertex_associator = cms.InputTag("hltPrimaryVertexAssociation","original"),
-        # vertices = cms.InputTag("offlinePrimaryVertices")
-        vertices = cms.InputTag("goodOfflinePrimaryVertices")
+        vertices = cms.InputTag("offlinePrimaryVertices")
+        # vertices = cms.InputTag("goodOfflinePrimaryVertices")
     )
 
     process.hltPrimaryVertexAssociation = cms.EDProducer("PFCandidatePrimaryVertexSorter",
@@ -626,8 +626,8 @@ def customize_hltPhase2_BTV(process, name='HLTBTVSequence'):
 
         ),
         usePVMET = cms.bool(True),
-        # vertices = cms.InputTag("offlinePrimaryVertices")
-        vertices = cms.InputTag("goodOfflinePrimaryVertices")
+        vertices = cms.InputTag("offlinePrimaryVertices")
+        # vertices = cms.InputTag("goodOfflinePrimaryVertices")
     )
 
 

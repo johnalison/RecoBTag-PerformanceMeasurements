@@ -473,10 +473,10 @@ BTagHLTAnalyzerT<IPTI,VTX>::BTagHLTAnalyzerT(const edm::ParameterSet& iConfig):
   PuppiJetTagCollectionTag_ = consumes<ShallowTagCollection>(iConfig.getParameter<edm::InputTag>("PuppiJetTags"));
   PuppiSVCollectionTag_   = consumes<std::vector<SVTagInfo> >(iConfig.getParameter<edm::InputTag>("PuppiSVs"));
   PuppiDeepFlavourCollectionTag_ = consumes<DeepFlavourTagInfoCollection>(iConfig.getParameter<edm::InputTag>("PuppiDeepFlavourTags"));
-  PuppiJetCSVTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetCSVTags"));
+  // PuppiJetCSVTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetCSVTags"));
   PuppiJetDeepCSVTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetDeepCSVTags"));
-  PuppiJetProbTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetPBJetTags"));
-  PuppiJetBProbTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetBPBJetTags"));
+  // PuppiJetProbTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetPBJetTags"));
+  // PuppiJetBProbTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetBPBJetTags"));
   PuppiJetDeepFlavourTag_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetDeepFlavourTags"));
   PuppiJetDeepFlavourTag_bb_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetDeepFlavourTags_bb"));
   PuppiJetDeepFlavourTag_lb_ = consumes<HLTBTagValue>(iConfig.getParameter<edm::InputTag>("PuppiJetDeepFlavourTags_lb"));
@@ -590,7 +590,9 @@ void BTagHLTAnalyzerT<IPTI,VTX>::analyze(const edm::Event& iEvent, const edm::Ev
             if (pileupInfo_i.getBunchCrossing() == 0) {
                 pileupInfo_BX0_numTrueInteractions_ = pileupInfo_i.getTrueNumInteractions();
                 pileupInfo_BX0_numPUInteractions_ = pileupInfo_i.getPU_NumInteractions();
-                pileupInfo_BX0_max_pT_hats_ = *std::max_element(pileupInfo_i.getPU_pT_hats().begin(), pileupInfo_i.getPU_pT_hats().end());
+                if(not pileupInfo_i.getPU_pT_hats().empty()){
+                    pileupInfo_BX0_max_pT_hats_ = *std::max_element(pileupInfo_i.getPU_pT_hats().begin(), pileupInfo_i.getPU_pT_hats().end());
+                }
                 for (uint idx=0; idx<=pileupInfo_i.getPU_pT_hats().size(); ++idx) {
                     auto const i_pThat = (idx == pileupInfo_i.getPU_pT_hats().size()) ? genEventInfo_qScale_ : pileupInfo_i.getPU_pT_hats().at(idx);
                     if(0. <= i_pThat and i_pThat < 20.) ++pileupInfo_BX0_n_pThat000to020_;
@@ -1270,17 +1272,17 @@ void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jets
   edm::Handle <std::vector<SVColl> > jetSVTagsColl;
   iEvent.getByToken (svCollToken, jetSVTagsColl);
 
-  edm::Handle <HLTBTagValue> jetCSVColl;
-  iEvent.getByToken (CSVToken, jetCSVColl);
+  // edm::Handle <HLTBTagValue> jetCSVColl;
+  // iEvent.getByToken (CSVToken, jetCSVColl);
 
   edm::Handle <HLTBTagValue> jetDeepCSVColl;
   iEvent.getByToken (deepCSVToken, jetDeepCSVColl);
 
-  edm::Handle <HLTBTagValue> probColl;
-  iEvent.getByToken (probToken, probColl);
-
-  edm::Handle <HLTBTagValue> probbColl;
-  iEvent.getByToken (probbToken, probbColl);
+  // edm::Handle <HLTBTagValue> probColl;
+  // iEvent.getByToken (probToken, probColl);
+  //
+  // edm::Handle <HLTBTagValue> probbColl;
+  // iEvent.getByToken (probbToken, probbColl);
 
   edm::Handle <HLTBTagValue> deepflavourColl;
   iEvent.getByToken (DeepFlavourToken, deepflavourColl);
@@ -1310,15 +1312,15 @@ void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jets
       //  Fill CSV Value
       //
       JetInfo[iJetColl].Jet_CombIVF[JetInfo[iJetColl].nJet]     = -1;
-      if(jetCSVColl.isValid()){
-	unsigned int nCSV = jetCSVColl->size();
-	for(unsigned int iCSV = 0; iCSV < nCSV; ++iCSV){
-	  const reco::Jet* thisCSVJet = jetCSVColl->key(iCSV).get();
-	  if(reco::deltaR( etajet, phijet, thisCSVJet->eta(), thisCSVJet->phi()) < 0.1){
-	    JetInfo[iJetColl].Jet_CombIVF[JetInfo[iJetColl].nJet]     = jetCSVColl->value(iCSV);
-	  }
-	}
-      }
+    //   if(jetCSVColl.isValid()){
+	// unsigned int nCSV = jetCSVColl->size();
+	// for(unsigned int iCSV = 0; iCSV < nCSV; ++iCSV){
+	//   const reco::Jet* thisCSVJet = jetCSVColl->key(iCSV).get();
+	//   if(reco::deltaR( etajet, phijet, thisCSVJet->eta(), thisCSVJet->phi()) < 0.1){
+	//     JetInfo[iJetColl].Jet_CombIVF[JetInfo[iJetColl].nJet]     = jetCSVColl->value(iCSV);
+	//   }
+	// }
+    //   }
 
       //
       //  Fill DeepCSV Value
@@ -1355,25 +1357,25 @@ void BTagHLTAnalyzerT<IPTI,VTX>::processHLTJets(const edm::Handle<JetColl>& jets
       //  Fill prob Value
       //
       JetInfo[iJetColl].Jet_Proba[JetInfo[iJetColl].nJet]     = -1;
-      if(probColl.isValid()){
-	unsigned int nprob = probColl->size();
-	for(unsigned int iprob= 0; iprob < nprob; ++iprob){
-	  const reco::Jet* thisProbJet = probColl->key(iprob).get();
-	  if(reco::deltaR( etajet, phijet, thisProbJet->eta(), thisProbJet->phi()) < 0.1){
-	    JetInfo[iJetColl].Jet_Proba[JetInfo[iJetColl].nJet]     = probColl->value(iprob);
-	  }
-	}
-      }
+    //   if(probColl.isValid()){
+	// unsigned int nprob = probColl->size();
+	// for(unsigned int iprob= 0; iprob < nprob; ++iprob){
+	//   const reco::Jet* thisProbJet = probColl->key(iprob).get();
+	//   if(reco::deltaR( etajet, phijet, thisProbJet->eta(), thisProbJet->phi()) < 0.1){
+	//     JetInfo[iJetColl].Jet_Proba[JetInfo[iJetColl].nJet]     = probColl->value(iprob);
+	//   }
+	// }
+    //   }
       JetInfo[iJetColl].Jet_Bprob[JetInfo[iJetColl].nJet]     = -1;
-      if(probbColl.isValid()){
-	unsigned int nprobb = probbColl->size();
-	for(unsigned int iprobb= 0; iprobb < nprobb; ++iprobb){
-	  const reco::Jet* thisProbbJet = probbColl->key(iprobb).get();
-	  if(reco::deltaR( etajet, phijet, thisProbbJet->eta(), thisProbbJet->phi()) < 0.1){
-	    JetInfo[iJetColl].Jet_Bprob[JetInfo[iJetColl].nJet]     = probbColl->value(iprobb);
-	  }
-	}
-      }
+    //   if(probbColl.isValid()){
+	// unsigned int nprobb = probbColl->size();
+	// for(unsigned int iprobb= 0; iprobb < nprobb; ++iprobb){
+	//   const reco::Jet* thisProbbJet = probbColl->key(iprobb).get();
+	//   if(reco::deltaR( etajet, phijet, thisProbbJet->eta(), thisProbbJet->phi()) < 0.1){
+	//     JetInfo[iJetColl].Jet_Bprob[JetInfo[iJetColl].nJet]     = probbColl->value(iprobb);
+	//   }
+	// }
+    //   }
 
 
       //
