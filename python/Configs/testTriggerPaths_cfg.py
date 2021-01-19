@@ -451,36 +451,52 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
 
 
     ## L1 sequences and filters  (basic setup from JME)
-    process.l1tDoublePFPuppiJet112offMaxEta2p4 = cms.EDFilter('L1JetFilter',
+    process.l1tDoublePFPuppiJet112offMaxEta2p4 = cms.EDFilter('L1TJetFilter',
       inputTag = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
-      esScalingTag = cms.ESInputTag('l1tScalingESSource', 'L1PFPhase1JetScaling'),
+      Scalings = cms.PSet(
+        barrel = cms.vdouble(11.1254, 1.40627, 0),
+        overlap = cms.vdouble(24.8375, 1.4152, 0),
+        endcap = cms.vdouble(42.4039, 1.33052, 0),
+      ),
       MinPt = cms.double(112.),
       MinEta = cms.double(-2.4),
       MaxEta = cms.double(2.4),
       MinN = cms.int32(2),
     )
 
-    process.l1t1PFPuppiJet70offMaxEta2p4 = cms.EDFilter('L1JetFilter',
+    process.l1t1PFPuppiJet70offMaxEta2p4 = cms.EDFilter('L1TJetFilter',
       inputTag = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
-      esScalingTag = cms.ESInputTag('l1tScalingESSource', 'L1PFPhase1JetScaling'),
+      Scalings = cms.PSet(
+        barrel = cms.vdouble(11.1254, 1.40627, 0),
+        overlap = cms.vdouble(24.8375, 1.4152, 0),
+        endcap = cms.vdouble(42.4039, 1.33052, 0),
+      ),
       MinPt = cms.double(70.),
       MinEta = cms.double(-2.4),
       MaxEta = cms.double(2.4),
       MinN = cms.int32(1),
     )
 
-    process.l1t2PFPuppiJet55offMaxEta2p4 = cms.EDFilter('L1JetFilter',
+    process.l1t2PFPuppiJet55offMaxEta2p4 = cms.EDFilter('L1TJetFilter',
       inputTag = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
-      esScalingTag = cms.ESInputTag('l1tScalingESSource', 'L1PFPhase1JetScaling'),
+      Scalings = cms.PSet(
+        barrel = cms.vdouble(11.1254, 1.40627, 0),
+        overlap = cms.vdouble(24.8375, 1.4152, 0),
+        endcap = cms.vdouble(42.4039, 1.33052, 0),
+      ),
       MinPt = cms.double(55.),
       MinEta = cms.double(-2.4),
       MaxEta = cms.double(2.4),
       MinN = cms.int32(2),
     )
 
-    process.l1t4PFPuppiJet40offMaxEta2p4 = cms.EDFilter('L1JetFilter',
+    process.l1t4PFPuppiJet40offMaxEta2p4 = cms.EDFilter('L1TJetFilter',
       inputTag = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
-      esScalingTag = cms.ESInputTag('l1tScalingESSource', 'L1PFPhase1JetScaling'),
+      Scalings = cms.PSet(
+        barrel = cms.vdouble(11.1254, 1.40627, 0),
+        overlap = cms.vdouble(24.8375, 1.4152, 0),
+        endcap = cms.vdouble(42.4039, 1.33052, 0),
+      ),
       MinPt = cms.double(40.),
       MinEta = cms.double(-2.4),
       MaxEta = cms.double(2.4),
@@ -494,9 +510,11 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       maxEtaJetHt = cms.double(2.4)
     )
 
-    process.l1tPFPuppiHT400offMaxEta2p4 = cms.EDFilter('L1EnergySumFilter',
+    process.l1tPFPuppiHT400offMaxEta2p4 = cms.EDFilter('L1TEnergySumFilter',
       inputTag = cms.InputTag('l1tPFPuppiHTMaxEta2p4'),
-      esScalingTag = cms.ESInputTag('l1tScalingESSource', 'L1PFPhase1HT090Scaling'),
+      Scalings = cms.PSet(
+        theScalings = cms.vdouble(50.0182, 1.0961, 0), # PFPhase1HT090OfflineEtCut
+      ),
       TypeOfSum = cms.string('HT'),
       MinPt = cms.double(400.),
     )
