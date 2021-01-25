@@ -103,9 +103,9 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       'keep *_slimmedMETsPuppi__RECO',
     ])
 
-    ###
+    ################################################################################
     ### filter for QCD muon enriched
-    ###
+    ################################################################################
     process.muGenFilter = cms.EDFilter("MCSmartSingleParticleFilter",
         MaxDecayRadius = cms.untracked.vdouble(2000.0, 2000.0),
         MaxDecayZ = cms.untracked.vdouble(4000.0, 4000.0),
@@ -137,9 +137,11 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         )
     )
 
-    ###
-    ### single filters and producers
-    ###
+
+    ################################################################################
+    ### HLT single filters and producers
+    ################################################################################
+
     process.hltPFPuppiCentralJetQuad30MaxEta2p4 = cms.EDFilter( "HLT1PFJet",
         saveTags = cms.bool( True ),
         MinPt = cms.double( 30.0 ),
@@ -151,10 +153,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         MinE = cms.double( -1.0 ),
         triggerType = cms.int32( 86 ),
         MaxMass = cms.double( -1.0 )
-    )
-    process.hltPFPuppiCentralJetQuad30MaxEta4p0 = process.hltPFPuppiCentralJetQuad30MaxEta2p4.clone(
-        MaxEta = cms.double( 4.0 ),
-        MinEta = cms.double( -4.0 ),
     )
 
     process.hlt1PFPuppiCentralJet75MaxEta2p4 = cms.EDFilter( "HLT1PFJet",
@@ -169,16 +167,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         triggerType = cms.int32( 86 ),
         MaxMass = cms.double( -1.0 )
     )
-    process.hlt1PFPuppiCentralJet75MaxEta4p0 = process.hlt1PFPuppiCentralJet75MaxEta2p4.clone(
-        MaxEta = cms.double( 4.0 ),
-        MinEta = cms.double( -4.0 ),
-    )
-    process.hlt1PFPuppiCentralJet70MaxEta2p4 = process.hlt1PFPuppiCentralJet75MaxEta2p4.clone(
-        MinPt = cms.double( 70.0 ),
-    )
-    process.hlt1PFPuppiCentralJet70MaxEta4p0 = process.hlt1PFPuppiCentralJet75MaxEta4p0.clone(
-        MinPt = cms.double( 70.0 ),
-    )
 
     process.hlt2PFPuppiCentralJet60MaxEta2p4 = cms.EDFilter( "HLT1PFJet",
         saveTags = cms.bool( True ),
@@ -191,16 +179,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         MinE = cms.double( -1.0 ),
         triggerType = cms.int32( 86 ),
         MaxMass = cms.double( -1.0 )
-    )
-    process.hlt2PFPuppiCentralJet60MaxEta4p0 = process.hlt2PFPuppiCentralJet60MaxEta2p4.clone(
-        MaxEta = cms.double( 4.0 ),
-        MinEta = cms.double( -4.0 ),
-    )
-    process.hlt2PFPuppiCentralJet50MaxEta2p4 = process.hlt2PFPuppiCentralJet60MaxEta2p4.clone(
-        MinPt = cms.double( 50.0 ),
-    )
-    process.hlt2PFPuppiCentralJet50MaxEta4p0 = process.hlt2PFPuppiCentralJet60MaxEta4p0.clone(
-        MinPt = cms.double( 50.0 ),
     )
 
     process.hlt3PFPuppiCentralJet45MaxEta2p4 = cms.EDFilter( "HLT1PFJet",
@@ -215,10 +193,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         triggerType = cms.int32( 86 ),
         MaxMass = cms.double( -1.0 )
     )
-    process.hlt3PFPuppiCentralJet45MaxEta4p0 = process.hlt3PFPuppiCentralJet45MaxEta2p4.clone(
-        MaxEta = cms.double( 4.0 ),
-        MinEta = cms.double( -4.0 ),
-    )
 
     process.hlt4PFPuppiCentralJet40MaxEta2p4 = cms.EDFilter( "HLT1PFJet",
         saveTags = cms.bool( True ),
@@ -231,10 +205,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         MinE = cms.double( -1.0 ),
         triggerType = cms.int32( 86 ),
         MaxMass = cms.double( -1.0 )
-    )
-    process.hlt4PFPuppiCentralJet40MaxEta4p0 = process.hlt4PFPuppiCentralJet40MaxEta2p4.clone(
-        MaxEta = cms.double( 4.0 ),
-        MinEta = cms.double( -4.0 ),
     )
 
     process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4 = cms.EDProducer( "HLTHtMhtProducer",
@@ -249,10 +219,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         pfCandidatesLabel = cms.InputTag(""),
         excludePFMuons = cms.bool( False )
     )
-    process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0 = process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4.clone(
-        maxEtaJetMht = cms.double( 4.0 ),
-        maxEtaJetHt = cms.double( 4.0 ),
-    )
 
 
     process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4 = cms.EDFilter( "HLTHtMhtFilter",
@@ -264,44 +230,24 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         htLabels = cms.VInputTag( ['hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4'] ),
         minMeff = cms.vdouble( 0.0 )
     )
-    process.hltPFPuppiCentralJetsQuad30HT330MaxEta4p0 = process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4.clone(
-        mhtLabels = cms.VInputTag( ['hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0'] ),
-        htLabels = cms.VInputTag( ['hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0'] ),
-    )
-    process.hltPFPuppiCentralJetsQuad30HT200MaxEta2p4 = process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4.clone(
-        minHt = cms.vdouble( 200.0 ),
-    )
-    process.hltPFPuppiCentralJetsQuad30HT250MaxEta4p0 = process.hltPFPuppiCentralJetsQuad30HT330MaxEta4p0.clone(
-        minHt = cms.vdouble( 250.0 ),
-    )
+    # process.hltPFPuppiCentralJetsQuad30HT200MaxEta2p4 = process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4.clone(
+    #     minHt = cms.vdouble( 200.0 ),
+    # )
 
     # modified sequence
     process.hltDeepBLifetimeTagInfosPFPuppiModEta2p4 = process.hltDeepBLifetimeTagInfosPFPuppi.clone(jets = "hltPFPuppiJetForBtagEta2p4")
-    process.hltDeepBLifetimeTagInfosPFPuppiModEta4p0 = process.hltDeepBLifetimeTagInfosPFPuppi.clone(jets = "hltPFPuppiJetForBtagEta4p0")
     process.hltDeepSecondaryVertexTagInfosPFPuppiModEta2p4 = process.hltDeepSecondaryVertexTagInfosPF.clone(trackIPTagInfos = "hltDeepBLifetimeTagInfosPFPuppiModEta2p4")
-    process.hltDeepSecondaryVertexTagInfosPFPuppiModEta4p0 = process.hltDeepSecondaryVertexTagInfosPF.clone(trackIPTagInfos = "hltDeepBLifetimeTagInfosPFPuppiModEta4p0")
     process.hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta2p4 = process.hltDeepCombinedSecondaryVertexBJetTagsInfos.clone(svTagInfos = "hltDeepSecondaryVertexTagInfosPFPuppiModEta2p4")
-    process.hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta4p0 = process.hltDeepCombinedSecondaryVertexBJetTagsInfos.clone(svTagInfos = "hltDeepSecondaryVertexTagInfosPFPuppiModEta4p0")
     process.hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta2p4 = process.hltDeepCombinedSecondaryVertexBJetTagsPF.clone(src = "hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta2p4")
-    process.hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta4p0 = process.hltDeepCombinedSecondaryVertexBJetTagsPF.clone(src = "hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta4p0")
 
     process.hltPrimaryVertexAssociationModEta2p4 = process.hltPrimaryVertexAssociation.clone(jets = cms.InputTag("hltPFPuppiJetForBtagEta2p4"))
-    process.hltPrimaryVertexAssociationModEta4p0 = process.hltPrimaryVertexAssociation.clone(jets = cms.InputTag("hltPFPuppiJetForBtagEta4p0"))
     process.hltPfDeepFlavourTagInfosModEta2p4 = process.hltPfDeepFlavourTagInfos.clone(
         jets = cms.InputTag("hltPFPuppiJetForBtagEta2p4"),
         shallow_tag_infos = cms.InputTag("hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta2p4"),
         vertex_associator = cms.InputTag("hltPrimaryVertexAssociationModEta2p4","original"),
     )
-    process.hltPfDeepFlavourTagInfosModEta4p0 = process.hltPfDeepFlavourTagInfos.clone(
-        jets = cms.InputTag("hltPFPuppiJetForBtagEta4p0"),
-        shallow_tag_infos = cms.InputTag("hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta4p0"),
-        vertex_associator = cms.InputTag("hltPrimaryVertexAssociationModEta4p0","original"),
-    )
     process.hltPfDeepFlavourJetTagsModEta2p4 = process.hltPfDeepFlavourJetTags.clone(
         src = cms.InputTag("hltPfDeepFlavourTagInfosModEta2p4")
-    )
-    process.hltPfDeepFlavourJetTagsModEta4p0 = process.hltPfDeepFlavourJetTags.clone(
-        src = cms.InputTag("hltPfDeepFlavourTagInfosModEta4p0")
     )
 
     process.HLTBtagDeepCSVSequencePFPuppiModEta2p4 = cms.Sequence(
@@ -315,18 +261,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hltDeepSecondaryVertexTagInfosPFPuppiModEta2p4
         +process.hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta2p4
         +process.hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta2p4
-    )
-    process.HLTBtagDeepCSVSequencePFPuppiModEta4p0 = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelectorEta4p0
-        +process.hltPFPuppiJetForBtagEta4p0
-        +process.hltDeepBLifetimeTagInfosPFPuppiModEta4p0
-        +process.hltDeepInclusiveVertexFinderPF
-        +process.hltDeepInclusiveSecondaryVerticesPF
-        +process.hltDeepTrackVertexArbitratorPF
-        +process.hltDeepInclusiveMergedVerticesPF
-        +process.hltDeepSecondaryVertexTagInfosPFPuppiModEta4p0
-        +process.hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta4p0
-        +process.hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta4p0
     )
 
     process.HLTBtagDeepFlavourSequencePFPuppiModEta2p4 = cms.Sequence(
@@ -343,62 +277,32 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hltPfDeepFlavourTagInfosModEta2p4
         +process.hltPfDeepFlavourJetTagsModEta2p4
     )
-    process.HLTBtagDeepFlavourSequencePFPuppiModEta4p0 = cms.Sequence(
-        process.hltPFPuppiJetForBtagSelectorEta4p0
-        +process.hltPFPuppiJetForBtagEta4p0
-        +process.hltDeepBLifetimeTagInfosPFPuppiModEta4p0
-        +process.hltDeepInclusiveVertexFinderPF
-        +process.hltDeepInclusiveSecondaryVerticesPF
-        +process.hltDeepTrackVertexArbitratorPF
-        +process.hltDeepInclusiveMergedVerticesPF
-        +process.hltDeepSecondaryVertexTagInfosPFPuppiModEta4p0
-        +process.hltPrimaryVertexAssociationModEta4p0
-        +process.hltDeepCombinedSecondaryVertexBJetTagsInfosPuppiModEta4p0
-        +process.hltPfDeepFlavourTagInfosModEta4p0
-        +process.hltPfDeepFlavourJetTagsModEta4p0
-    )
 
 
-    process.hltBTagPFPuppiDeepCSV0p17Eta2p4TripleEta2p4 = cms.EDFilter( "HLTPFJetTag",
+    process.hltBTagPFPuppiDeepCSV0p31Eta2p4TripleEta2p4 = cms.EDFilter( "HLTPFJetTag",
         saveTags = cms.bool( True ),
         MinJets = cms.int32( 3 ),
         JetTags = cms.InputTag( 'hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta2p4','probb' ),
         TriggerType = cms.int32( 86 ),
         Jets = cms.InputTag( "hltPFPuppiJetForBtagEta2p4" ),
-        MinTag = cms.double( 0.17 ),
+        MinTag = cms.double( 0.31 ),
         MaxTag = cms.double( 999999.0 )
     )
-    process.hltBTagPFPuppiDeepCSV0p32Eta2p4TripleEta4p0 = process.hltBTagPFPuppiDeepCSV0p17Eta2p4TripleEta2p4.clone(
-        JetTags = cms.InputTag( 'hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta4p0','probb' ),
-        Jets = cms.InputTag( "hltPFPuppiJetForBtagEta4p0" ),
-        MinTag = cms.double( 0.32 ),
-    )
-    process.hltBTagPFPuppiDeepCSV0p27Eta2p4TripleEta2p4 = process.hltBTagPFPuppiDeepCSV0p17Eta2p4TripleEta2p4.clone(
+    process.hltBTagPFPuppiDeepCSV0p385Eta2p4TripleEta2p4 = process.hltBTagPFPuppiDeepCSV0p31Eta2p4TripleEta2p4.clone(
         MinTag = cms.double( 0.27 ),
     )
-    process.hltBTagPFPuppiDeepCSV0p37Eta2p4TripleEta4p0 = process.hltBTagPFPuppiDeepCSV0p32Eta2p4TripleEta4p0.clone(
-        MinTag = cms.double( 0.37 ),
-    )
 
-    process.hltBTagPFPuppiDeepFlavour0p17Eta2p4TripleEta2p4 = cms.EDFilter( "HLTPFJetTag",
+    process.hltBTagPFPuppiDeepFlavour0p275Eta2p4TripleEta2p4 = cms.EDFilter( "HLTPFJetTag",
         saveTags = cms.bool( True ),
         MinJets = cms.int32( 3 ),
         JetTags = cms.InputTag( 'hltPfDeepFlavourJetTagsModEta2p4','probb' ),
         TriggerType = cms.int32( 86 ),
         Jets = cms.InputTag( "hltPFPuppiJetForBtagEta2p4" ),
-        MinTag = cms.double( 0.17 ),
+        MinTag = cms.double( 0.275 ),
         MaxTag = cms.double( 999999.0 )
     )
-    process.hltBTagPFPuppiDeepFlavour0p32Eta2p4TripleEta4p0 = process.hltBTagPFPuppiDeepFlavour0p17Eta2p4TripleEta2p4.clone(
-        JetTags = cms.InputTag( 'hltPfDeepFlavourJetTagsModEta4p0','probb' ),
-        Jets = cms.InputTag( "hltPFPuppiJetForBtagEta4p0" ),
-        MinTag = cms.double( 0.32 ),
-    )
-    process.hltBTagPFPuppiDeepFlavour0p27Eta2p4TripleEta2p4 = process.hltBTagPFPuppiDeepFlavour0p17Eta2p4TripleEta2p4.clone(
-        MinTag = cms.double( 0.27 ),
-    )
-    process.hltBTagPFPuppiDeepFlavour0p37Eta2p4TripleEta4p0 = process.hltBTagPFPuppiDeepFlavour0p32Eta2p4TripleEta4p0.clone(
-        MinTag = cms.double( 0.37 ),
+    process.hltBTagPFPuppiDeepFlavour0p385Eta2p4TripleEta2p4 = process.hltBTagPFPuppiDeepFlavour0p275Eta2p4TripleEta2p4.clone(
+        MinTag = cms.double( 0.385 ),
     )
 
     process.hltDoublePFPuppiJets128MaxEta2p4 = cms.EDFilter( "HLT1PFJet",
@@ -413,44 +317,53 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         triggerType = cms.int32( 86 ),
         MaxMass = cms.double( -1.0 )
     )
-    process.hltDoublePFPuppiJets128MaxEta4p0 = process.hltDoublePFPuppiJets128MaxEta2p4.clone(
-        MaxEta = cms.double( 4.0 ),
-        MinEta = cms.double( -4.0 ),
+
+    process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6 =  cms.EDFilter( "HLT2PFJetPFJet",
+        saveTags = cms.bool( True ),
+        MinMinv = cms.double( 0.0 ),
+        originTag2 = cms.VInputTag( 'hltAK4PFPuppiJetsCorrected' ),
+        MinDelR = cms.double( 0.0 ),
+        MinPt = cms.double( 0.0 ),
+        MinN = cms.int32( 1 ),
+        originTag1 = cms.VInputTag( 'hltAK4PFPuppiJetsCorrected' ),
+        triggerType1 = cms.int32( 86 ),
+        triggerType2 = cms.int32( 86 ),
+        MaxMinv = cms.double( 1.0E7 ),
+        MinDeta = cms.double( -1000.0 ),
+        MaxDelR = cms.double( 1000.0 ),
+        inputTag1 = cms.InputTag( "hltDoublePFPuppiJets128MaxEta2p4" ),
+        inputTag2 = cms.InputTag( "hltDoublePFPuppiJets128MaxEta2p4" ),
+        MaxDphi = cms.double( 1.0E7 ),
+        MaxDeta = cms.double( 1.6 ),
+        MaxPt = cms.double( 1.0E7 ),
+        MinDphi = cms.double( 0.0 )
     )
 
-    process.hltBTagPFPuppiDeepCSV0p75DoubleEta2p4 = cms.EDFilter( "HLTPFJetTagWithMatching",
+    process.hltBTagPFPuppiDeepCSV0p865DoubleEta2p4 = cms.EDFilter( "HLTPFJetTagWithMatching",
         saveTags = cms.bool( True ),
         deltaR = cms.double( 0.1 ),
         MinJets = cms.int32( 2 ),
         JetTags = cms.InputTag( 'hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta2p4','probb' ),
         TriggerType = cms.int32( 86 ),
         Jets = cms.InputTag( "hltPFPuppiJetForBtagEta2p4" ),
-        MinTag = cms.double( 0.75 ),
+        MinTag = cms.double( 0.865 ),
         MaxTag = cms.double( 999999.0 )
     )
-    process.hltBTagPFPuppiDeepCSV0p75DoubleEta4p0 = process.hltBTagPFPuppiDeepCSV0p75DoubleEta2p4.clone(
-        JetTags = cms.InputTag( 'hltDeepCombinedSecondaryVertexBJetTagsPFPuppiModEta4p0','probb' ),
-        Jets = cms.InputTag( "hltPFPuppiJetForBtagEta4p0" ),
-    )
-
-    process.hltBTagPFPuppiDeepFlavour0p75DoubleEta2p4 = cms.EDFilter( "HLTPFJetTagWithMatching",
+    process.hltBTagPFPuppiDeepFlavour0p935DoubleEta2p4 = cms.EDFilter( "HLTPFJetTagWithMatching",
         saveTags = cms.bool( True ),
         deltaR = cms.double( 0.1 ),
         MinJets = cms.int32( 2 ),
         JetTags = cms.InputTag( 'hltPfDeepFlavourJetTagsModEta2p4','probb' ),
         TriggerType = cms.int32( 86 ),
         Jets = cms.InputTag( "hltPFPuppiJetForBtagEta2p4" ),
-        MinTag = cms.double( 0.75 ),
+        MinTag = cms.double( 0.935 ),
         MaxTag = cms.double( 999999.0 )
     )
-    process.hltBTagPFPuppiDeepFlavour0p75DoubleEta4p0 = process.hltBTagPFPuppiDeepFlavour0p75DoubleEta2p4.clone(
-        JetTags = cms.InputTag( 'hltPfDeepFlavourJetTagsModEta4p0','probb' ),
-        Jets = cms.InputTag( "hltPFPuppiJetForBtagEta4p0" ),
-    )
 
 
-
-    ## L1 sequences and filters  (basic setup from JME)
+    ################################################################################
+    ## L1 sequences and filters (basic setup cloned from JME)
+    ################################################################################
     process.l1tDoublePFPuppiJet112offMaxEta2p4 = cms.EDFilter('L1TJetFilter',
       inputTag = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
       Scalings = cms.PSet(
@@ -462,6 +375,28 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       MinEta = cms.double(-2.4),
       MaxEta = cms.double(2.4),
       MinN = cms.int32(2),
+      saveTags = cms.bool( True ),
+    )
+
+    process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6 =  cms.EDFilter( "HLT2PFJetPFJet",
+        saveTags = cms.bool( True ),
+        MinMinv = cms.double( 0.0 ),
+        originTag2 = cms.VInputTag('l1tSlwPFPuppiJetsCorrected::Phase1L1TJetFromPfCandidates'),
+        MinDelR = cms.double( 0.0 ),
+        MinPt = cms.double( 0.0 ),
+        MinN = cms.int32( 1 ),
+        originTag1 = cms.VInputTag('l1tSlwPFPuppiJetsCorrected::Phase1L1TJetFromPfCandidates'),
+        triggerType1 = cms.int32( 86 ),
+        triggerType2 = cms.int32( 86 ),
+        MaxMinv = cms.double( 1.0E7 ),
+        MinDeta = cms.double( -1000.0 ),
+        MaxDelR = cms.double( 1000.0 ),
+        inputTag1 = cms.InputTag( "l1tDoublePFPuppiJet112offMaxEta2p4" ),
+        inputTag2 = cms.InputTag( "l1tDoublePFPuppiJet112offMaxEta2p4" ),
+        MaxDphi = cms.double( 1.0E7 ),
+        MaxDeta = cms.double( 1.6 ),
+        MaxPt = cms.double( 1.0E7 ),
+        MinDphi = cms.double( 0.0 ),
     )
 
     process.l1t1PFPuppiJet70offMaxEta2p4 = cms.EDFilter('L1TJetFilter',
@@ -503,6 +438,19 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       MinN = cms.int32(4),
     )
 
+    process.l1t4PFPuppiJet25OnlineMaxEta2p4 = cms.EDFilter('L1TJetFilter',
+      inputTag = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
+      # Scalings = cms.PSet( ## no scaling
+      #   barrel = cms.vdouble(11.1254, 1.40627, 0),
+      #   overlap = cms.vdouble(24.8375, 1.4152, 0),
+      #   endcap = cms.vdouble(42.4039, 1.33052, 0),
+      # ),
+      MinPt = cms.double(25.),
+      MinEta = cms.double(-2.4),
+      MaxEta = cms.double(2.4),
+      MinN = cms.int32(4),
+    )
+
     # L1T-HT
     process.l1tPFPuppiHTMaxEta2p4 = cms.EDProducer('HLTHtMhtProducer',
       jetsLabel = cms.InputTag('l1tSlwPFPuppiJetsCorrected', 'Phase1L1TJetFromPfCandidates'),
@@ -522,12 +470,13 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
 
 
     # final paths
-    process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p17_2p4_v1 = cms.Path(
+    process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1 = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
         +process.l1tPFPuppiHT400offMaxEta2p4
         +process.l1t1PFPuppiJet70offMaxEta2p4
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
+        +process.l1t4PFPuppiJet25OnlineMaxEta2p4
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiCentralJetQuad30MaxEta2p4
@@ -538,70 +487,37 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
         +process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4
         +process.HLTBtagDeepCSVSequencePFPuppiModEta2p4
-        +process.hltBTagPFPuppiDeepCSV0p17Eta2p4TripleEta2p4
+        +process.hltBTagPFPuppiDeepCSV0p31Eta2p4TripleEta2p4
     )
-    process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p32_4p0_v1 = cms.Path(
+
+    process.HLT_PFHT0PT30_QuadPFPuppiJet_30_30_30_30_TriplePFPuppiBTagDeepCSV_2p4_v1 = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
         +process.l1tPFPuppiHT400offMaxEta2p4
         +process.l1t1PFPuppiJet70offMaxEta2p4
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
-        +process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltPFPuppiCentralJetQuad30MaxEta4p0
-        +process.hlt1PFPuppiCentralJet75MaxEta4p0
-        +process.hlt2PFPuppiCentralJet60MaxEta4p0
-        +process.hlt3PFPuppiCentralJet45MaxEta4p0
-        +process.hlt4PFPuppiCentralJet40MaxEta4p0
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0
-        +process.hltPFPuppiCentralJetsQuad30HT330MaxEta4p0
-        +process.HLTBtagDeepCSVSequencePFPuppiModEta4p0
-        +process.hltBTagPFPuppiDeepCSV0p32Eta2p4TripleEta4p0
-    )
-    process.HLT_PFHT200PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepCSV0p27_2p4_v1 = cms.Path(
-        process.l1tPFPuppiHTMaxEta2p4
-        +process.l1tPFPuppiHT400offMaxEta2p4
-        +process.l1t1PFPuppiJet70offMaxEta2p4
-        +process.l1t2PFPuppiJet55offMaxEta2p4
-        +process.l1t4PFPuppiJet40offMaxEta2p4
+        +process.l1t4PFPuppiJet25OnlineMaxEta2p4
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiCentralJetQuad30MaxEta2p4
-        +process.hlt1PFPuppiCentralJet70MaxEta2p4
-        +process.hlt2PFPuppiCentralJet50MaxEta2p4
+        # +process.hlt2PFPuppiCentralJet50MaxEta2p4 # not needed
         # +process.hlt3PFPuppiCentralJet45MaxEta2p4 # not needed
         # +process.hlt4PFPuppiCentralJet40MaxEta2p4 # not needed
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
-        +process.hltPFPuppiCentralJetsQuad30HT200MaxEta2p4
+        # +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
+        # +process.hltPFPuppiCentralJetsQuad30HT200MaxEta2p4 # not needed
         +process.HLTBtagDeepCSVSequencePFPuppiModEta2p4
-        +process.hltBTagPFPuppiDeepCSV0p27Eta2p4TripleEta2p4
+        +process.hltBTagPFPuppiDeepCSV0p385Eta2p4TripleEta2p4
     )
-    process.HLT_PFHT250PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepCSV0p37_4p0_v1 = cms.Path(
+
+
+
+    process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour_2p4_v1 = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
         +process.l1tPFPuppiHT400offMaxEta2p4
         +process.l1t1PFPuppiJet70offMaxEta2p4
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
-        +process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltPFPuppiCentralJetQuad30MaxEta4p0
-        +process.hlt1PFPuppiCentralJet70MaxEta4p0
-        +process.hlt2PFPuppiCentralJet50MaxEta4p0
-        # +process.hlt3PFPuppiCentralJet45MaxEta4p0 # not needed
-        # +process.hlt4PFPuppiCentralJet40MaxEta4p0 # not needed
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0
-        +process.hltPFPuppiCentralJetsQuad30HT250MaxEta4p0
-        +process.HLTBtagDeepCSVSequencePFPuppiModEta4p0
-        +process.hltBTagPFPuppiDeepCSV0p37Eta2p4TripleEta4p0
-    )
-
-
-    process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p17_2p4_v1 = cms.Path(
-        process.l1tPFPuppiHTMaxEta2p4
-        +process.l1tPFPuppiHT400offMaxEta2p4
-        +process.l1t1PFPuppiJet70offMaxEta2p4
-        +process.l1t2PFPuppiJet55offMaxEta2p4
-        +process.l1t4PFPuppiJet40offMaxEta2p4
+        +process.l1t4PFPuppiJet25OnlineMaxEta2p4
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiCentralJetQuad30MaxEta2p4
@@ -612,62 +528,27 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
         +process.hltPFPuppiCentralJetsQuad30HT330MaxEta2p4
         +process.HLTBtagDeepFlavourSequencePFPuppiModEta2p4
-        +process.hltBTagPFPuppiDeepFlavour0p17Eta2p4TripleEta2p4
+        +process.hltBTagPFPuppiDeepFlavour0p275Eta2p4TripleEta2p4
     )
-    process.HLT_PFHT200PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepFlavour0p27_2p4_v1 = cms.Path(
+    process.HLT_PFHT0PT30_QuadPFPuppiJet_30_30_30_30_TriplePFPuppiBTagDeepFlavour_2p4_v1 = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
         +process.l1tPFPuppiHT400offMaxEta2p4
         +process.l1t1PFPuppiJet70offMaxEta2p4
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
+        +process.l1t4PFPuppiJet25OnlineMaxEta2p4
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiCentralJetQuad30MaxEta2p4
-        +process.hlt1PFPuppiCentralJet70MaxEta2p4
-        +process.hlt2PFPuppiCentralJet50MaxEta2p4
+        # +process.hlt2PFPuppiCentralJet50MaxEta2p4
         # +process.hlt3PFPuppiCentralJet45MaxEta2p4 # not needed
         # +process.hlt4PFPuppiCentralJet40MaxEta2p4 # not needed
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
-        +process.hltPFPuppiCentralJetsQuad30HT200MaxEta2p4
+        # +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
+        # +process.hltPFPuppiCentralJetsQuad30HT200MaxEta2p4
         +process.HLTBtagDeepFlavourSequencePFPuppiModEta2p4
-        +process.hltBTagPFPuppiDeepFlavour0p27Eta2p4TripleEta2p4
+        +process.hltBTagPFPuppiDeepFlavour0p385Eta2p4TripleEta2p4
     )
-    process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p32_4p0_v1 = cms.Path(
-        process.l1tPFPuppiHTMaxEta2p4
-        +process.l1tPFPuppiHT400offMaxEta2p4
-        +process.l1t1PFPuppiJet70offMaxEta2p4
-        +process.l1t2PFPuppiJet55offMaxEta2p4
-        +process.l1t4PFPuppiJet40offMaxEta2p4
-        +process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltPFPuppiCentralJetQuad30MaxEta4p0
-        +process.hlt1PFPuppiCentralJet75MaxEta4p0
-        +process.hlt2PFPuppiCentralJet60MaxEta4p0
-        +process.hlt3PFPuppiCentralJet45MaxEta4p0
-        +process.hlt4PFPuppiCentralJet40MaxEta4p0
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0
-        +process.hltPFPuppiCentralJetsQuad30HT330MaxEta4p0
-        +process.HLTBtagDeepFlavourSequencePFPuppiModEta4p0
-        +process.hltBTagPFPuppiDeepFlavour0p32Eta2p4TripleEta4p0
-    )
-    process.HLT_PFHT250PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepFlavour0p37_4p0_v1 = cms.Path(
-        process.l1tPFPuppiHTMaxEta2p4
-        +process.l1tPFPuppiHT400offMaxEta2p4
-        +process.l1t1PFPuppiJet70offMaxEta2p4
-        +process.l1t2PFPuppiJet55offMaxEta2p4
-        +process.l1t4PFPuppiJet40offMaxEta2p4
-        +process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltPFPuppiCentralJetQuad30MaxEta4p0
-        +process.hlt1PFPuppiCentralJet70MaxEta4p0
-        +process.hlt2PFPuppiCentralJet50MaxEta4p0
-        # +process.hlt3PFPuppiCentralJet45MaxEta4p0 # not needed
-        # +process.hlt4PFPuppiCentralJet40MaxEta4p0 # not needed
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0
-        +process.hltPFPuppiCentralJetsQuad30HT250MaxEta4p0
-        +process.HLTBtagDeepFlavourSequencePFPuppiModEta4p0
-        +process.hltBTagPFPuppiDeepFlavour0p37Eta2p4TripleEta4p0
-    )
+
 
     # L1T seed
     process.L1_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1 = cms.Path(
@@ -676,6 +557,7 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.l1t1PFPuppiJet70offMaxEta2p4
         +process.l1t2PFPuppiJet55offMaxEta2p4
         +process.l1t4PFPuppiJet40offMaxEta2p4
+        +process.l1t4PFPuppiJet25OnlineMaxEta2p4
     )
 
     # filters for QCD enriched
@@ -697,43 +579,34 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
     )
 
 
-    process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p75_2p4_v1 = cms.Path(
+    process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
+        # +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltDoublePFPuppiJets128MaxEta2p4
+        +process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6
         +process.HLTBtagDeepCSVSequencePFPuppiModEta2p4
-        +process.hltBTagPFPuppiDeepCSV0p75DoubleEta2p4
-    )
-    process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p75_4p0_v1 = cms.Path(
-        process.l1tDoublePFPuppiJet112offMaxEta2p4
-        +process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltDoublePFPuppiJets128MaxEta4p0
-        +process.HLTBtagDeepCSVSequencePFPuppiModEta4p0
-        +process.hltBTagPFPuppiDeepCSV0p75DoubleEta4p0
+        +process.hltBTagPFPuppiDeepCSV0p865DoubleEta2p4
     )
 
-    process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_p75_2p4_v1 = cms.Path(
+
+    process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
+        # +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltDoublePFPuppiJets128MaxEta2p4
+        +process.hltDoublePFPuppiJets128Eta2p3MaxDeta1p6
         +process.HLTBtagDeepFlavourSequencePFPuppiModEta2p4
-        +process.hltBTagPFPuppiDeepFlavour0p75DoubleEta2p4
+        +process.hltBTagPFPuppiDeepFlavour0p935DoubleEta2p4
     )
-    process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_p75_4p0_v1 = cms.Path(
-        process.l1tDoublePFPuppiJet112offMaxEta2p4
-        +process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltDoublePFPuppiJets128MaxEta4p0
-        +process.HLTBtagDeepFlavourSequencePFPuppiModEta4p0
-        +process.hltBTagPFPuppiDeepFlavour0p75DoubleEta4p0
-    )
+
 
     # L1T seed
     process.L1_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p71_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
+        # +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
     )
 
     # to be run for every event
@@ -741,9 +614,7 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         # +process.hltPFPuppiJetForBtagSelectorEta2p4
-        # +process.hltPFPuppiJetForBtagSelectorEta4p0
         # +process.hltPFPuppiJetForBtagEta2p4
-        # +process.hltPFPuppiJetForBtagEta4p0
         +process.HLTBtagDeepCSVSequencePFPuppi
     )
 
@@ -751,14 +622,13 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         # +process.hltPFPuppiJetForBtagSelectorEta2p4
-        # +process.hltPFPuppiJetForBtagSelectorEta4p0
         # +process.hltPFPuppiJetForBtagEta2p4
-        # +process.hltPFPuppiJetForBtagEta4p0
         +process.HLTBtagDeepFlavourSequencePFPuppi
     )
 
     process.L1Objects = cms.Path(
         process.l1tPFPuppiHTMaxEta2p4
+        +process.l1tDoublePFPuppiJet112offMaxEta2p4
     )
 
     process.HLTObjects = cms.Path(
@@ -766,21 +636,8 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltPFPuppiHT
         +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta2p4
-        # +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0
         +process.hltPFPuppiJetForBtagSelectorEta2p4
         +process.hltPFPuppiJetForBtagEta2p4
-        # +process.hltPFPuppiJetForBtagSelectorEta4p0
-        # +process.hltPFPuppiJetForBtagEta4p0
-
-    )
-    process.HLTObjectsEta4 = cms.Path(
-        process.HLTParticleFlowSequence
-        +process.HLTAK4PFPuppiJetsReconstruction
-        +process.hltPFPuppiHT
-        +process.hltHtMhtPFPuppiCentralJetsQuadC30MaxEta4p0
-        +process.hltPFPuppiJetForBtagSelectorEta4p0
-        +process.hltPFPuppiJetForBtagEta4p0
-
     )
 
     process.schedule_().extend([
@@ -791,7 +648,6 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       # general paths and filters
       process.L1Objects,
       process.HLTObjects,
-      process.HLTObjectsEta4,
       process.QCDMuon,
       process.Gen_QCDMuGenFilter,
       process.Gen_QCDEmEnrichingNoBCToEFilter,
@@ -801,20 +657,14 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       process.noFilter_PFDeepFlavourPuppi,
 
       # based on DeepCSV
-      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p17_2p4_v1,
-      process.HLT_PFHT200PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepCSV0p27_2p4_v1,
-      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV0p32_4p0_v1,
-      process.HLT_PFHT250PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepCSV0p37_4p0_v1,
-      process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p75_2p4_v1,
-      process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p75_4p0_v1,
+      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1,
+      process.HLT_PFHT0PT30_QuadPFPuppiJet_30_30_30_30_TriplePFPuppiBTagDeepCSV_2p4_v1,
+      process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_2p4_v1,
 
       # based on DeepJet
-      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p17_2p4_v1,
-      process.HLT_PFHT200PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepFlavour0p27_2p4_v1,
-      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour0p32_4p0_v1,
-      process.HLT_PFHT250PT30_QuadPFPuppiJet_70_50_30_30_TriplePFPuppiBTagDeepFlavour0p37_4p0_v1,
-      process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_p75_2p4_v1,
-      process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_p75_4p0_v1,
+      process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour_2p4_v1,
+      process.HLT_PFHT0PT30_QuadPFPuppiJet_30_30_30_30_TriplePFPuppiBTagDeepFlavour_2p4_v1,
+      process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_2p4_v1,
     ])
 
 
