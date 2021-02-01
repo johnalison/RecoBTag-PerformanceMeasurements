@@ -3,23 +3,13 @@
 ## Software setup for CMSSW_11_1_6
 * **Step #1** : create local CMSSW area and add the relevant packages.
 ```
-scramv1 project CMSSW scramv1 project CMSSW CMSSW_11_1_6
-cd scramv1 project CMSSW CMSSW_11_1_6/src
+scramv1 project CMSSW scramv1 project CMSSW CMSSW_11_1_7
+cd scramv1 project CMSSW CMSSW_11_1_7/src
 eval `scramv1 runtime -sh`
 
 git cms-init
 
-# L1T + JME (cms-sw#31607 by L1T accidentaly includes cms-sw#32434 by JME)
-git cms-merge-topic cms-sw:31607
-
-# HLT
-git cms-merge-topic cms-sw:32474
-
-# HGCal
-git cms-merge-topic cms-sw:32527
-cp -r ${CMSSW_DATA_PATH}/data-RecoHGCal-TICL/V00-01-00/RecoHGCal/TICL/data/ ${CMSSW_BASE}/src/RecoHGCal/TICL
-wget https://github.com/rovere/RecoHGCal-TICL/raw/9d2c6f72c86233fa5573e93d5535b32e90c835ee/tf_models/energy_id_v0.pb -O ${CMSSW_BASE}/src/RecoHGCal/TICL/data/tf_models/energy_id_v0.pb
-
+# [optional; required only for  NTuple production]
 # fix for GenFilters
 git cms-merge-topic Sam-Harper:MCStartFilterInputCollFix_1110pre6
 
@@ -29,19 +19,7 @@ git cms-addpkg RecoBTag/Combined
 
 git cms-merge-topic emilbols:BTV_CMSSW_11_1_X
 
-# [optional; required only for PF-Hadron calibrations]
-# workaround for PFSimParticle::trackerSurfaceMomentum
-# ref: hatakeyamak:FBaseSimEvent_ProtectAgainstMissingTrackerSurfaceMomentum
-git cms-addpkg FastSimulation/Event
-git remote add hatakeyamak https://github.com/hatakeyamak/cmssw.git
-git fetch hatakeyamak
-git diff 0cf67551731c80dc85130e4b8ec73c8f44d53cb0^ 0cf67551731c80dc85130e4b8ec73c8f44d53cb0 | git apply
-
-[optional; required only for  NTuple workflow with 'pvdqm > 1']
-# analyzer for primary vertices (courtesy of W. Erdmann)
-git clone https://github.com/missirol/PVAnalysis.git usercode -o missirol -b phase2
-
-# [optional; MinBias/QCD Stitching required only for NTuples]
+# [optional; MinBias/QCD Stitching required only for  NTuple production]
 mkdir -p HLTrigger
 git clone https://github.com/veelken/mcStitching.git HLTrigger/mcStitching
 
