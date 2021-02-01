@@ -106,36 +106,36 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
     ################################################################################
     ### filter for QCD muon enriched
     ################################################################################
-    process.muGenFilter = cms.EDFilter("MCSmartSingleParticleFilter",
-        MaxDecayRadius = cms.untracked.vdouble(2000.0, 2000.0),
-        MaxDecayZ = cms.untracked.vdouble(4000.0, 4000.0),
-        MaxEta = cms.untracked.vdouble(4.5, 4.5),
-        MinDecayZ = cms.untracked.vdouble(-4000.0, -4000.0),
-        MinEta = cms.untracked.vdouble(-4.5, -4.5),
-        MinPt = cms.untracked.vdouble(5.0, 5.0),
-        ParticleID = cms.untracked.vint32(13, -13),
-        Status = cms.untracked.vint32(1, 1),
-        moduleLabel = cms.untracked.InputTag("generatorSmeared","","SIM")
-    )
-    process.emEnrichingFilter = cms.EDFilter("EMEnrichingFilter",
-        filterAlgoPSet = cms.PSet(
-            caloIsoMax = cms.double(10.0),
-            clusterThreshold = cms.double(20.0),
-            genParSource = cms.InputTag("genParticles"),
-            hOverEMax = cms.double(0.5),
-            isoConeSize = cms.double(0.2),
-            isoGenParConeSize = cms.double(0.1),
-            isoGenParETMin = cms.double(20.0),
-            requireTrackMatch = cms.bool(False),
-            tkIsoMax = cms.double(5.0)
-        )
-    )
-    process.bcToEFilter = cms.EDFilter("BCToEFilter",
-        filterAlgoPSet = cms.PSet(
-            eTThreshold = cms.double(10),
-            genParSource = cms.InputTag("genParticles")
-        )
-    )
+    # process.muGenFilter = cms.EDFilter("MCSmartSingleParticleFilter",
+    #     MaxDecayRadius = cms.untracked.vdouble(2000.0, 2000.0),
+    #     MaxDecayZ = cms.untracked.vdouble(4000.0, 4000.0),
+    #     MaxEta = cms.untracked.vdouble(4.5, 4.5),
+    #     MinDecayZ = cms.untracked.vdouble(-4000.0, -4000.0),
+    #     MinEta = cms.untracked.vdouble(-4.5, -4.5),
+    #     MinPt = cms.untracked.vdouble(5.0, 5.0),
+    #     ParticleID = cms.untracked.vint32(13, -13),
+    #     Status = cms.untracked.vint32(1, 1),
+    #     moduleLabel = cms.untracked.InputTag("generatorSmeared","","SIM")
+    # )
+    # process.emEnrichingFilter = cms.EDFilter("EMEnrichingFilter",
+    #     filterAlgoPSet = cms.PSet(
+    #         caloIsoMax = cms.double(10.0),
+    #         clusterThreshold = cms.double(20.0),
+    #         genParSource = cms.InputTag("genParticles"),
+    #         hOverEMax = cms.double(0.5),
+    #         isoConeSize = cms.double(0.2),
+    #         isoGenParConeSize = cms.double(0.1),
+    #         isoGenParETMin = cms.double(20.0),
+    #         requireTrackMatch = cms.bool(False),
+    #         tkIsoMax = cms.double(5.0)
+    #     )
+    # )
+    # process.bcToEFilter = cms.EDFilter("BCToEFilter",
+    #     filterAlgoPSet = cms.PSet(
+    #         eTThreshold = cms.double(10),
+    #         genParSource = cms.InputTag("genParticles")
+    #     )
+    # )
 
 
     ################################################################################
@@ -378,7 +378,7 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       saveTags = cms.bool( True ),
     )
 
-    process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6 =  cms.EDFilter( "HLT2PFJetPFJet",
+    process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6 =  cms.EDFilter( "HLT2CaloJetCaloJet",
         saveTags = cms.bool( True ),
         MinMinv = cms.double( 0.0 ),
         originTag2 = cms.VInputTag('l1tSlwPFPuppiJetsCorrected::Phase1L1TJetFromPfCandidates'),
@@ -386,8 +386,8 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
         MinPt = cms.double( 0.0 ),
         MinN = cms.int32( 1 ),
         originTag1 = cms.VInputTag('l1tSlwPFPuppiJetsCorrected::Phase1L1TJetFromPfCandidates'),
-        triggerType1 = cms.int32( 86 ),
-        triggerType2 = cms.int32( 86 ),
+        triggerType1 = cms.int32( -116 ),
+        triggerType2 = cms.int32( -116 ),
         MaxMinv = cms.double( 1.0E7 ),
         MinDeta = cms.double( -1000.0 ),
         MaxDelR = cms.double( 1000.0 ),
@@ -561,27 +561,27 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
     )
 
     # filters for QCD enriched
-    process.QCDMuon = cms.Path(
-        process.muGenFilter
-    )
-    process.Gen_QCDEmEnrichingNoBCToEFilter = cms.Path(
-       ~process.bcToEFilter +
-       process.emEnrichingFilter
-    )
-    process.Gen_QCDEmEnrichingFilter = cms.Path(
-       process.emEnrichingFilter
-    )
-    process.Gen_QCDBCToEFilter = cms.Path(
-       process.bcToEFilter
-    )
-    process.Gen_QCDMuGenFilter = cms.Path(
-       process.muGenFilter
-    )
+    # process.QCDMuon = cms.Path(
+    #     process.muGenFilter
+    # )
+    # process.Gen_QCDEmEnrichingNoBCToEFilter = cms.Path(
+    #    ~process.bcToEFilter +
+    #    process.emEnrichingFilter
+    # )
+    # process.Gen_QCDEmEnrichingFilter = cms.Path(
+    #    process.emEnrichingFilter
+    # )
+    # process.Gen_QCDBCToEFilter = cms.Path(
+    #    process.bcToEFilter
+    # )
+    # process.Gen_QCDMuGenFilter = cms.Path(
+    #    process.muGenFilter
+    # )
 
 
     process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
-        # +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
+        +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltDoublePFPuppiJets128MaxEta2p4
@@ -593,7 +593,7 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
 
     process.HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
-        # +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
+        +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
         +process.HLTParticleFlowSequence
         +process.HLTAK4PFPuppiJetsReconstruction
         +process.hltDoublePFPuppiJets128MaxEta2p4
@@ -606,7 +606,7 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
     # L1T seed
     process.L1_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_p71_2p4_v1 = cms.Path(
         process.l1tDoublePFPuppiJet112offMaxEta2p4
-        # +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
+        +process.l1tDoublePFPuppiJets128Eta2p3MaxDeta1p6
     )
 
     # to be run for every event
@@ -648,13 +648,13 @@ def customize_hltPhase2_BTV_paths(reco="HLT_TRKv06p1_TICL",  BTVreco="cutsV2", n
       # general paths and filters
       process.L1Objects,
       process.HLTObjects,
-      process.QCDMuon,
-      process.Gen_QCDMuGenFilter,
-      process.Gen_QCDEmEnrichingNoBCToEFilter,
-      process.Gen_QCDEmEnrichingFilter,
-      process.Gen_QCDBCToEFilter,
-      process.noFilter_PFDeepCSVPuppi,
-      process.noFilter_PFDeepFlavourPuppi,
+      # process.QCDMuon,
+      # process.Gen_QCDMuGenFilter,
+      # process.Gen_QCDEmEnrichingNoBCToEFilter,
+      # process.Gen_QCDEmEnrichingFilter,
+      # process.Gen_QCDBCToEFilter,
+      # process.noFilter_PFDeepCSVPuppi,
+      # process.noFilter_PFDeepFlavourPuppi,
 
       # based on DeepCSV
       process.HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1,
