@@ -1,6 +1,6 @@
 # RecoBTag-PerformanceMeasurements
 
-## Software setup for CMSSW_11_1_6
+## Software setup for CMSSW_11_1_7
 * **Step #1** : create local CMSSW area and add the relevant packages.
 ```
 scramv1 project CMSSW scramv1 project CMSSW CMSSW_11_1_7
