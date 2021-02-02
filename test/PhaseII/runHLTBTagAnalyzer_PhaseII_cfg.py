@@ -391,13 +391,13 @@ process.btagana.HLTTriggerPathNames   = cms.vstring(
 
       # based on DeepCSV
     'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepCSV_2p4_v1',
-    'HLT_PFHT0PT30_QuadPFPuppiJet_30_30_30_30_TriplePFPuppiBTagDeepCSV_2p4_v1',
+    'HLT_PFHT200PT30_QuadPFPuppiJet_70_40_30_30_TriplePFPuppiBTagDeepCSV_2p4_v1',
     'HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepCSV_2p4_v1',
 
 
       # based on DeepJet
     'HLT_PFHT330PT30_QuadPFPuppiJet_75_60_45_40_TriplePFPuppiBTagDeepFlavour_2p4_v1',
-    'HLT_PFHT0PT30_QuadPFPuppiJet_30_30_30_30_TriplePFPuppiBTagDeepFlavour_2p4_v1',
+    'HLT_PFHT200PT30_QuadPFPuppiJet_70_40_30_30_TriplePFPuppiBTagDeepFlavour_2p4_v1',
     'HLT_DoublePFPuppiJets128_DoublePFPuppiBTagDeepFlavour_2p4_v1',
     )
 # process.btagana.primaryVertexColl     = cms.InputTag('hltVerticesPF')
